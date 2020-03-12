@@ -1,0 +1,194 @@
+body{
+	padding: 0;
+	margin: 0;
+	font-family: Calibri, sans-serif;
+}
+
+div{
+	box-sizing: border-box;
+}
+
+header{
+	background-color: #AFCDE7;
+	width: 100%;
+	height: 270px;
+}
+
+section{
+	margin: 0;
+	padding: 0;
+	min-height: calc(100vh - 270px);
+	background-color: #edeef0;
+}
+
+.upper-container{
+	width: 100%;
+}
+
+.name-admin{
+	text-align: center;
+	font-size: 30px;
+}
+
+.entities{
+	margin-top: 50px;
+}
+
+.entities li{
+	float: left;
+	display: inline-block;
+	margin-left: 170px;
+	width: 250px;
+	border: 2px solid grey;
+	background-color: #3c77a5;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.entities li a{
+	font-size: 30px;
+	text-decoration: none;
+	color: white;
+}
+
+
+.search{
+	margin-top: 10px;
+	width: 99%;
+	font-size: 30px;
+	text-decoration: none;
+	color: white;
+	height: 30px;
+	margin-left: 5px;
+	border: 2px solid #3c77a5;
+	background-color: #D8E6F3;
+}
+
+.menu-elem{
+	width: 100px;
+	height: 70px;
+	/*padding-bottom: 20px;
+	padding-top: 20px;*/
+}
+
+.button-menu{
+	color: white;
+	font-size: 30px;
+	width: 250px;
+	height: 70px;
+	background-color: #3c77a5;
+	border: 0;
+}
+
+.name-table{
+	text-align: center;
+	font-size: 30px;
+}
+
+/*table {
+	margin-top: 20px;
+	width: 100%;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 14px;
+	border-collapse: collapse;
+	text-align: center;
+}*/
+
+.table-categories, .table-orders, .table-product{
+	margin-top: 20px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 14px;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.table-product{
+	width: 70%;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+.table-categories{
+	width: 30%;
+	margin-left: 35%;
+	margin-right: 35%;
+}
+
+.table-orders{
+	width: 20%;
+	margin-left: 40%;
+	margin-right: 40%;
+}
+
+th, td:first-child {
+	background: #AFCDE7;
+	color: white;
+	padding: 10px 20px;
+}
+
+th, td {
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	border-color: white;
+}
+
+td {
+	background: #D8E6F3;
+}
+
+th:first-child, td:first-child {
+	text-align: left;
+}
+
+.button-create{
+	color: #fff; /* цвет текста */
+	text-decoration: none; /* убирать подчёркивание у ссылок */
+	user-select: none; /* убирать выделение текста */
+	background: #3c77a5; /* фон кнопки */
+	padding: .7em 1.5em; /* отступ от текста */
+	outline: none; /* убирать контур в Mozilla */
+}
+
+.button-create:hover{
+	background: rgb(52, 95, 167);
+}
+
+.button-create:active{
+	background: #3c77a5;
+}
+
+.button-edit{
+	color: #fff; /* цвет текста */
+	text-decoration: none; /* убирать подчёркивание у ссылок */
+	user-select: none; /* убирать выделение текста */
+	background: #3c77a5; /* фон кнопки */
+	padding: .3em 1.5em; /* отступ от текста */
+	outline: none; /* убирать контур в Mozilla */
+}
+
+.button-edit:hover{
+	background: rgb(52, 95, 167);
+}
+
+.button-edit:active{
+	background: rgb(18, 32, 167);
+}
+
+.button-delete{
+	font-weight: 500;
+	border: 0;
+	color: #fff; /* цвет текста */
+	text-decoration: none; /* убирать подчёркивание у ссылок */
+	user-select: none; /* убирать выделение текста */
+	background: #3c77a5; /* фон кнопки */
+	padding: .5em 1.5em; /* отступ от текста */
+	outline: none; /* убирать контур в Mozilla */
+}
+
+.button-delete:hover{
+	background: rgb(52, 95, 167);
+}
+
+.button-delete:active{
+	background: rgb(18, 32, 167);
+}
