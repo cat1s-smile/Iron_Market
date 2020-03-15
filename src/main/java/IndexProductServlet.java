@@ -13,7 +13,6 @@ public class IndexProductServlet extends HttpServlet {
             throws ServletException, IOException {
         ArrayList<Product> products = ProductDataBase.select();
         request.setAttribute("products", products);
-
         getServletContext().getRequestDispatcher("/admin-products.jsp").forward(request, response);
     }
 }

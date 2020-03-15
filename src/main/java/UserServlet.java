@@ -29,6 +29,44 @@ public class UserServlet extends HttpServlet {
             }
         }
         request.setAttribute("cart", productNumber);
+
+        if(request.getParameter("id") != null){
+            try {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Product product = ProductDataBase.selectOne(id);
+                if(product!=null) {
+                    request.setAttribute("product", product);
+                    request.setAttribute("overlay", 1);
+                    //getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
+                }
+                else {
+                    getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+                }
+            }
+            catch(Exception ex) {
+                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            }
+        }
         getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
     }
+
+    /*@Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Product product = ProductDataBase.selectOne(id);
+            if(product!=null) {
+                request.setAttribute("product", product);
+                getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
+            }
+            else {
+                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            }
+        }
+        catch(Exception ex) {
+            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        }
+    }*/
+
+
 }

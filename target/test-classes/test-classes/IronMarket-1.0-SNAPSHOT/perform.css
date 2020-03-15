@@ -1,0 +1,83 @@
+body{
+    padding: 0;
+    margin: 0;
+    font-family: Calibri, sans-serif;
+    background-color: #edeef0;
+}
+section {
+    margin: 0;
+    padding: 0;
+    min-height: calc(100vh - 50px);
+    height: 100%;
+    background-color: #edeef0;
+}
+
+.upper-container {
+    width: 100%;
+}
+
+.header {
+    padding-left: 5px;
+    background-color: #AFCDE7;
+    width: 100%;
+    height: 50px;
+    text-align: left;
+    font-size: 30px;
+}
+
+.property-name {
+    margin-left: 10px;
+    align-content: center;
+    text-align: left;
+    font-size: 20px;
+    display: inline;
+}
+
+.input-field {
+    float: right;
+    margin-right: 200px;
+}
+
+.field{
+    margin-top: 20px;
+    /*border: 1px solid black;*/
+}
+#first-field{
+    margin-top: 10px;
+}
+
+.fields{
+    background-color: #edeef0;
+    width: 500px;
+    /*border: 2px solid green;*/
+}
+
+/*.button {
+    float: left;
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 90px;
+    width: 100px;
+    border: 2px solid grey;
+    background-color: #3c77a5;
+    text-align: center;
+    vertical-align: bottom;
+    color: white;
+}*/
+
+.button {
+    margin-left: 70px;
+    width: 150px;
+    color: #fff; /* цвет текста */
+    text-decoration: none; /* убирать подчёркивание у ссылок */
+    user-select: none; /* убирать выделение текста */
+    background: rgb(52, 95, 167); /* фон кнопки */
+    padding: .7em 1.5em; /* отступ от текста */
+    outline: none; /* убирать контур в Mozilla */
+}
+.button:hover {
+    background: rgb(61, 78, 167);
+} /* при наведении курсора мышки */
+.button:active {
+    background: rgb(18, 32, 167);
+} /* при нажатии */

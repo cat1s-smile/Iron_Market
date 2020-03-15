@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class CartItem {
     private Product product;
     private int number;
+    private int status;
 
-    public CartItem(Product product, int number) {
+    public CartItem(Product product, int number, int status) {
         this.product = product;
         this.number = number;
+        this.status = status;
     }
 
     public Product getProduct() {
@@ -23,5 +25,13 @@ public class CartItem {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

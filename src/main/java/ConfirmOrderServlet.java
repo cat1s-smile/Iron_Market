@@ -13,6 +13,7 @@ public class ConfirmOrderServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            boolean statusOrder = true;
             //String userID = request.getSession().getId();
             String userID = User.getDefaultID();
             Order order = OrderDataBase.selectActive(userID);
@@ -24,19 +25,27 @@ public class ConfirmOrderServlet extends HttpServlet {
                 }
                 for(OrderContent content : orderContents) {
                     Product product = ProductDataBase.selectOne(content.getIdProduct());
-                    if(product.getAmount() < content.getNumber()) {
-                        response.sendRedirect(request.getContextPath() + "/not_enough.jsp");
-                        return;
+                    if (product.getAmount() < content.getNumber()) {
+                        //lackProductIndex.add(product.getIdProduct());
+                        statusOrder = false;
+                        //response.sendRedirect(request.getContextPath() + "/cart");
+                        // return;
                     }
                 }
-                for(OrderContent content : orderContents) {
-                    Product product = ProductDataBase.selectOne(content.getIdProduct());
-                    product.setAmount(product.getAmount() - content.getNumber());
-                    ProductDataBase.update(product);
+                if(statusOrder) {
+                    for (OrderContent content : orderContents) {
+                        Product product = ProductDataBase.selectOne(content.getIdProduct());
+                        product.setAmount(product.getAmount() - content.getNumber());
+                        ProductDataBase.update(product);
+                    }
+                    order.setStatus("1");
+                    OrderDataBase.update(order);
+                    response.sendRedirect(request.getContextPath() + "/order_successful.jsp");
                 }
-                order.setStatus("1");
-                OrderDataBase.update(order);
-                response.sendRedirect(request.getContextPath() + "/order_successful.jsp");
+                else {
+                    //request.setAttribute("indexes", lackProductIndex);
+                    getServletContext().getRequestDispatcher("/cart").forward(request, response);
+                }
             }
             else {
                 response.sendRedirect(request.getContextPath() + "/cart");

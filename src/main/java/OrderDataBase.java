@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class OrderDataBase {
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
     private static String username = "root";
-    private static String password = "1111";
+    private static String password = "кщще";
 
     public static ArrayList<Order> select() {
         ArrayList<Order> orders = new ArrayList<Order>();

@@ -69,5 +69,10 @@ public class Product {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public String getCategory(int idCategory){
+        Category category = CategoryDataBase.selectOne(idCategory);
+        return category.getName();
+    }
 }
 
