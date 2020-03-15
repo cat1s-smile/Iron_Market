@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="IronMarket" target="8" />
+      <module name="IronMarket" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,9 +2,9 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class ProductDataBase {
-    private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
     private static String username = "root";
-    private static String password = "кщще";
+    private static String password = "admin";
+    private static String url = "jdbc:mysql://localhost:3306/MyShop?useUnicode=true&serverTimezone=UTC";
 
     public static ArrayList<Product> select() {
         ArrayList<Product> products = new ArrayList<Product>();
@@ -20,8 +20,39 @@ public class ProductDataBase {
                     int amount = resultSet.getInt(4);
                     String description = resultSet.getString(5);
                     int idCategory = resultSet.getInt(6);
-                    Product product = new Product(idProduct, idCategory, name, price, amount, description);
+                    int status = resultSet.getInt(7);
+                    Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
                     products.add(product);
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return products;
+    }
+
+    public static ArrayList<Product> selectOnSale() {
+        ArrayList<Product> products = new ArrayList<Product>();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                Statement statement = conn.createStatement();
+                String sql = "SELECT * FROM product WHERE status = ?";
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setInt(1, 1);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        int idProduct = resultSet.getInt(1);
+                        String name = resultSet.getString(2);
+                        int price = resultSet.getInt(3);
+                        int amount = resultSet.getInt(4);
+                        String description = resultSet.getString(5);
+                        int idCategory = resultSet.getInt(6);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
+                        products.add(product);
+                    }
                 }
             }
         }
@@ -136,7 +167,8 @@ public class ProductDataBase {
                         int amount = resultSet.getInt(4);
                         String description = resultSet.getString(5);
                         int idCategory = resultSet.getInt(6);
-                        product = new Product(idProduct, idCategory, name, price, amount, description);
+                        int status = resultSet.getInt(7);
+                        product = new Product(idProduct, idCategory, name, price, amount, description, status);
                     }
                 }
             }
@@ -196,6 +228,44 @@ public class ProductDataBase {
                 String sql = "DELETE FROM product WHERE idProduct = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
+                    return  preparedStatement.executeUpdate();
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return 0;
+    }
+
+    public static int archive(Product product) {
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                String sql = "UPDATE product SET status = ? WHERE idProduct = ?";
+
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setInt(1, 0);
+                    preparedStatement.setInt(2, product.getIdProduct());
+                    return  preparedStatement.executeUpdate();
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return 0;
+    }
+
+    public static int deArchive(Product product) {
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                String sql = "UPDATE product SET status = ? WHERE idProduct = ?";
+
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setInt(1, 1);
+                    preparedStatement.setInt(2, product.getIdProduct());
                     return  preparedStatement.executeUpdate();
                 }
             }

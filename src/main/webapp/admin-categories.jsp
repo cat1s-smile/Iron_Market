@@ -20,10 +20,6 @@
 					<%--					<a href='<c:url value="/admin-categories" />' type="button">Категории</a>--%>
 					<input id= "a-categories" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-categories';" value="Категории" style="background-color: #1220a7">
 				</li>
-				<li class="menu-elem">
-					<%--					<a href='<c:url value="/admin-orders" />' type="button">Заказы</a>--%>
-					<input id= "a-orders" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-orders';" value="Заказы">
-				</li>
 			</ul>
 		</div>
 	</header>

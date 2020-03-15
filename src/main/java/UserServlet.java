@@ -11,7 +11,7 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<Product> products = ProductDataBase.select();
+        ArrayList<Product> products = ProductDataBase.selectOnSale();
         ArrayList<Category> categories = CategoryDataBase.select();
         request.setAttribute("catID", -1);
         request.setAttribute("products", products);

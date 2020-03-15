@@ -19,10 +19,6 @@
 <%--					<a href='<c:url value="/admin-categories" />' type="button">Категории</a>--%>
 					<input id= "a-categories" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-categories';" value="Категории">
 				</li>
-				<li class="menu-elem">
-<%--					<a href='<c:url value="/admin-orders" />' type="button">Заказы</a>--%>
-					<input id= "a-orders" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-orders';" value="Заказы">
-				</li>
 			</ul>
 		</div>
 	</header>
@@ -39,16 +35,23 @@
 					<th style="width: 150px">
 						<p><a href='<c:url value="/create" />' class="button-create">Create new</a></p>
 					</th>
+					<th>Статус</th>
 				</tr>
 				<c:forEach var="product" items="${products}">
-					<tr><td>${product.idProduct}</td>
+					<tr ${product.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
+						<td>${product.idProduct}</td>
 						<td>${product.name}</td>
 						<td>${product.price}</td>
 						<td>${product.amount}</td>
 						<td>${product.description}</td>
 						<td>${product.getCategory(product.idCategory)}</td>
+						<td>${product.status}</td>
 						<td>
 							<a href='<c:url value="/edit?id=${product.idProduct}" />' class="button-edit">Edit</a> |
+							<form method="post" action='<c:url value="/archive" />' style="display:inline;">
+								<input type="hidden" name="id" value="${product.idProduct}">
+								<input type="submit" class="button-delete" value=${product.status == 1 ? "Archive" : "DeArchive"}>
+							</form>
 							<form method="post" action='<c:url value="/delete" />' style="display:inline;">
 								<input type="hidden" name="id" value="${product.idProduct}">
 								<input type="submit" value="Delete" class="button-delete">
