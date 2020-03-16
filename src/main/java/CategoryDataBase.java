@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class CategoryDataBase {
     private static String username = "root";
-    private static String password = "admin";
-    private static String url = "jdbc:mysql://localhost:3306/MyShop?useUnicode=true&serverTimezone=UTC";
+    private static String password = "1111";
+    private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
     public static ArrayList<Category> select() {
         ArrayList<Category> categories = new ArrayList<>();

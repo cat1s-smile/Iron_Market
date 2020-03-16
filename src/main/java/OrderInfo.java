@@ -1,27 +1,29 @@
+import java.util.ArrayList;
+
 public class OrderInfo {
-    private double orderID;
-    private String content;
+    private int orderID;
+    private ArrayList<String> content;
     private double totalCost;
 
-    public OrderInfo(double orderID, String content, double totalCost) {
+    public OrderInfo(int orderID, ArrayList<String> content, double totalCost) {
         this.orderID = orderID;
         this.content = content;
         this.totalCost = totalCost;
     }
 
-    public double getOrderID() {
+    public int getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(double orderID) {
+    public void setOrderID(int orderID) {
         this.orderID = orderID;
     }
 
-    public String getContent() {
+    public ArrayList<String> getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(ArrayList<String> content) {
         this.content = content;
     }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+    <xsd:element name="shopContent">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="products" type="products"/>
+                <xsd:element name="categories" type="categories"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    
+    <xsd:complexType name="products">
+        <xsd:sequence>
+            <xsd:element name="product" type="product" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="product">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="idCategory" type="xsd:string"/>
+            <xsd:element name="price" type="xsd:int"/>
+            <xsd:element name="description" type="xsd:string"/>
+            <xsd:element name="amount" type="xsd:double"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="categories">
+        <xsd:sequence>
+            <xsd:element name="category" type="category" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="category">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+</xsd:schema>

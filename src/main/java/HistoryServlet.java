@@ -16,18 +16,15 @@ public class HistoryServlet extends HttpServlet {
         ArrayList<OrderInfo> orderInfos = new ArrayList<>();
         if (!orders.isEmpty()) {
             for (Order order : orders) {
-                StringBuilder content = new StringBuilder();
+                ArrayList<String> content = new ArrayList<>();
                 double totalCost = 0.0;
                 ArrayList<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getIdOrder());
                 for (OrderContent ord : orderContents) {
                     Product product = ProductDataBase.selectOne(ord.getIdProduct());
-                    content.append(product.getName())
-                            .append(" x")
-                            .append(ord.getNumber())
-                            .append("; ");
+                    content.add(product.getName() + " x" + ord.getNumber() + ";");
                     totalCost += product.getPrice() * ord.getNumber();
                 }
-                orderInfos.add(new OrderInfo(order.getIdOrder(), content.toString(), totalCost));
+                orderInfos.add(new OrderInfo(order.getIdOrder(), content, totalCost));
             }
         }
         request.setAttribute("orders", orderInfos);

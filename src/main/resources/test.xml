@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shopContent>
+    <products>
+        <product>
+            <name>AMD Ryzen 5 2600X</name>
+            <idCategory>CPU</idCategory>
+            <price>11000</price>
+            <description>s</description>
+            <amount>54.0</amount>
+        </product>
+        <product>
+            <name>Intel Core i5 8600K</name>
+            <idCategory>CPU</idCategory>
+            <price>13000</price>
+            <description>112</description>
+            <amount>73.0</amount>
+        </product>
+        <product>
+            <name>AMD FX 8350</name>
+            <idCategory>CPU</idCategory>
+            <price>5500</price>
+            <description>An atomic reactor but ok</description>
+            <amount>135.0</amount>
+        </product>
+        <product>
+            <name>Intel Core i7 9700K</name>
+            <idCategory>CPU</idCategory>
+            <price>21000</price>
+            <description>still 14nm lol</description>
+            <amount>250.0</amount>
+        </product>
+        <product>
+            <name>ASUS PRIME B350-A</name>
+            <idCategory>Motherboard</idCategory>
+            <price>4500</price>
+            <description>no its amd</description>
+            <amount>0.0</amount>
+        </product>
+        <product>
+            <name>MSI Z370-A</name>
+            <idCategory>Motherboard</idCategory>
+            <price>6990</price>
+            <description></description>
+            <amount>123.0</amount>
+        </product>
+        <product>
+            <name>ASROCK B350m-A</name>
+            <idCategory>Motherboard</idCategory>
+            <price>4590</price>
+            <description></description>
+            <amount>312.0</amount>
+        </product>
+        <product>
+            <name>Intel Pentium G4550</name>
+            <idCategory>CPU</idCategory>
+            <price>5990</price>
+            <description></description>
+            <amount>153.0</amount>
+        </product>
+        <product>
+            <name>ASUS Z170 Gaming</name>
+            <idCategory>Motherboard</idCategory>
+            <price>4990</price>
+            <description></description>
+            <amount>82.0</amount>
+        </product>
+        <product>
+            <name>Samsung 8GB DDR4</name>
+            <idCategory>Memory</idCategory>
+            <price>3990</price>
+            <description>3200MHz</description>
+            <amount>436.0</amount>
+        </product>
+        <product>
+            <name>G.Skill 4GB DDR4</name>
+            <idCategory>Memory</idCategory>
+            <price>2190</price>
+            <description>2666Mhz</description>
+            <amount>213.0</amount>
+        </product>
+    </products>
+    <categories>
+        <category>
+            <name>CPU</name>
+        </category>
+        <category>
+            <name>Motherboard</name>
+        </category>
+        <category>
+            <name>Memory</name>
+        </category>
+    </categories>
+</shopContent>

@@ -20,7 +20,7 @@ public class CartServlet extends HttpServlet {
             int cost = 0;
             for (OrderContent ord : cart) {
                 Product product = ProductDataBase.selectOne(ord.getIdProduct());
-                if(product.getAmount() < ord.getNumber()) {
+                if(product.getAmount() < ord.getNumber() || product.getStatus() == 0) {
                     cartItems.add(new CartItem(product, ord.getNumber(), 0));
                     request.setAttribute("correct", 0);
                 }
