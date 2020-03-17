@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class ProductDataBase {
     private static String username = "root";
-    private static String password = "admin";
-    private static String url = "jdbc:mysql://localhost:3306/MyShop?useUnicode=true&serverTimezone=UTC";
+    private static String password = "1111";
+    private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
     public static ArrayList<Product> select() {
         ArrayList<Product> products = new ArrayList<Product>();
@@ -177,6 +177,26 @@ public class ProductDataBase {
             System.out.println(ex);
         }
         return product;
+    }
+
+    public static boolean isContain(Product product) {
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                String sql = "SELECT * FROM product WHERE name like ? and description like ? and idCategory=?";
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setString(1, product.getName());
+                    preparedStatement.setString(2, product.getDescription());
+                    preparedStatement.setInt(3, product.getIdCategory());
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    return resultSet.next();
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return false;
     }
     public static int insert(Product product) {
         try{

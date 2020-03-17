@@ -18,11 +18,12 @@
     
     <xsd:complexType name="product">
         <xsd:sequence>
+            <xsd:element name="id" type="xsd:int"/>
             <xsd:element name="name" type="xsd:string"/>
             <xsd:element name="idCategory" type="xsd:string"/>
-            <xsd:element name="price" type="xsd:int"/>
+            <xsd:element name="price" type="xsd:double"/>
             <xsd:element name="description" type="xsd:string"/>
-            <xsd:element name="amount" type="xsd:double"/>
+            <xsd:element name="amount" type="xsd:int"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -35,6 +36,7 @@
 
     <xsd:complexType name="category">
         <xsd:sequence>
+            <xsd:element name="id" type="xsd:int"/>
             <xsd:element name="name" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
