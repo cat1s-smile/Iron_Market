@@ -25,10 +25,11 @@
             <ul class="products">
                 <c:forEach var="cartItem" items="${cart}">
                     <li>
-                        <div class="product" ${cartItem.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
+                        <div class="cart-product" ${cartItem.product.status == 0 || cartItem.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
                             <p>${cartItem.product.name}</p>
                             <p>Цена: ${cartItem.product.price}</p>
-                            <p style="display: inline">Количество: ${cartItem.number}</p>
+                            <p>Наличие: ${cartItem.product.status == 0 ? " НЕ ДОСТУПНО" : cartItem.product.amount}</p>
+                            <p style="display: inline; margin-left: 5px">Выбрано: ${cartItem.number}</p>
                             <div class="buttons-count">
                                 <form method="post" action='<c:url value="/remove_from_cart" />'
                                       style="display:inline;">

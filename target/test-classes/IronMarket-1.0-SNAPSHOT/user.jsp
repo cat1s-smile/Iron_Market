@@ -5,7 +5,6 @@
 <head>
     <link rel="stylesheet" type="text/css" href="user3.css">
     <link rel="stylesheet" type="text/css" href="popup.css">
-    <script src="script_user.js"></script>
     <title>Магазин комплектующих компьютеров</title>
 </head>
 <body>

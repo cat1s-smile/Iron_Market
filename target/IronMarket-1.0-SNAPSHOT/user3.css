@@ -205,9 +205,9 @@ section{
     margin-left: 35px;
     font-size: 22px;
     margin-top: 30px;
+    line-height: 100%;
     /*width: calc(50vw - 200px);*/
     width: 400px;
-    height: 200px;
     border: 1px solid #a0a0a0;
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
@@ -229,6 +229,7 @@ p{
     background: #3c87b5;
     box-shadow: 0 -3px rgb(52, 95, 167) inset;
     transition: 0.2s;
+    margin-bottom: 4px;
 }
 
 .button-product:hover{

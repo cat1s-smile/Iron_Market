@@ -20,15 +20,18 @@
 <section>
     <div class="container">
         <div class="list-text">Совершенные заказы</div>
-        <div class="container-products">
+        <div class="hist-container-products">
             <ul class="products">
                 <c:forEach var="order" items="${orders}">
                     <li>
                         <div class="container-product">
                             <div class="product">
                                 <p>id заказа: ${order.orderID}</p>
-                                <p> ${order.content}</p>
-                                <p style="display: inline">Стоимость: ${order.totalCost}р.</p>
+                                <c:forEach var = "item" items="${order.content}">
+                                    <p> ${item}</p>
+                                </c:forEach>
+                                <p>Стоимость: ${order.totalCost}р.</p>
+                                <p></p>
                             </div>
                         </div>
                     </li>

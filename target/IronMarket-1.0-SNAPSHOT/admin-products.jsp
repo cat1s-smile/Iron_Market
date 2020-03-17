@@ -38,15 +38,15 @@
 					</th>
 				</tr>
 				<c:forEach var="product" items="${products}">
-					<tr ${product.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
-						<td>${product.idProduct}</td>
-						<td>${product.name}</td>
-						<td>${product.price}</td>
-						<td>${product.amount}</td>
-						<td>${product.description}</td>
-						<td>${product.getCategory(product.idCategory)}</td>
-						<td>${product.status}</td>
-						<td>
+					<tr>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.idProduct}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.name}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.getCategory(product.idCategory)}</td>
+						<td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
+						<td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
 							<a href='<c:url value="/edit?id=${product.idProduct}" />' class="button-edit">Edit</a> |
 							<form method="post" action='<c:url value="/archive" />' style="display:inline;">
 								<input type="hidden" name="id" value="${product.idProduct}">
