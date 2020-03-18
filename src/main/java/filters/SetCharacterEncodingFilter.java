@@ -26,7 +26,7 @@ import javax.servlet.Filter; import javax.servlet.FilterChain; import javax.serv
  subclass it and make the <code>selectEncoding()</code> method more
  intelligent about what encoding to choose, based on characteristics of
  the incoming request (such as the values of the <code>Accept-Language</code>
- and <code>User-Agent</code> headers, or a value stashed in the current
+ and <code>entities.main.User-Agent</code> headers, or a value stashed in the current
  user's session.</p> *
  @author Craig McClanahan
  @version $Revision: 267129 $ $Date: 2004-03-18 11:40:35 -0500 (Thu, 18 Mar 2004) $ */

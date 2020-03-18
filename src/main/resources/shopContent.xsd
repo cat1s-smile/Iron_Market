@@ -12,7 +12,7 @@
     
     <xsd:complexType name="products">
         <xsd:sequence>
-            <xsd:element name="product" type="product" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="rawProduct" type="product" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
     
@@ -21,7 +21,7 @@
             <xsd:element name="id" type="xsd:int"/>
             <xsd:element name="name" type="xsd:string"/>
             <xsd:element name="idCategory" type="xsd:string"/>
-            <xsd:element name="price" type="xsd:double"/>
+            <xsd:element name="price" type="xsd:int"/>
             <xsd:element name="description" type="xsd:string"/>
             <xsd:element name="amount" type="xsd:int"/>
         </xsd:sequence>
@@ -30,7 +30,7 @@
 
     <xsd:complexType name="categories">
         <xsd:sequence>
-            <xsd:element name="category" type="category" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="rawCategory" type="category" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
