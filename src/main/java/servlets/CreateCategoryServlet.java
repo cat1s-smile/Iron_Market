@@ -32,7 +32,7 @@ public class CreateCategoryServlet extends HttpServlet {
             Category category = new Category(name);
             model.createCategory(category);
             request.setAttribute("tab", "categories");
-            response.sendRedirect(request.getContextPath()+"/admin");
+            response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         }
         catch(Exception ex) {
 

@@ -71,4 +71,7 @@ public class Categories {
         return this.rawCategory;
     }
 
+    public void setRawCategory(List<RawCategory> rawCategory) {
+        this.rawCategory = rawCategory;
+    }
 }

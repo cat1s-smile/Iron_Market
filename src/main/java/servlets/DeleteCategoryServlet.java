@@ -25,7 +25,7 @@ public class DeleteCategoryServlet extends HttpServlet {
             int id = Parser.parseID(request.getParameter("id"));
             model.deleteCategory(id);
             request.setAttribute("tab", "categories");
-            response.sendRedirect(request.getContextPath() + "/admin");
+            response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         }
         catch(Exception ex) {
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);

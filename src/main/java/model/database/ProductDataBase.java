@@ -67,6 +67,36 @@ class ProductDataBase {
         return products;
     }
 
+    static List<Product> selectArchivedProducts() {
+        List<Product> products = new ArrayList<Product>();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                Statement statement = conn.createStatement();
+                String sql = "SELECT * FROM product WHERE status = ?";
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setInt(1, 0);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        int idProduct = resultSet.getInt(1);
+                        String name = resultSet.getString(2);
+                        int price = resultSet.getInt(3);
+                        int amount = resultSet.getInt(4);
+                        String description = resultSet.getString(5);
+                        int idCategory = resultSet.getInt(6);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
+                        products.add(product);
+                    }
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return products;
+    }
+
     static List<Product> selectByCategory(int id) {
         List<Product> products = new ArrayList<Product>();
         try{

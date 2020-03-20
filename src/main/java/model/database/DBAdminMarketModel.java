@@ -1,13 +1,19 @@
 package model.database;
 
-import entities.jaxbready.RawCategory;
-import entities.jaxbready.RawProduct;
-import entities.jaxbready.ShopContent;
+import entities.jaxbready.*;
 import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
+import org.xml.sax.SAXException;
 
 import javax.ejb.Stateless;
+import javax.xml.XMLConstants;
+import javax.xml.bind.*;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +159,102 @@ public class DBAdminMarketModel implements AdminMarketModel {
         categories.add(category);
         ProductDataBase.insert(transformProduct(rawProduct, category.getIdCategory()));
     }
+
+    @Override
+    public ShopContent createShopContent(String xmlFilePath, String xsdSchemaPath) throws JAXBException, SAXException {
+        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = sf.newSchema(new File("shopContent.xsd"));
+
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        unmarshaller.setSchema(schema);
+       // unmarshaller.setEventHandler(new EmployeeValidationEventHandler());
+
+        ShopContent shopContent = (ShopContent) unmarshaller.unmarshal(new File(xmlFilePath));
+        return shopContent;
+    }
+
+/*class EmployeeValidationEventHandler implements ValidationEventHandler {
+    @Override
+    public boolean handleEvent(ValidationEvent event) {
+        System.out.println("\nEVENT");
+        System.out.println("SEVERITY:  " + event.getSeverity());
+        System.out.println("MESSAGE:  " + event.getMessage());
+        System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());
+        System.out.println("LOCATOR");
+        System.out.println("    LINE NUMBER:  " + event.getLocator().getLineNumber());
+        System.out.println("    COLUMN NUMBER:  " + event.getLocator().getColumnNumber());
+        System.out.println("    OFFSET:  " + event.getLocator().getOffset());
+        System.out.println("    OBJECT:  " + event.getLocator().getObject());
+        System.out.println("    NODE:  " + event.getLocator().getNode());
+        System.out.println("    URL:  " + event.getLocator().getURL());
+        return true;
+    }
+}
+    }*/
+
+    @Override
+    public void toXmlFile(ShopContent shopContent, String xmlFilePath) throws JAXBException, FileNotFoundException {
+        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(xmlFilePath));
+        marshaller.marshal(shopContent, fileOutputStream);
+    }
+
+    private ShopContent createShopContent(List<Product> products, List<Category> categories) {
+        ObjectFactory factory = new ObjectFactory();
+        List<RawCategory> rawCategories = new ArrayList<>();
+        for (Category category : categories) {
+            RawCategory cat = factory.createCategory();
+            cat.setName(category.getName());
+            cat.setId(category.getIdCategory());
+            rawCategories.add(cat);
+        }
+        List<RawProduct> rawProducts = new ArrayList<>();
+        for (Product product : products) {
+            RawProduct prod = factory.createProduct();
+            prod.setName(product.getName());
+            for(Category cat : categories) {
+                if (product.getIdCategory() == cat.getIdCategory()) {
+                    prod.setIdCategory(cat.getName());
+                    break;
+                }
+            }
+            prod.setId(product.getIdProduct());
+            prod.setAmount(product.getAmount());
+            prod.setPrice(product.getPrice());
+            prod.setDescription(product.getDescription());
+            rawProducts.add(prod);
+        }
+        ShopContent shopContent = factory.createShopContent();
+        Categories jaxbCategories = factory.createCategories();
+        jaxbCategories.setRawCategory(rawCategories);
+        Products jaxbProducts = factory.createProducts();
+        jaxbProducts.setRawProduct(rawProducts);
+        shopContent.setProducts(jaxbProducts);
+        shopContent.setCategories(jaxbCategories);
+        return shopContent;
+    }
+
+    @Override
+    public ShopContent getAllProducts() {
+        return createShopContent(ProductDataBase.select(), CategoryDataBase.select());
+    }
+
+    @Override
+    public ShopContent getProductsOnSale() {
+        return createShopContent(ProductDataBase.selectOnSale(), CategoryDataBase.select());
+    }
+
+    @Override
+    public ShopContent getArchivedProducts() {
+        return createShopContent(ProductDataBase.selectArchivedProducts(), CategoryDataBase.select());
+    }
+
+
 
     private int getCategoryID(List<Category> categories, String categoryName) {
         for (Category category : categories) {

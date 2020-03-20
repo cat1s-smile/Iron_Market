@@ -71,4 +71,7 @@ public class Products {
         return this.rawProduct;
     }
 
+    public void setRawProduct(List<RawProduct> rawProduct) {
+        this.rawProduct = rawProduct;
+    }
 }

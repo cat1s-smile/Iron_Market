@@ -3,8 +3,11 @@ package model;
 import entities.jaxbready.ShopContent;
 import entities.main.Category;
 import entities.main.Product;
+import org.xml.sax.SAXException;
 
 import javax.ejb.Local;
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @Local
@@ -40,6 +43,16 @@ public interface AdminMarketModel {
     void insertUpdateOverwriteDuplicates(ShopContent shopContent);
 
     void insertUpdateWithDuplicates(ShopContent shopContent);
+
+    ShopContent createShopContent(String xmlFilePath, String xsdSchemaPath) throws JAXBException, SAXException;
+
+    void toXmlFile(ShopContent shopContent, String xmlFilePath) throws JAXBException, FileNotFoundException;
+
+    ShopContent getAllProducts();
+
+    ShopContent getProductsOnSale();
+
+    ShopContent getArchivedProducts();
 
     void changeProductStatus(int id);
 }

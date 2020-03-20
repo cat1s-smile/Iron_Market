@@ -50,8 +50,7 @@ public class EditCategoryServlet extends HttpServlet {
             }
             else
                 model.editCategory(category);
-            request.setAttribute("tab", "categories");
-            response.sendRedirect(request.getContextPath() + "/admin");
+                response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         } catch (Exception ex) {
 
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
