@@ -1,107 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <shopContent>
     <products>
-        <product>
+        <rawProduct>
             <id>1</id>
             <name>AMD Ryzen 5 2600X</name>
             <idCategory>CPU</idCategory>
             <price>11000</price>
             <description>s</description>
-            <amount>54.0</amount>
-        </product>
-        <product>
+            <amount>48</amount>
+        </rawProduct>
+        <rawProduct>
             <id>2</id>
             <name>Intel Core i5 8600K</name>
             <idCategory>CPU</idCategory>
             <price>13000</price>
             <description>112</description>
-            <amount>73.0</amount>
-        </product>
-        <product>
+            <amount>73</amount>
+        </rawProduct>
+        <rawProduct>
             <id>15</id>
             <name>AMD FX 8350</name>
             <idCategory>CPU</idCategory>
             <price>5500</price>
             <description>An atomic reactor but ok</description>
-            <amount>135.0</amount>
-        </product>
-        <product>
+            <amount>135</amount>
+        </rawProduct>
+        <rawProduct>
             <id>16</id>
             <name>Intel Core i7 9700K</name>
             <idCategory>CPU</idCategory>
             <price>21000</price>
             <description>still 14nm lol</description>
-            <amount>250.0</amount>
-        </product>
-        <product>
+            <amount>249</amount>
+        </rawProduct>
+        <rawProduct>
             <id>17</id>
             <name>ASUS PRIME B350-A</name>
             <idCategory>Motherboard</idCategory>
             <price>4500</price>
             <description>no its amd</description>
-            <amount>1.0</amount>
-        </product>
-        <product>
+            <amount>0</amount>
+        </rawProduct>
+        <rawProduct>
             <id>18</id>
             <name>MSI Z370-A</name>
             <idCategory>Motherboard</idCategory>
             <price>6990</price>
             <description></description>
-            <amount>123.0</amount>
-        </product>
-        <product>
+            <amount>123</amount>
+        </rawProduct>
+        <rawProduct>
             <id>19</id>
             <name>ASROCK B350m-A</name>
             <idCategory>Motherboard</idCategory>
             <price>4590</price>
             <description></description>
-            <amount>312.0</amount>
-        </product>
-        <product>
+            <amount>312</amount>
+        </rawProduct>
+        <rawProduct>
             <id>20</id>
             <name>Intel Pentium G4550</name>
             <idCategory>CPU</idCategory>
             <price>5990</price>
             <description></description>
-            <amount>153.0</amount>
-        </product>
-        <product>
+            <amount>153</amount>
+        </rawProduct>
+        <rawProduct>
             <id>21</id>
             <name>ASUS Z170 Gaming</name>
             <idCategory>Motherboard</idCategory>
             <price>4990</price>
             <description></description>
-            <amount>82.0</amount>
-        </product>
-        <product>
+            <amount>82</amount>
+        </rawProduct>
+        <rawProduct>
             <id>23</id>
             <name>Samsung 8GB DDR4</name>
             <idCategory>Memory</idCategory>
             <price>3990</price>
             <description>3200MHz</description>
-            <amount>436.0</amount>
-        </product>
-        <product>
+            <amount>436</amount>
+        </rawProduct>
+        <rawProduct>
             <id>24</id>
             <name>G.Skill 4GB DDR4</name>
             <idCategory>Memory</idCategory>
             <price>2190</price>
             <description>2666Mhz</description>
-            <amount>213.0</amount>
-        </product>
+            <amount>213</amount>
+        </rawProduct>
     </products>
     <categories>
-        <category>
+        <rawCategory>
             <id>1</id>
             <name>CPU</name>
-        </category>
-        <category>
+        </rawCategory>
+        <rawCategory>
             <id>2</id>
             <name>Motherboard</name>
-        </category>
-        <category>
+        </rawCategory>
+        <rawCategory>
             <id>4</id>
             <name>Memory</name>
-        </category>
+        </rawCategory>
+        <rawCategory>
+            <id>10</id>
+            <name>a</name>
+        </rawCategory>
     </categories>
 </shopContent>

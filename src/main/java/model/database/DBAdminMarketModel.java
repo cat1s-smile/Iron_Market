@@ -165,7 +165,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
         JAXBContext context = JAXBContext.newInstance(ShopContent.class);
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File("shopContent.xsd"));
+        Schema schema = sf.newSchema(new File(xsdSchemaPath));
 
         Unmarshaller unmarshaller = context.createUnmarshaller();
 

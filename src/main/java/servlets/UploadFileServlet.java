@@ -36,7 +36,7 @@ public class UploadFileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("uploadFile.jsp");
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("import.jsp");
 
         dispatcher.forward(request, response);
     }
@@ -83,22 +83,22 @@ public class UploadFileServlet extends HttpServlet {
 
             // Transform to HTML
             TransformerFactory tFactory = TransformerFactory.newInstance();
-            Source xslDoc = new StreamSource("C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\shop.xsl");
+            String xslPath = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\shop.xsl";
+            Source xslDoc = new StreamSource(xslPath);
             Source xmlDoc = new StreamSource(filePath);
-            String outputFileName = "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\webapp\\preview.html";
+            String outputFileName = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\webapp\\preview.html";
             OutputStream htmlFile = new FileOutputStream(outputFileName);
             Transformer trasform = tFactory.newTransformer(xslDoc);
             trasform.transform(xmlDoc, new StreamResult(htmlFile));
 
-            String s = htmlFile.toString();
-            request.setAttribute("html", s);
-
+            request.setAttribute("xsl", xslPath);
+            request.setAttribute("xml", filePath);
 
             getServletContext().getRequestDispatcher("/uploadFileResults.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/uploadFile.jsp");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/import.jsp");
             dispatcher.forward(request, response);
         }
     }

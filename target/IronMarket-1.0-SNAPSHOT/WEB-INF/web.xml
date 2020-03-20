@@ -30,139 +30,91 @@
     </context-param>
 
     <servlet>
-        <servlet-name>HistoryServlet</servlet-name>
-        <servlet-class>HistoryServlet</servlet-class>
+        <servlet-name>servlets.HistoryServlet</servlet-name>
+        <servlet-class>servlets.HistoryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ConfirmOrderServlet</servlet-name>
-        <servlet-class>ConfirmOrderServlet</servlet-class>
+        <servlet-name>servlets.ConfirmOrderServlet</servlet-name>
+        <servlet-class>servlets.ConfirmOrderServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RemoveFromCartServlet</servlet-name>
-        <servlet-class>RemoveFromCartServlet</servlet-class>
+        <servlet-name>servlets.RemoveFromCartServlet</servlet-name>
+        <servlet-class>servlets.RemoveFromCartServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CategoryServlet</servlet-name>
-        <servlet-class>CategoryServlet</servlet-class>
+        <servlet-name>servlets.CartServlet</servlet-name>
+        <servlet-class>servlets.CartServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SearchServlet</servlet-name>
-        <servlet-class>SearchServlet</servlet-class>
+        <servlet-name>servlets.IndexServlet</servlet-name>
+        <servlet-class>servlets.IndexServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CartServlet</servlet-name>
-        <servlet-class>CartServlet</servlet-class>
+        <servlet-name>servlets.CreateServlet</servlet-name>
+        <servlet-class>servlets.CreateServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>IndexServlet</servlet-name>
-        <servlet-class>IndexServlet</servlet-class>
+        <servlet-name>servlets.EditServlet</servlet-name>
+        <servlet-class>servlets.EditServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreateServlet</servlet-name>
-        <servlet-class>CreateServlet</servlet-class>
+        <servlet-name>servlets.DeleteServlet</servlet-name>
+        <servlet-class>servlets.DeleteServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>IndexProductServlet</servlet-name>
-        <servlet-class>IndexProductServlet</servlet-class>
+        <servlet-name>servlets.EditCategoryServlet</servlet-name>
+        <servlet-class>servlets.EditCategoryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditServlet</servlet-name>
-        <servlet-class>EditServlet</servlet-class>
+        <servlet-name>servlets.DeleteCategoryServlet</servlet-name>
+        <servlet-class>servlets.DeleteCategoryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteServlet</servlet-name>
-        <servlet-class>DeleteServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>CreateCategoryServlet</servlet-name>
-        <servlet-class>CreateCategoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>IndexCategoryServlet</servlet-name>
-        <servlet-class>IndexCategoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>EditCategoryServlet</servlet-name>
-        <servlet-class>EditCategoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DeleteCategoryServlet</servlet-name>
-        <servlet-class>DeleteCategoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UserServlet</servlet-name>
-        <servlet-class>UserServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>OpenServlet</servlet-name>
-        <servlet-class>OpenServlet</servlet-class>
+        <servlet-name>servlets.UserServlet</servlet-name>
+        <servlet-class>servlets.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HistoryServlet</servlet-name>
+        <servlet-name>servlets.HistoryServlet</servlet-name>
         <url-pattern>/history</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ConfirmOrderServlet</servlet-name>
+        <servlet-name>servlets.ConfirmOrderServlet</servlet-name>
         <url-pattern>/confirm_order</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RemoveFromCartServlet</servlet-name>
+        <servlet-name>servlets.RemoveFromCartServlet</servlet-name>
         <url-pattern>/remove_from_cart</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
+        <servlet-name>servlets.IndexServlet</servlet-name>
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CategoryServlet</servlet-name>
-        <url-pattern>/category</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteServlet</servlet-name>
+        <servlet-name>servlets.DeleteServlet</servlet-name>
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditServlet</servlet-name>
+        <servlet-name>servlets.EditServlet</servlet-name>
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SearchServlet</servlet-name>
-        <url-pattern>/search</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>IndexProductServlet</servlet-name>
-        <url-pattern>/admin-products</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CreateServlet</servlet-name>
+        <servlet-name>servlets.CreateServlet</servlet-name>
         <url-pattern>/create</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DeleteCategoryServlet</servlet-name>
+        <servlet-name>servlets.DeleteCategoryServlet</servlet-name>
         <url-pattern>/deleteCategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditCategoryServlet</servlet-name>
+        <servlet-name>servlets.EditCategoryServlet</servlet-name>
         <url-pattern>/editCategory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>IndexCategoryServlet</servlet-name>
-        <url-pattern>/admin-categories</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CreateCategoryServlet</servlet-name>
-        <url-pattern>/createCategory</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
+        <servlet-name>servlets.UserServlet</servlet-name>
         <url-pattern>/user</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OpenServlet</servlet-name>
-        <url-pattern>/open</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CartServlet</servlet-name>
+        <servlet-name>servlets.CartServlet</servlet-name>
         <url-pattern>/cart</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -32,6 +32,14 @@ section{
 
 .entities{
 	margin-top: 50px;
+	float: left;
+	display: inline-block;
+
+	text-align: center;
+	vertical-align: bottom;
+	font-size: 30px;
+	text-decoration: none;
+	color: white;
 }
 
 .entities li{
@@ -72,12 +80,14 @@ section{
 }
 
 .button-menu{
+	display: inline;
 	color: white;
 	font-size: 30px;
-	width: 250px;
 	height: 70px;
+	margin-left: 200px;
+	width: 250px;
+	border: 2px solid grey;
 	background-color: #3c77a5;
-	border: 0;
 }
 
 .name-table{

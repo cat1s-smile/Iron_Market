@@ -43,8 +43,8 @@
 <body>
 <div class="container">
     <h3>${product.name}</h3>
-    <p>Product code: ${product.idProduct}</p>
-    <p>Category: ${product.idCategory}</p>
+    <p>entities.main.Product code: ${product.idProduct}</p>
+    <p>entities.main.Category: ${product.idCategory}</p>
     <p>Description: ${product.description}</p>
     <p>Amount on store: ${product.amount}</p>
     <p>Price: ${product.price}</p>

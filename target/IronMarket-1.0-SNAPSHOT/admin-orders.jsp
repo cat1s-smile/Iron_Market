@@ -11,16 +11,20 @@
 	<header>
 		<div class="upper-container">
 			<div class="name-admin">Администраторская панель</div>
-			<ul class="entities">
-				<li class="menu-elem">
-					<%--					<a href='<c:url value="/admin-products" />' type="button">Товары</a>--%>
-					<input id= "a-products" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-products';" value="Товары">
-				</li>
-				<li class="menu-elem">
-					<%--					<a href='<c:url value="/admin-categories" />' type="button">Категории</a>--%>
-					<input id= "a-categories" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-categories';" value="Категории">
-				</li>
-			</ul>
+			<div class="entities">
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="products">
+					<input type="submit" class="button-menu" value="Товары" style="background-color: #1220a7">
+				</form>
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="categories">
+					<input type="submit" class="button-menu" value="Категории">
+				</form>
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="import-export">
+					<input type="submit" class="button-menu" value="Импорт/Экспорт">
+				</form>
+			</div>
 		</div>
 	</header>
 	<section>
