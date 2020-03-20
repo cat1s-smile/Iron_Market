@@ -66,7 +66,7 @@ public class Categories {
      */
     public List<RawCategory> getRawCategory() {
         if (rawCategory == null) {
-            rawCategory = new ArrayList<RawCategory>();
+            rawCategory = new ArrayList<>();
         }
         return this.rawCategory;
     }

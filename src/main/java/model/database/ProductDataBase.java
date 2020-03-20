@@ -4,14 +4,15 @@ import entities.main.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ProductDataBase {
+class ProductDataBase {
     private static String username = "root";
     private static String password = "1111";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
-    public static ArrayList<Product> select() {
-        ArrayList<Product> products = new ArrayList<Product>();
+    static List<Product> select() {
+        List<Product> products = new ArrayList<Product>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -36,8 +37,8 @@ public class ProductDataBase {
         return products;
     }
 
-    public static ArrayList<Product> selectOnSale() {
-        ArrayList<Product> products = new ArrayList<Product>();
+    static List<Product> selectOnSale() {
+        List<Product> products = new ArrayList<Product>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -66,8 +67,8 @@ public class ProductDataBase {
         return products;
     }
 
-    public static ArrayList<Product> selectByCategory(int id) {
-        ArrayList<Product> products = new ArrayList<Product>();
+    static List<Product> selectByCategory(int id) {
+        List<Product> products = new ArrayList<Product>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -82,7 +83,8 @@ public class ProductDataBase {
                         int amount = resultSet.getInt(4);
                         String description = resultSet.getString(5);
                         int idCategory = resultSet.getInt(6);
-                        Product product = new Product(idProduct, idCategory, name, price, amount, description);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
                         products.add(product);
                     }
                 }
@@ -94,8 +96,38 @@ public class ProductDataBase {
         return products;
     }
 
-    public static ArrayList<Product> selectBySearch(String search, int categoryID) {
-        ArrayList<Product> products = new ArrayList<Product>();
+    static List<Product> selectByCategoryOnSale(int id) {
+        List<Product> products = new ArrayList<>();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(url, username, password)){
+                String sql = "SELECT * FROM product WHERE idCategory=? AND status=?";
+                try(PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setInt(2, 1);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while (resultSet.next()) {
+                        int idProduct = resultSet.getInt(1);
+                        String name = resultSet.getString(2);
+                        int price = resultSet.getInt(3);
+                        int amount = resultSet.getInt(4);
+                        String description = resultSet.getString(5);
+                        int idCategory = resultSet.getInt(6);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
+                        products.add(product);
+                    }
+                }
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        return products;
+    }
+
+    static List<Product> selectBySearch(String search, int categoryID) {
+        List<Product> products = new ArrayList<Product>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -113,7 +145,8 @@ public class ProductDataBase {
                         int amount = resultSet.getInt(4);
                         String description = resultSet.getString(5);
                         int idCategory = resultSet.getInt(6);
-                        Product product = new Product(idProduct, idCategory, name, price, amount, description);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
                         products.add(product);
                     }
                 }
@@ -125,8 +158,8 @@ public class ProductDataBase {
         return products;
     }
 
-    public static ArrayList<Product> selectBySearch(String search) {
-        ArrayList<Product> products = new ArrayList<Product>();
+    static List<Product> selectBySearch(String search) {
+        List<Product> products = new ArrayList<Product>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -143,7 +176,8 @@ public class ProductDataBase {
                         int amount = resultSet.getInt(4);
                         String description = resultSet.getString(5);
                         int idCategory = resultSet.getInt(6);
-                        Product product = new Product(idProduct, idCategory, name, price, amount, description);
+                        int status = resultSet.getInt(7);
+                        Product product = new Product(idProduct, idCategory, name, price, amount, description, status);
                         products.add(product);
                     }
                 }
@@ -155,7 +189,7 @@ public class ProductDataBase {
         return products;
     }
 
-    public static Product selectOne(int id) {
+    static Product selectOne(int id) {
         Product product = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -183,7 +217,7 @@ public class ProductDataBase {
         return product;
     }
 
-    public static boolean isContain(Product product) {
+    static boolean isContain(Product product) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -202,7 +236,7 @@ public class ProductDataBase {
         }
         return false;
     }
-    public static int insert(Product product) {
+    static void insert(Product product) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -213,17 +247,16 @@ public class ProductDataBase {
                     preparedStatement.setInt(3,product.getAmount());
                     preparedStatement.setString(4, product.getDescription());
                     preparedStatement.setInt(5, product.getIdCategory());
-                    return  preparedStatement.executeUpdate();
+                    preparedStatement.executeUpdate();
                 }
             }
         }
         catch(Exception ex){
             System.out.println(ex);
         }
-        return 0;
     }
 
-    public static int update(Product product) {
+    static void update(Product product) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -236,16 +269,15 @@ public class ProductDataBase {
                     preparedStatement.setString(4, product.getDescription());
                     preparedStatement.setInt(5, product.getIdCategory());
                     preparedStatement.setInt(6, product.getIdProduct());
-                    return  preparedStatement.executeUpdate();
+                    preparedStatement.executeUpdate();
                 }
             }
         }
         catch(Exception ex){
             System.out.println(ex);
         }
-        return 0;
     }
-    public static int delete(int id) {
+    static int delete(int id) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -262,7 +294,7 @@ public class ProductDataBase {
         return 0;
     }
 
-    public static int archive(Product product) {
+    static int archive(Product product) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -281,7 +313,7 @@ public class ProductDataBase {
         return 0;
     }
 
-    public static int deArchive(Product product) {
+    static int deArchive(Product product) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){

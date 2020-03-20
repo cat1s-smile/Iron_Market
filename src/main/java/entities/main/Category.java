@@ -1,9 +1,5 @@
 package entities.main;
 
-import model.database.ProductDataBase;
-
-import java.util.ArrayList;
-
 public class Category {
 
     private int idCategory;
@@ -34,10 +30,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int countBoundProducts(){
-        ArrayList<Product> products = ProductDataBase.selectByCategory(idCategory);
-        return products.size();
     }
 }

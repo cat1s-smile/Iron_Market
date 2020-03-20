@@ -1,8 +1,11 @@
 package servlets;
 
 import entities.main.Product;
-import model.database.ProductDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,12 +16,15 @@ import java.io.IOException;
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
 
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Product product = ProductDataBase.selectOne(id);
+            int id = Parser.parseID(request.getParameter("id"));
+            Product product = model.getProduct(id);
             if(product!=null) {
                 request.setAttribute("product", product);
                 getServletContext().getRequestDispatcher("/edit.jsp").forward(request, response);
@@ -43,8 +49,8 @@ public class EditServlet extends HttpServlet {
             String description = request.getParameter("description");
             int idCategory = Integer.parseInt(request.getParameter("idCategory"));
             Product product = new Product(id, idCategory, name, price, amount, description);
-            ProductDataBase.update(product);
-            response.sendRedirect(request.getContextPath() + "/admin-products");
+            model.editProduct(product);
+            response.sendRedirect(request.getContextPath() + "/admin");
         }
         catch(Exception ex) {
 

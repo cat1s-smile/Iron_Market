@@ -1,8 +1,11 @@
 package servlets;
 
 import entities.main.*;
+import model.UserMarketModel;
 import model.database.*;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,41 +15,32 @@ import java.io.IOException;
 
 @WebServlet("/remove_from_cart")
 public class RemoveFromCartServlet extends HttpServlet {
+    @EJB(beanName = "DBUserMarketModel")
+    private UserMarketModel model;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            //String userID = request.getSession().getId();
             String userID = User.getDefaultID();
-            int id = Integer.parseInt(request.getParameter("id"));
-            Order order = OrderDataBase.selectActive(userID);
+            int productID = Parser.parseID(request.getParameter("id"));
             String toDo = request.getParameter("todo");
             switch (toDo) {
                 case "-":
-                    OrderContent orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), id);
-                    if(orderContent.getNumber() ==1) {
-                        OrderContentDataBase.delete(order.getIdOrder(), id);
-                    }
-                    else {
-                        orderContent.setNumber(orderContent.getNumber() - 1);
-                        OrderContentDataBase.update(orderContent);
-                    }
+                    model.decrementItemNumber(userID, productID);
                     break;
                 case "+":
-                    orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), id);
-                    orderContent.setNumber(orderContent.getNumber() + 1);
-                    OrderContentDataBase.update(orderContent);
+                    model.incrementItemNumber(userID, productID);
                     break;
                 case "remove":
-                    OrderContentDataBase.delete(order.getIdOrder(), id);
+                    model.removeItemFromOrder(userID, productID);
                     break;
                 default:
             }
             response.sendRedirect(request.getContextPath() + "/cart");
         }
         catch(Exception ex) {
-
+            ex.printStackTrace();
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }
     }

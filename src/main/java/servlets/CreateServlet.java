@@ -1,8 +1,10 @@
 package servlets;
 
 import entities.main.Product;
-import model.database.ProductDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,10 @@ import java.io.IOException;
 
 @WebServlet("/create")
 public class CreateServlet extends HttpServlet {
+
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -28,8 +34,8 @@ public class CreateServlet extends HttpServlet {
             String description = request.getParameter("description");
             int idCategory = Integer.parseInt(request.getParameter("idCategory"));
             Product product = new Product(idCategory, name, price, amount, description);
-            ProductDataBase.insert(product);
-            response.sendRedirect(request.getContextPath()+"/admin-products");
+            model.createProduct(product);
+            response.sendRedirect(request.getContextPath()+"/admin");
         }
         catch(Exception ex) {
 

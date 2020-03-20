@@ -1,8 +1,11 @@
 package servlets;
 
 import entities.main.Category;
-import model.database.CategoryDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,21 +16,22 @@ import java.io.IOException;
 @WebServlet("/editCategory")
 public class EditCategoryServlet extends HttpServlet {
 
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Category category = CategoryDataBase.selectOne(id);
-            if(category!=null) {
+            int id = Parser.parseID(request.getParameter("id"));
+            Category category = model.getCategory(id);
+            if (category != null) {
                 request.setAttribute("category", category);
                 getServletContext().getRequestDispatcher("/editCategory.jsp").forward(request, response);
-            }
-            else {
+            } else {
                 getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
             }
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }
     }
@@ -36,13 +40,19 @@ public class EditCategoryServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            int idCategory = Integer.parseInt(request.getParameter("idCategory"));
+            int id = Parser.parseID(request.getParameter("id"));
             String name = request.getParameter("name");
-            Category category = new Category(idCategory, name);
-            CategoryDataBase.update(category);
-            response.sendRedirect(request.getContextPath() + "/admin-categories");
-        }
-        catch(Exception ex) {
+            Category duplicate = model.getCategory(name);
+            Category category = new Category(id, name);
+            if (name.equalsIgnoreCase(duplicate.getName())) {
+                if (id != duplicate.getIdCategory())
+                    getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            }
+            else
+                model.editCategory(category);
+            request.setAttribute("tab", "categories");
+            response.sendRedirect(request.getContextPath() + "/admin");
+        } catch (Exception ex) {
 
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }

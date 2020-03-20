@@ -1,7 +1,5 @@
 package entities.jaxbready;
 
-import model.database.CategoryDataBase;
-import model.database.ProductDataBase;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +27,7 @@ public class Main {
     }
 
     private ShopContent createEmployee() {
-        return new ObjectFactory().createShopContent(ProductDataBase.select(), CategoryDataBase.select());
+        return null;// new ObjectFactory().createShopContent(ProductDataBase.select(), CategoryDataBase.select());
     }
 /*package com.javacodegeeks.examples.jaxb.validation.main;
 

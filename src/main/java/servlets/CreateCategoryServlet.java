@@ -1,8 +1,10 @@
 package servlets;
 
 import entities.main.Category;
-import model.database.CategoryDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,10 @@ import java.io.IOException;
 
 @WebServlet("/createCategory")
 public class CreateCategoryServlet extends HttpServlet {
+
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -24,8 +30,9 @@ public class CreateCategoryServlet extends HttpServlet {
         try {
             String name = request.getParameter("name");
             Category category = new Category(name);
-            CategoryDataBase.insert(category);
-            response.sendRedirect(request.getContextPath()+"/admin-categories");
+            model.createCategory(category);
+            request.setAttribute("tab", "categories");
+            response.sendRedirect(request.getContextPath()+"/admin");
         }
         catch(Exception ex) {
 

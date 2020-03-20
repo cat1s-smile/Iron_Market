@@ -1,7 +1,5 @@
 package entities.main;
 
-import model.database.CategoryDataBase;
-
 public class Product {
 
     private int idProduct;
@@ -10,11 +8,12 @@ public class Product {
     private int price;
     private int amount;
     private String description;
-    private int status;
+    private int status = 1;
 
-    public Product(){ }
+    public Product() {
+    }
 
-    public Product(int idCategory, String name, int price, int amount, String description){
+    public Product(int idCategory, String name, int price, int amount, String description) {
         this.idCategory = idCategory;
         this.name = name;
         this.price = price;
@@ -22,7 +21,7 @@ public class Product {
         this.description = description;
     }
 
-    public Product(int idProduct, int idCategory, String name, int price, int amount, String description){
+    public Product(int idProduct, int idCategory, String name, int price, int amount, String description) {
         this.idProduct = idProduct;
         this.idCategory = idCategory;
         this.name = name;
@@ -31,14 +30,14 @@ public class Product {
         this.description = description;
     }
 
-    public Product(int idProduct, int idCategory, String name, int price, int amount, String description, int status){
+    public Product(int idProduct, int idCategory, String name, int price, int amount, String description, int status) {
         this.idProduct = idProduct;
         this.idCategory = idCategory;
         this.name = name;
         this.price = price;
         this.amount = amount;
         this.description = description;
-        this.status= status;
+        this.status = status;
     }
 
     public int getIdCategory() {
@@ -91,11 +90,6 @@ public class Product {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getCategory(int idCategory){
-        Category category = CategoryDataBase.selectOne(idCategory);
-        return category.getName();
     }
 }
 

@@ -1,8 +1,10 @@
 package servlets;
 
-import entities.main.Product;
-import model.database.ProductDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,17 +15,21 @@ import java.io.IOException;
 @WebServlet("/archive")
 public class ArchiveServlet extends HttpServlet {
 
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Product product = ProductDataBase.selectOne(id);
-            if (product.getStatus()==1) ProductDataBase.archive(product);
-            else ProductDataBase.deArchive(product);
-            response.sendRedirect(request.getContextPath() + "/admin-products");
-        }
-        catch(Exception ex) {
+            int id = Parser.parseID(request.getParameter("id"));
+            if (id == Parser.NAN)
+                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            else {
+                model.changeProductStatus(id);
+                response.sendRedirect(request.getContextPath() + "/admin");
+            }
+        } catch (Exception ex) {
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }
     }

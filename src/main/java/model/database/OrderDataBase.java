@@ -4,14 +4,15 @@ import entities.main.Order;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class OrderDataBase {
+class OrderDataBase {
     private static String username = "root";
     private static String password = "1111";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
-    public static ArrayList<Order> select() {
-        ArrayList<Order> orders = new ArrayList<Order>();
+    static List<Order> select() {
+        List<Order> orders = new ArrayList<Order>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             ;
@@ -32,8 +33,8 @@ public class OrderDataBase {
         return orders;
     }
 
-    public static ArrayList<Order> selectByID(String userID) {
-        ArrayList<Order> orders = new ArrayList<Order>();
+    static List<Order> selectByID(String userID) {
+        List<Order> orders = new ArrayList<Order>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
@@ -57,7 +58,7 @@ public class OrderDataBase {
         return orders;
     }
 
-    public static int update(Order order) {
+    static int update(Order order) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
@@ -77,7 +78,7 @@ public class OrderDataBase {
     }
 
 
-    public static Order selectActive(String userID) {
+    static Order selectActive(String userID) {
         Order order = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -101,7 +102,7 @@ public class OrderDataBase {
         return order;
     }
 
-    public static int insert(Order order) {
+    static int insert(Order order) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {

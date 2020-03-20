@@ -1,8 +1,11 @@
 package servlets;
 
 import entities.main.*;
+import model.UserMarketModel;
 import model.database.*;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,53 +16,32 @@ import java.io.IOException;
 @WebServlet("/buy")
 public class BuyServlet extends HttpServlet {
 
+    @EJB(beanName = "DBUserMarketModel")
+    private UserMarketModel model;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            /*String userID = request.getSession().getId();
-            int id = Integer.parseInt(request.getParameter("id"));
-            entities.main.Order order = null;
-            order = model.database.OrderDataBase.selectActive(userID);
-            entities.main.OrderContent orderContent = null;
-            if(order == null) {
-                model.database.OrderDataBase.insert(new entities.main.Order(userID, "0"));
-                order = model.database.OrderDataBase.selectActive(userID);
-                int orderID = order.getIdOrder();
-                model.database.OrderContentDataBase.insert(new entities.main.OrderContent(orderID, id, 1));
-            }
+            int id = Parser.parseID(request.getParameter("buyID"));
+            if (id == Parser.NAN)
+                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
             else {
-                order = model.database.OrderDataBase.selectActive(userID);
-                orderContent = model.database.OrderContentDataBase.selectOne(order.getIdOrder(), id);
-                if(orderContent == null)
-                    model.database.OrderContentDataBase.insert(new entities.main.OrderContent(order.getIdOrder(), id, 1));
-                else {
-                    orderContent.setNumber(orderContent.getNumber() + 1);
-                    model.database.OrderContentDataBase.update(orderContent);
-                }
-            }*/
-            String userID = User.getDefaultID();
-            int id = Integer.parseInt(request.getParameter("id"));
-            Order order = null;
-            order = OrderDataBase.selectActive(userID);
-            if (order == null) {
-                OrderDataBase.insert(new Order(userID, "0"));
-                order = OrderDataBase.selectActive(userID);
-                int orderID = order.getIdOrder();
-                OrderContentDataBase.insert(new OrderContent(orderID, id, 1));
-            } else {
-                OrderContent orderContent = null;
-                orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), id);
-                if (orderContent == null)
-                    OrderContentDataBase.insert(new OrderContent(order.getIdOrder(), id, 1));
-                else {
-                    orderContent.setNumber(orderContent.getNumber() + 1);
-                    OrderContentDataBase.update(orderContent);
-                }
+                String userID = User.getDefaultID();
+                model.buyProduct(id, userID);
+                int catID = Parser.parseID(request.getParameter("catID"));
+                if(catID != Parser.NAN)
+                    request.setAttribute("catID", catID);
+                String searchRequest = request.getParameter("search");
+                if(searchRequest != null)
+                    request.setAttribute("search", searchRequest);
+                request.setAttribute("cart", request.getParameter("cart"));
+                getServletContext().getRequestDispatcher("/user").forward(request, response);
+                //response.sendRedirect(request.getContextPath() + "/user");
             }
-            response.sendRedirect(request.getContextPath() + "/user");
-        } catch (Exception ex) {
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }
     }

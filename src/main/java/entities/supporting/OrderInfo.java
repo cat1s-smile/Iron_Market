@@ -1,13 +1,14 @@
 package entities.supporting;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderInfo {
     private int orderID;
-    private ArrayList<String> content;
+    private List<String> content;
     private double totalCost;
 
-    public OrderInfo(int orderID, ArrayList<String> content, double totalCost) {
+    public OrderInfo(int orderID, List<String> content, double totalCost) {
         this.orderID = orderID;
         this.content = content;
         this.totalCost = totalCost;
@@ -21,11 +22,11 @@ public class OrderInfo {
         this.orderID = orderID;
     }
 
-    public ArrayList<String> getContent() {
+    public List<String> getContent() {
         return content;
     }
 
-    public void setContent(ArrayList<String> content) {
+    public void setContent(List<String> content) {
         this.content = content;
     }
 

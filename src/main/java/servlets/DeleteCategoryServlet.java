@@ -1,7 +1,10 @@
 package servlets;
 
-import model.database.CategoryDataBase;
+import model.AdminMarketModel;
+import model.UserMarketModel;
+import parse.Parser;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,13 +15,17 @@ import java.io.IOException;
 @WebServlet("/deleteCategory")
 public class DeleteCategoryServlet extends HttpServlet {
 
+    @EJB(beanName = "DBAdminMarketModel")
+    private AdminMarketModel model;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            CategoryDataBase.delete(id);
-            response.sendRedirect(request.getContextPath() + "/admin-categories");
+            int id = Parser.parseID(request.getParameter("id"));
+            model.deleteCategory(id);
+            request.setAttribute("tab", "categories");
+            response.sendRedirect(request.getContextPath() + "/admin");
         }
         catch(Exception ex) {
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);

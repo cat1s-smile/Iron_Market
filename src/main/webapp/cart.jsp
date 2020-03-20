@@ -25,7 +25,7 @@
             <ul class="products">
                 <c:forEach var="cartItem" items="${cart}">
                     <li>
-                        <div class="cart-product" ${cartItem.product.status == 0 || cartItem.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
+                        <div class="cart-product" ${cartItem.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>
                             <p>${cartItem.product.name}</p>
                             <p>Цена: ${cartItem.product.price}</p>
                             <p>Наличие: ${cartItem.product.status == 0 ? " НЕ ДОСТУПНО" : cartItem.product.amount}</p>

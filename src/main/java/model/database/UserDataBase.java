@@ -4,14 +4,15 @@ import entities.main.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class UserDataBase {
+class UserDataBase {
     private static String username = "root";
     private static String password = "1111";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
-    public static ArrayList<User> select() {
-        ArrayList<User> users = new ArrayList<>();
+    static List<User> select() {
+        List<User> users = new ArrayList<>();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -32,7 +33,7 @@ public class UserDataBase {
         return users;
     }
 
-    public static User selectOne(String id) {
+    static User selectOne(String id) {
         User user = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -56,7 +57,7 @@ public class UserDataBase {
         }
         return user;
     }
-    public static int insert(User user) {
+    static int insert(User user) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -76,7 +77,7 @@ public class UserDataBase {
         return 0;
     }
 
-    /*public static int update(RawProduct rawProduct) {
+    /*static int update(RawProduct rawProduct) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){
@@ -98,7 +99,7 @@ public class UserDataBase {
         }
         return 0;
     }
-    public static int delete(int id) {
+    static int delete(int id) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)){

@@ -4,17 +4,17 @@ import entities.main.Category;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class CategoryDataBase {
+class CategoryDataBase {
     private static String username = "root";
     private static String password = "1111";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
-    public static ArrayList<Category> select() {
-        ArrayList<Category> categories = new ArrayList<>();
+    static List<Category> select() {
+        List<Category> categories = new ArrayList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            ;
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
                 Statement statement = conn.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM category");
@@ -31,7 +31,7 @@ public class CategoryDataBase {
         return categories;
     }
 
-    public static Category searchByName(String categoryName) {
+    static Category searchByName(String categoryName) {
         Category category = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -53,11 +53,11 @@ public class CategoryDataBase {
     //
     // //
 
-    //**меняем id категориям в соответствии с бызой и вставляем новые категории
+    //**меняем id категориям в соответствии с базой и вставляем новые категории
     //
     // insert
 
-    public static Category selectOne(int id) {
+    static Category selectOne(int id) {
         Category category = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
@@ -79,7 +79,7 @@ public class CategoryDataBase {
         return category;
     }
 
-    public static int insert(Category category) {
+    static int insert(Category category) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
@@ -95,7 +95,7 @@ public class CategoryDataBase {
         return 0;
     }
 
-    public static int update(Category category) {
+    static int update(Category category) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
@@ -113,7 +113,7 @@ public class CategoryDataBase {
         return 0;
     }
 
-    public static int delete(int id) {
+    static int delete(int id) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {

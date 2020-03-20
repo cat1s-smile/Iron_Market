@@ -11,16 +11,20 @@
 	<header>
 		<div class="upper-container">
 			<div class="name-admin">Администраторская панель</div>
-			<ul class="entities">
-				<li class="menu-elem">
-					<%--					<a href='<c:url value="/admin-products" />' type="button">Товары</a>--%>
-					<input id= "a-products" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-products';" value="Товары">
-				</li>
-				<li class="menu-elem">
-					<%--					<a href='<c:url value="/admin-categories" />' type="button">Категории</a>--%>
-					<input id= "a-categories" class="button-menu" type="button" onclick="window.location.href = '/IronMarket_war_exploded/admin-categories';" value="Категории" style="background-color: #1220a7">
-				</li>
-			</ul>
+			<div class="entities">
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="products">
+					<input type="submit" class="button-menu" value="Товары">
+				</form>
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="categories">
+					<input type="submit" class="button-menu" value="Категории" style="background-color: #1220a7">
+				</form>
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="import-export">
+					<input type="submit" class="button-menu" value="Импорт/Экспорт">
+				</form>
+			</div>
 		</div>
 	</header>
 	<section>
@@ -38,7 +42,7 @@
 							<a href='<c:url value="/editCategory?id=${category.idCategory}" />' class="button-edit">Edit</a> |
 							<form method="post" action='<c:url value="/deleteCategory" />' style="display:inline;">
 								<input type="hidden" name="id" value="${category.idCategory}">
-								<input type="submit" value="Delete" class="button-delete" id="${category.idCategory}" ${category.countBoundProducts() != 0 ? "disabled" : ""}>
+								<input type="submit" value="Delete" class="button-delete" id="${category.idCategory}" ${doLinkedProductsExists != 0 ? "disabled" : ""}>
 							</form>
 						</td></tr>
 				</c:forEach>
