@@ -14,8 +14,8 @@ class UserDataBase {
     static List<User> select() {
         List<User> users = new ArrayList<>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 Statement statement = conn.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM user");
                 while(resultSet.next()){
@@ -36,8 +36,8 @@ class UserDataBase {
     static User selectOne(String id) {
         User user = null;
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM user WHERE idUser=?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, id);
@@ -59,8 +59,8 @@ class UserDataBase {
     }
     static int insert(User user) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "INSERT INTO user (idUser, login, password, type) Values (?, ?, ?, ?)";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, user.getId());
@@ -79,8 +79,8 @@ class UserDataBase {
 
     /*static int update(RawProduct rawProduct) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "UPDATE rawProduct SET name = ?, price = ?, amount = ?, description = ?, idCategory = ?" +
                         " WHERE idProduct = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
@@ -101,8 +101,8 @@ class UserDataBase {
     }
     static int delete(int id) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "DELETE FROM rawProduct WHERE idProduct = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);

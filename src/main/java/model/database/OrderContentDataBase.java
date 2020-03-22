@@ -5,6 +5,7 @@ import entities.main.OrderContent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 class OrderContentDataBase {
     private static String username = "root";
@@ -14,9 +15,9 @@ class OrderContentDataBase {
     static List<OrderContent> select() {
         List<OrderContent> products = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             ;
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 Statement statement = conn.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM ordercontent");
                 while (resultSet.next()) {
@@ -36,8 +37,9 @@ class OrderContentDataBase {
     static List<OrderContent> selectByOrderID(int orderID) {
         List<OrderContent> products = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties()))
+            {
                 String sql = "SELECT * FROM ordercontent WHERE idOrder=?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, orderID);
@@ -61,8 +63,8 @@ class OrderContentDataBase {
         List<OrderContent> products = new ArrayList<>();
         boolean result = false;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "SELECT * FROM ordercontent WHERE idProduct=?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, productID);
@@ -80,8 +82,8 @@ class OrderContentDataBase {
     static OrderContent selectOne(int orderID, int productID) {
         OrderContent content = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "SELECT * FROM ordercontent WHERE idOrder=? and idProduct=?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, orderID);
@@ -103,8 +105,8 @@ class OrderContentDataBase {
 
     static int insert(OrderContent orderContent) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "INSERT INTO ordercontent (idOrder, idProduct, amount) Values (?, ?, ?)";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, orderContent.getIdOrder());
@@ -121,8 +123,8 @@ class OrderContentDataBase {
 
     static int update(OrderContent content) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "UPDATE ordercontent SET idOrder = ?, idProduct = ?, amount = ?" +
                         " WHERE idOrder = ? and idProduct = ?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -142,8 +144,8 @@ class OrderContentDataBase {
 
     static int delete(int orderID, int productID) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "DELETE FROM ordercontent WHERE idOrder=? AND idProduct = ?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, orderID);

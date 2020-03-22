@@ -32,7 +32,7 @@ public class ExportServlet extends HttpServlet {
                 break;
         }
         try {
-            model.toXmlFile(shopContent, "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\result.xml");
+            model.toXmlFile(shopContent, "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\result.xml");
         } catch (JAXBException e) {
             e.printStackTrace();
         }

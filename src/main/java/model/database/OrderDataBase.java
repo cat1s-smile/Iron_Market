@@ -14,9 +14,9 @@ class OrderDataBase {
     static List<Order> select() {
         List<Order> orders = new ArrayList<Order>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             ;
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 Statement statement = conn.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM `order`");
                 while (resultSet.next()) {
@@ -36,8 +36,8 @@ class OrderDataBase {
     static List<Order> selectByID(String userID) {
         List<Order> orders = new ArrayList<Order>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "SELECT * FROM `order` WHERE idUser=? and status=?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setString(1, userID);
@@ -60,8 +60,8 @@ class OrderDataBase {
 
     static int update(Order order) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "UPDATE `order` SET idUser = ?, status = ?" +
                         " WHERE idOrder = ?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -81,8 +81,8 @@ class OrderDataBase {
     static Order selectActive(String userID) {
         Order order = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "SELECT * FROM `order` WHERE idUser=? AND status=?";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setString(1, userID);
@@ -104,8 +104,8 @@ class OrderDataBase {
 
     static int insert(Order order) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
                 String sql = "INSERT INTO `order` (idUser, status) Values (?, ?)";
                 try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setString(1, order.getIdUser());

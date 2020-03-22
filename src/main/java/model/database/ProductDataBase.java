@@ -14,8 +14,8 @@ class ProductDataBase {
     static List<Product> select() {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 Statement statement = conn.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM product");
                 while(resultSet.next()){
@@ -40,8 +40,8 @@ class ProductDataBase {
     static List<Product> selectOnSale() {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 Statement statement = conn.createStatement();
                 String sql = "SELECT * FROM product WHERE status = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
@@ -70,8 +70,8 @@ class ProductDataBase {
     static List<Product> selectArchivedProducts() {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 Statement statement = conn.createStatement();
                 String sql = "SELECT * FROM product WHERE status = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
@@ -100,8 +100,8 @@ class ProductDataBase {
     static List<Product> selectByCategory(int id) {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE idCategory=?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, id);
@@ -129,8 +129,8 @@ class ProductDataBase {
     static List<Product> selectByCategoryOnSale(int id) {
         List<Product> products = new ArrayList<>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE idCategory=? AND status=?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, id);
@@ -159,8 +159,8 @@ class ProductDataBase {
     static List<Product> selectBySearch(String search, int categoryID) {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE idCategory=? AND (idProduct LIKE ? OR name LIKE ? OR description LIKE ?)";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setInt(1, categoryID);
@@ -191,8 +191,8 @@ class ProductDataBase {
     static List<Product> selectBySearch(String search) {
         List<Product> products = new ArrayList<Product>();
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE idProduct LIKE ? OR name LIKE ? OR description LIKE ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
                     preparedStatement.setString(1, '%' + search + '%');
@@ -222,8 +222,8 @@ class ProductDataBase {
     static Product selectOne(int id) {
         Product product = null;
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE idProduct=?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
@@ -249,8 +249,8 @@ class ProductDataBase {
 
     static boolean isContain(Product product) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "SELECT * FROM product WHERE name like ? and description like ? and idCategory=?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, product.getName());
@@ -268,8 +268,8 @@ class ProductDataBase {
     }
     static void insert(Product product) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "INSERT INTO product (name, price, amount, description, idCategory) Values (?, ?, ?, ?, ?)";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, product.getName());
@@ -288,8 +288,8 @@ class ProductDataBase {
 
     static void update(Product product) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "UPDATE product SET name = ?, price = ?, amount = ?, description = ?, idCategory = ?" +
                         " WHERE idProduct = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
@@ -309,8 +309,8 @@ class ProductDataBase {
     }
     static int delete(int id) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "DELETE FROM product WHERE idProduct = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
@@ -326,8 +326,8 @@ class ProductDataBase {
 
     static int archive(Product product) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "UPDATE product SET status = ? WHERE idProduct = ?";
 
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
@@ -345,8 +345,8 @@ class ProductDataBase {
 
     static int deArchive(Product product) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(url, username, password)){
+            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "UPDATE product SET status = ? WHERE idProduct = ?";
 
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){

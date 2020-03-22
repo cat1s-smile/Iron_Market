@@ -82,11 +82,11 @@
             <amount>436</amount>
         </rawProduct>
         <rawProduct>
-            <id>24</id>
-            <name>G.Skill 4GB DDR4</name>
+            <id>29</id>
+            <name>G.Skill 8GB DDR4</name>
             <idCategory>Memory</idCategory>
             <price>2190</price>
-            <description>2666Mhz</description>
+            <description>3000Mhz</description>
             <amount>213</amount>
         </rawProduct>
     </products>
@@ -102,10 +102,6 @@
         <rawCategory>
             <id>4</id>
             <name>Memory</name>
-        </rawCategory>
-        <rawCategory>
-            <id>10</id>
-            <name>a</name>
         </rawCategory>
     </categories>
 </shopContent>

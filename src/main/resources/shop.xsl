@@ -13,7 +13,7 @@
                         <th>description</th>
                         <th>amount</th>
                     </tr>
-                    <xsl:for-each select="shopContent/products/product">
+                    <xsl:for-each select="shopContent/products/rawProduct">
                         <tr>
                             <td>
                                 <xsl:value-of select="name" />
@@ -38,7 +38,7 @@
                     <tr>
                         <th>name</th>
                     </tr>
-                    <xsl:for-each select="shopContent/categories/category">
+                    <xsl:for-each select="shopContent/categories/rawCategory">
                         <tr>
                             <td>
                                 <xsl:value-of select="name" />

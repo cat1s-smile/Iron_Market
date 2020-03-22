@@ -1,21 +1,28 @@
 package entities.jaxbready;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import model.database.DBAdminMarketModel;
+
+import java.io.*;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException, JAXBException {
+    public static void main(String[] args) throws IOException, JAXBException {
         new Main().runMarshaller();
     }
 
-    private void runMarshaller() throws JAXBException, FileNotFoundException {
-        ShopContent shopContent = createEmployee();
+    private void runMarshaller() throws JAXBException, IOException {
+        DataOutputStream outputStream = new DataOutputStream(new FileOutputStream("findme.bin"));
+        outputStream.writeDouble(6);
+        outputStream.close();
+        FileInputStream inputStream = new FileInputStream("src/main/resources/database.properties");
+        Properties properties = new Properties();
+        properties.load(inputStream);
+        /*ShopContent shopContent = createEmployee();
 
         JAXBContext context = JAXBContext.newInstance(ShopContent.class);
         Marshaller marshaller = context.createMarshaller();
@@ -23,11 +30,11 @@ public class Main {
 
         FileOutputStream fileOutputStream = new FileOutputStream(new File("test.xml"));
 
-        marshaller.marshal(shopContent, fileOutputStream);
+        marshaller.marshal(shopContent, fileOutputStream);*/
     }
 
     private ShopContent createEmployee() {
-        return null;// new ObjectFactory().createShopContent(ProductDataBase.select(), CategoryDataBase.select());
+        return new DBAdminMarketModel().getAllProducts();
     }
 /*package com.javacodegeeks.examples.jaxb.validation.main;
 
