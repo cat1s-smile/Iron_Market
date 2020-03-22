@@ -21,6 +21,7 @@
     <input type="file" name="file"  />
     <br />
     <br />
+    <input type="hidden" name="impOrExp" value="${impOrExp}">
     <input type="submit" value="Upload" />
 </form>
 

@@ -22,7 +22,7 @@
         <label>
             <input type="radio" name="option" value="a3">
         </label>ArchivedProducts<Br>
-        <input type="hidden" name="xml" value="${xml}">
+        <input type="hidden" name="file" value="${file}">
     <p><input type="submit" value="Сохранить из базы"></p>
 </form>
 

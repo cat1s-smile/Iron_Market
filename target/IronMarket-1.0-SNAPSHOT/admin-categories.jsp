@@ -21,8 +21,12 @@
 					<input type="submit" class="button-menu" value="Категории" style="background-color: #1220a7">
 				</form>
 				<form action='<c:url value="admin" />' style="display: inline">
-					<input type="hidden" name="tab" value="import-export">
-					<input type="submit" class="button-menu" value="Импорт/Экспорт">
+					<input type="hidden" name="tab" value="import">
+					<input type="submit" class="button-menu" value="Импорт">
+				</form>
+				<form action='<c:url value="admin" />' style="display: inline">
+					<input type="hidden" name="tab" value="export">
+					<input type="submit" class="button-menu" value="Экспорт">
 				</form>
 			</div>
 		</div>

@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.xml.bind.JAXBException;
+import java.io.File;
 import java.io.IOException;
 
 @WebServlet("/export")
@@ -19,6 +21,8 @@ public class ExportServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String filePath = request.getParameter("file");
         ShopContent shopContent = null;
         switch (request.getParameter("option")){
             case "a1":
@@ -32,7 +36,7 @@ public class ExportServlet extends HttpServlet {
                 break;
         }
         try {
-            model.toXmlFile(shopContent, "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\result.xml");
+            model.toXmlFile(shopContent, "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\1.xml");
         } catch (JAXBException e) {
             e.printStackTrace();
         }

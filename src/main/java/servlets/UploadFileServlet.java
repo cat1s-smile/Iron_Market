@@ -1,5 +1,7 @@
 package servlets;
 
+import parse.Parser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,46 +26,21 @@ import javax.xml.transform.stream.StreamSource;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UploadFileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    public static final String SAVE_DIRECTORY = "uploadDir";
-
-    public UploadFileServlet() {
-        super();
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("import.jsp");
-
-        dispatcher.forward(request, response);
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String description = request.getParameter("description");
-            System.out.println("Description: " + description);
-
             // Gets absolute path to root directory of web app.
             String appPath = request.getServletContext().getRealPath("");
             appPath = appPath.replace('\\', '/');
 
-            // The directory to save uploaded file
-            String fullSavePath = null;
+           // The directory to save uploaded file
+            String fullPath = null;
             if (appPath.endsWith("/")) {
-                fullSavePath = appPath + SAVE_DIRECTORY;
+                fullPath = appPath;
             } else {
-                fullSavePath = appPath + "/" + SAVE_DIRECTORY;
-            }
-
-            // Creates the save directory if it does not exists
-            File fileSaveDir = new File(fullSavePath);
-            if (!fileSaveDir.exists()) {
-                fileSaveDir.mkdir();
+                fullPath = appPath + "/";
             }
 
             // Part list (multi files).
@@ -72,7 +49,7 @@ public class UploadFileServlet extends HttpServlet {
             for (Part part : request.getParts()) {
                 String fileName = extractFileName(part);
                 if (fileName != null && fileName.length() > 0) {
-                    filePath = fullSavePath + File.separator + fileName;
+                    filePath = fullPath + fileName;
                     System.out.println("Write attachment to file: " + filePath);
                     // Write to file
                     part.write(filePath);
@@ -81,20 +58,27 @@ public class UploadFileServlet extends HttpServlet {
 
             // Upload successfully!.
 
-            // Transform to HTML
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-            String xslPath = "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\shop.xsl";
-            Source xslDoc = new StreamSource(xslPath);
-            Source xmlDoc = new StreamSource(filePath);
-            String outputFileName = "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\target\\IronMarket-1.0-SNAPSHOT\\preview.html";
-            OutputStream htmlFile = new FileOutputStream(outputFileName);
-            Transformer trasform = tFactory.newTransformer(xslDoc);
-            trasform.transform(xmlDoc, new StreamResult(htmlFile));
+            int id = Parser.parseID(request.getParameter("impOrExp"));
+            if (id==0) {
+                // Transform to HTML
+                TransformerFactory tFactory = TransformerFactory.newInstance();
+                String xslPath = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\shop.xsl";
+                Source xslDoc = new StreamSource(xslPath);
+                Source xmlDoc = new StreamSource(filePath);
+                String outputFileName = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\target\\IronMarket-1.0-SNAPSHOT\\preview.html";
+                OutputStream htmlFile = new FileOutputStream(outputFileName);
+                Transformer trasform = tFactory.newTransformer(xslDoc);
+                trasform.transform(xmlDoc, new StreamResult(htmlFile));
 
-            request.setAttribute("xsl", xslPath);
-            request.setAttribute("xml", filePath);
+                request.setAttribute("xsl", xslPath);
+                request.setAttribute("file", filePath);
 
-            getServletContext().getRequestDispatcher("/uploadFileResults.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/importResults.jsp").forward(request, response);
+            }
+            else {
+                request.setAttribute("file", filePath);
+                getServletContext().getRequestDispatcher("/exportResults.jsp").forward(request, response);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error: " + e.getMessage());

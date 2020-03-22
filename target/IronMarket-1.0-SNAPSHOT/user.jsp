@@ -64,7 +64,7 @@
                             <p>${product.name}</p>
                             <p>Цена: ${product.price}</p>
                             <p>Наличие: ${product.amount}</p>
-                            <div class="prccoduct-buttons">
+                            <div class="product-buttons">
                                 <form method="get" action='<c:url value="/user" />' style="display:inline;">
                                     <input type="hidden" name="id" value="${product.idProduct}">
                                     <input type="hidden" value="${catID}" name="catID"/>

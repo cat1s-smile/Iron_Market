@@ -21,7 +21,7 @@
         <label>
             <input type="radio" name="option" value="a3">
         </label>WithDuplicates<Br>
-        <input type="hidden" name="xml" value="${xml}">
+        <input type="hidden" name="file" value="${file}">
         <input type="hidden" name="xsl" value="${xsl}">
     <p><input type="submit" value="Загрузить в базу"></p>
 </form>
