@@ -3,6 +3,7 @@
 <!DOCTYPE >
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="import.css">
     <title>Экспорт</title>
 </head>
 <body>
@@ -23,7 +24,7 @@
             <input type="radio" name="option" value="a3">
         </label>ArchivedProducts<Br>
         <input type="hidden" name="file" value="${file}">
-    <p><input type="submit" value="Сохранить из базы"></p>
+    <input type="submit" class="button" value="Сохранить из базы">
 </form>
 
 </body>

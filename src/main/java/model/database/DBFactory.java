@@ -8,7 +8,7 @@ class DBFactory {
     private static Properties properties;
 
     static void init() throws IOException {
-        InputStream inputStream = DBFactory.class.getClassLoader().getResourceAsStream("database.properties");
+        InputStream inputStream = DBFactory.class.getClassLoader().getResourceAsStream("database_properties.properties");
         Properties properties = new Properties();
         properties.load(inputStream);
         DBFactory.URL = (String)properties.get("URL");

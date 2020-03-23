@@ -8,7 +8,7 @@ import java.util.List;
 
 class CategoryDataBase {
     private static String username = "root";
-    private static String password = "1111";
+    private static String password = "кщще";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
     static List<Category> select() {

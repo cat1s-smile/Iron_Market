@@ -1,0 +1,26 @@
+body{
+    background-color: #AFCDE7;
+}
+
+.button{
+    margin-top: 20px;
+    color: #fff; /* цвет текста */
+    text-decoration: none; /* убирать подчёркивание у ссылок */
+    user-select: none; /* убирать выделение текста */
+    background: #3c77a5; /* фон кнопки */
+    padding: .7em 1.5em; /* отступ от текста */
+    outline: none; /* убирать контур в Mozilla */
+}
+
+.button:hover{
+    background: rgb(52, 95, 167);
+}
+
+.button:active{
+    background: #3c77a5;
+}
+
+.files{
+    display: inline;
+    margin-top: 0;
+}

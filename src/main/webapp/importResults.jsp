@@ -3,6 +3,7 @@
 <!DOCTYPE >
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="import.css">
     <title>Upload files</title>
 </head>
 <body>
@@ -23,7 +24,7 @@
         </label>WithDuplicates<Br>
         <input type="hidden" name="file" value="${file}">
         <input type="hidden" name="xsl" value="${xsl}">
-    <p><input type="submit" value="Загрузить в базу"></p>
+    <input type="submit" class="button" value="Загрузить в базу">
 </form>
 
 </body>
