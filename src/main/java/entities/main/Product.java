@@ -1,38 +1,27 @@
 package entities.main;
 
-public class Product {
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 
-    private int idProduct;
-    private int idCategory;
+@Entity
+public class Product {
+    private int id;
     private String name;
     private int price;
     private int amount;
     private String description;
-    private int status = 1;
+    private int category;
+    private Integer status = 1;
 
     public Product() {
     }
 
-    public Product(int idCategory, String name, int price, int amount, String description) {
-        this.idCategory = idCategory;
-        this.name = name;
-        this.price = price;
-        this.amount = amount;
-        this.description = description;
-    }
-
-    public Product(int idProduct, int idCategory, String name, int price, int amount, String description) {
-        this.idProduct = idProduct;
-        this.idCategory = idCategory;
-        this.name = name;
-        this.price = price;
-        this.amount = amount;
-        this.description = description;
-    }
-
-    public Product(int idProduct, int idCategory, String name, int price, int amount, String description, int status) {
-        this.idProduct = idProduct;
-        this.idCategory = idCategory;
+    public Product(int id, int category, String name, int price, int amount, String description, int status) {
+        this.id = id;
+        this.category = category;
         this.name = name;
         this.price = price;
         this.amount = amount;
@@ -40,34 +29,35 @@ public class Product {
         this.status = status;
     }
 
-    public int getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
+    public Product(int id, int category, String name, int price, int amount, String description) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.price = price;
         this.amount = amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 
-    public int getIdProduct() {
-        return idProduct;
+    public Product(int category, String name, int price, int amount, String description) {
+        this.category = category;
+        this.name = name;
+        this.price = price;
+        this.amount = amount;
+        this.description = description;
     }
 
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = false, length = 45)
     public String getName() {
         return name;
     }
@@ -76,6 +66,8 @@ public class Product {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "price", nullable = false)
     public int getPrice() {
         return price;
     }
@@ -84,12 +76,71 @@ public class Product {
         this.price = price;
     }
 
-    public int getStatus() {
+    @Basic
+    @Column(name = "amount", nullable = false)
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    @Basic
+    @Column(name = "description", nullable = false, length = 100)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Basic
+    @Column(name = "category", nullable = false)
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    @Basic
+    @Column(name = "status", nullable = true)
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (id != product.id) return false;
+        if (price != product.price) return false;
+        if (amount != product.amount) return false;
+        if (category != product.category) return false;
+        if (!Objects.equals(name, product.name)) return false;
+        if (!Objects.equals(description, product.description)) return false;
+        return Objects.equals(status, product.status);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + price;
+        result = 31 * result + amount;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + category;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
+    }
+}

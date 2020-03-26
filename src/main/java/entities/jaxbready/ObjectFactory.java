@@ -87,7 +87,7 @@ public class ObjectFactory {
         for (Category category : categories) {
             RawCategory cat = createCategory();
             cat.name = category.getName();
-            cat.id = category.getIdCategory();
+            cat.id = category.getId();
             jaxbCategories.rawCategory.add(cat);
         }
         Products jaxbProducts = createProducts();
@@ -96,12 +96,12 @@ public class ObjectFactory {
             RawProduct prod = createProduct();
             prod.name = product.getName();
             for(Category cat : categories) {
-                if (product.getIdCategory() == cat.getIdCategory()) {
+                if (product.getCategory() == cat.getId()) {
                     prod.idCategory = cat.getName();
                     break;
                 }
             }
-            prod.id = product.getIdProduct();
+            prod.id = product.getId();
             prod.amount = product.getAmount();
             prod.price = product.getPrice();
             prod.description = product.getDescription();

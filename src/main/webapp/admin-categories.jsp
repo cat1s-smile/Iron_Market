@@ -44,13 +44,13 @@
 					<th style="width: 150px"><p><a href='<c:url value="/createCategory" />' class="button-create">Create new</a></p></th>
 				</tr>
 				<c:forEach var="category" items="${categories}">
-					<tr><td>${category.idCategory}</td>
+					<tr><td>${category.id}</td>
 						<td>${category.name}</td>
 						<td>
-							<a href='<c:url value="/editCategory?id=${category.idCategory}" />' class="button-edit">Edit</a> |
+							<a href='<c:url value="/editCategory?id=${category.id}" />' class="button-edit">Edit</a> |
 							<form method="post" action='<c:url value="/deleteCategory" />' style="display:inline;">
-								<input type="hidden" name="id" value="${category.idCategory}">
-								<input type="submit" value="Delete" class="button-delete" id="${category.idCategory}" ${doLinkedProductsExists != 0 ? "disabled" : ""}>
+								<input type="hidden" name="id" value="${category.id}">
+								<input type="submit" value="Delete" class="button-delete" id="${category.id}" ${doLinkedProductsExists != 0 ? "disabled" : ""}>
 							</form>
 						</td></tr>
 				</c:forEach>

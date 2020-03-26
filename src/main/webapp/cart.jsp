@@ -33,20 +33,20 @@
                             <div class="buttons-count">
                                 <form method="post" action='<c:url value="/remove_from_cart" />'
                                       style="display:inline;">
-                                    <input type="hidden" name="id" value="${cartItem.product.idProduct}">
+                                    <input type="hidden" name="id" value="${cartItem.product.id}">
                                     <input type="hidden" name="todo" value="-">
                                     <input type="submit" value="-"
                                            style="display:inline; height: 15px; padding-top: 0;">
                                 </form>
                                 <form method="post" action='<c:url value="/remove_from_cart" />'
                                       style="display:inline;">
-                                    <input type="hidden" name="id" value="${cartItem.product.idProduct}">
+                                    <input type="hidden" name="id" value="${cartItem.product.id}">
                                     <input type="hidden" name="todo" value="+">
                                     <input type="submit" value="+" style="display:inline;height: 15px; padding-top: 0">
                                 </form>
                             </div>
                             <form method="post" action='<c:url value="/remove_from_cart" />'>
-                                <input type="hidden" name="id" value="${cartItem.product.idProduct}">
+                                <input type="hidden" name="id" value="${cartItem.product.id}">
                                 <input type="hidden" name="todo" value="remove">
                                 <input type="submit" class="delete" value="Удалить" style="display:inline;">
                             </form>

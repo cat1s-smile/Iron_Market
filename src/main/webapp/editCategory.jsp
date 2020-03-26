@@ -17,7 +17,7 @@
 <form method="post">
     <div class="fields">
         <div class="field">
-            <input type="hidden" value="${category.idCategory}" name="idCategory" />
+            <input type="hidden" value="${category.id}" name="idCategory" />
             <div class="property-name">Название</div>
             <label>
                 <input name="name" value="${category.name}" class="input-field"/>

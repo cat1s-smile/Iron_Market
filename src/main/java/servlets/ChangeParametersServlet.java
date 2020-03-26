@@ -56,7 +56,7 @@ public class ChangeParametersServlet extends HttpServlet {
                     int idProduct = Integer.parseInt(id);
                     Product product = model.getProduct(idProduct);
                     if(!price.equals("")) product.setPrice(Integer.parseInt(price));
-                    if(!idCategory.equals("")) product.setIdCategory(Integer.parseInt(idCategory));
+                    if(!idCategory.equals("")) product.setCategory(Integer.parseInt(idCategory));
                     model.editProduct(product);
                 }
                 request.setAttribute("mode", "preview");

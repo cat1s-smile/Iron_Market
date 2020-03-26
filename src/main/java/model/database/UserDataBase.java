@@ -11,7 +11,7 @@ class UserDataBase {
     private static String password = "кщще";
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
-    static List<User> select() {
+    /*static List<User> select() {
         List<User> users = new ArrayList<>();
         try{
             //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();;
@@ -82,14 +82,14 @@ class UserDataBase {
             //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
                 String sql = "UPDATE rawProduct SET name = ?, price = ?, amount = ?, description = ?, idCategory = ?" +
-                        " WHERE idProduct = ?";
+                        " WHERE product = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, rawProduct.getName());
                     preparedStatement.setInt(2, rawProduct.getPrice());
                     preparedStatement.setInt(3,rawProduct.getAmount());
                     preparedStatement.setString(4, rawProduct.getDescription());
                     preparedStatement.setInt(5, rawProduct.getIdCategory());
-                    preparedStatement.setInt(6, rawProduct.getIdProduct());
+                    preparedStatement.setInt(6, rawProduct.getproduct());
                     return  preparedStatement.executeUpdate();
                 }
             }
@@ -103,7 +103,7 @@ class UserDataBase {
         try{
             //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())){
-                String sql = "DELETE FROM rawProduct WHERE idProduct = ?";
+                String sql = "DELETE FROM rawProduct WHERE product = ?";
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setInt(1, id);
                     return  preparedStatement.executeUpdate();

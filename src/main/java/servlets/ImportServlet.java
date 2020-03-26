@@ -23,7 +23,7 @@ public class ImportServlet extends HttpServlet {
         ShopContent shopContent = null;
         String xmlPath = request.getParameter("file");
         try {
-           shopContent =  model.createShopContent(xmlPath, "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\shopContent.xsd");
+           shopContent =  model.createShopContent(xmlPath, "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\shopContent.xsd");
         } catch (JAXBException | SAXException e) {
             e.printStackTrace();
         }

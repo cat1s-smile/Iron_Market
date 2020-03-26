@@ -11,7 +11,7 @@ public class Initializer {
 
     @PostConstruct
     public void init() throws ClassNotFoundException, IOException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        //Class.forName("com.mysql.cj.jdbc.Driver");
         DBFactory.init();
     }
 }

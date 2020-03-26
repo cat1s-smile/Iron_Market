@@ -1,8 +1,5 @@
 package model.database;
 
-import entities.jaxbready.RawCategory;
-import entities.jaxbready.RawProduct;
-import entities.jaxbready.ShopContent;
 import entities.main.*;
 import entities.supporting.CartItem;
 import entities.supporting.OrderInfo;
@@ -51,15 +48,15 @@ public class DBUserMarketModel implements UserMarketModel {
         if (order == null) {
             OrderDataBase.insert(new Order(userID, "0"));
             order = OrderDataBase.selectActive(userID);
-            int orderID = order.getIdOrder();
+            int orderID = order.getId();
             OrderContentDataBase.insert(new OrderContent(orderID, productID, 1));
         } else {
             OrderContent orderContent = null;
-            orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), productID);
+            orderContent = OrderContentDataBase.selectOne(order.getId(), productID);
             if (orderContent == null)
-                OrderContentDataBase.insert(new OrderContent(order.getIdOrder(), productID, 1));
+                OrderContentDataBase.insert(new OrderContent(order.getId(), productID, 1));
             else {
-                orderContent.setNumber(orderContent.getNumber() + 1);
+                orderContent.setAmount(orderContent.getAmount() + 1);
                 OrderContentDataBase.update(orderContent);
             }
         }
@@ -70,9 +67,9 @@ public class DBUserMarketModel implements UserMarketModel {
         Order order = OrderDataBase.selectActive(userID);
         int productNumber = 0;
         if (order != null) {
-            List<OrderContent> cart = OrderContentDataBase.selectByOrderID(order.getIdOrder());
+            List<OrderContent> cart = OrderContentDataBase.selectByOrderID(order.getId());
             for (OrderContent ord : cart) {
-                productNumber += ord.getNumber();
+                productNumber += ord.getAmount();
             }
         }
         return productNumber;
@@ -83,10 +80,10 @@ public class DBUserMarketModel implements UserMarketModel {
         Order order = OrderDataBase.selectActive(userID);
         List<CartItem> cart = new ArrayList<>();
         if (order != null) {
-            List<OrderContent> cartItems = OrderContentDataBase.selectByOrderID(order.getIdOrder());
+            List<OrderContent> cartItems = OrderContentDataBase.selectByOrderID(order.getId());
             for (OrderContent ord : cartItems) {
-                Product product = ProductDataBase.selectOne(ord.getIdProduct());
-                cart.add(new CartItem(product, ord.getNumber(), 1));
+                Product product = ProductDataBase.selectOne(ord.getProduct());
+                cart.add(new CartItem(product, ord.getAmount(), 1));
             }
         }
         return cart;
@@ -127,7 +124,7 @@ public class DBUserMarketModel implements UserMarketModel {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
             throw new IllegalAccessException();
-        OrderContentDataBase.delete(order.getIdOrder(), productID);
+        OrderContentDataBase.delete(order.getId(), productID);
     }
 
     @Override
@@ -135,10 +132,10 @@ public class DBUserMarketModel implements UserMarketModel {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
             throw new IllegalAccessException();
-        OrderContent orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), productID);
+        OrderContent orderContent = OrderContentDataBase.selectOne(order.getId(), productID);
         if (orderContent == null)
             throw new IllegalAccessException();
-        orderContent.setNumber(orderContent.getNumber() + 1);
+        orderContent.setAmount(orderContent.getAmount() + 1);
         OrderContentDataBase.update(orderContent);
     }
 
@@ -147,13 +144,13 @@ public class DBUserMarketModel implements UserMarketModel {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
             throw new IllegalAccessException();
-        OrderContent orderContent = OrderContentDataBase.selectOne(order.getIdOrder(), productID);
+        OrderContent orderContent = OrderContentDataBase.selectOne(order.getId(), productID);
         if (orderContent == null)
             throw new IllegalAccessException();
-        if (orderContent.getNumber() == 1) {
-            OrderContentDataBase.delete(order.getIdOrder(), productID);
+        if (orderContent.getAmount() == 1) {
+            OrderContentDataBase.delete(order.getId(), productID);
         } else {
-            orderContent.setNumber(orderContent.getNumber() - 1);
+            orderContent.setAmount(orderContent.getAmount() - 1);
             OrderContentDataBase.update(orderContent);
         }
     }
@@ -164,19 +161,19 @@ public class DBUserMarketModel implements UserMarketModel {
             return false;
         Order order = OrderDataBase.selectActive(userID);
         if (order != null) {
-            List<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getIdOrder());
+            List<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getId());
             if (orderContents.isEmpty()) {
                 return false;
             }
             for (OrderContent content : orderContents) {
-                Product product = getProduct(content.getIdProduct());
-                if (product.getAmount() < content.getNumber() || product.getStatus() == 0) {
+                Product product = getProduct(content.getProduct());
+                if (product.getAmount() < content.getAmount() || product.getStatus() == 0) {
                     return false;
                 }
             }
             for (OrderContent content : orderContents) {
-                Product product = getProduct(content.getIdProduct());
-                product.setAmount(product.getAmount() - content.getNumber());
+                Product product = getProduct(content.getProduct());
+                product.setAmount(product.getAmount() - content.getAmount());
                 ProductDataBase.update(product);
             }
             order.setStatus("1");
@@ -195,13 +192,13 @@ public class DBUserMarketModel implements UserMarketModel {
             for (Order order : orders) {
                 List<String> content = new ArrayList<>();
                 int totalCost = 0;
-                List<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getIdOrder());
+                List<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getId());
                 for (OrderContent ord : orderContents) {
-                    Product product = ProductDataBase.selectOne(ord.getIdProduct());
-                    content.add(product.getName() + " x" + ord.getNumber() + ";");
-                    totalCost += product.getPrice() * ord.getNumber();
+                    Product product = ProductDataBase.selectOne(ord.getProduct());
+                    content.add(product.getName() + " x" + ord.getAmount() + ";");
+                    totalCost += product.getPrice() * ord.getAmount();
                 }
-                orderInfos.add(new OrderInfo(order.getIdOrder(), content, totalCost));
+                orderInfos.add(new OrderInfo(order.getId(), content, totalCost));
             }
         }
         return orderInfos;

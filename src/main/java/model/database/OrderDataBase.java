@@ -1,7 +1,11 @@
 package model.database;
 
 import entities.main.Order;
+import entities.main.Product;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,110 +16,47 @@ class OrderDataBase {
     private static String url = "jdbc:mysql://localhost:3306/marketdb?useUnicode=true&serverTimezone=UTC";
 
     static List<Order> select() {
-        List<Order> orders = new ArrayList<Order>();
-        try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            ;
-            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
-                Statement statement = conn.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM `order`");
-                while (resultSet.next()) {
-                    int idOrder = resultSet.getInt(1);
-                    String idUser = resultSet.getString(2);
-                    String status = resultSet.getString(3);
-                    Order order = new Order(idOrder, idUser, status);
-                    orders.add(order);
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        return orders;
+        EntityManager manager = DBFactory.getEntityManager();
+        List result = manager.createQuery("FROM Order").getResultList();
+        manager.close();
+        return (List<Order>) result;
     }
 
     static List<Order> selectByID(String userID) {
-        List<Order> orders = new ArrayList<Order>();
-        try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
-                String sql = "SELECT * FROM `order` WHERE idUser=? and status=?";
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                    preparedStatement.setString(1, userID);
-                    preparedStatement.setString(2, "1");
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    while (resultSet.next()) {
-                        int idOrder = resultSet.getInt(1);
-                        String idUser = resultSet.getString(2);
-                        String status = resultSet.getString(3);
-                        Order order = new Order(idOrder, idUser, status);
-                        orders.add(order);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return orders;
+        EntityManager manager = DBFactory.getEntityManager();
+        Query query = manager.createQuery("FROM Order WHERE user = :user");
+        query.setParameter("user", userID);
+        List result = query.getResultList();
+        manager.close();
+        return (List<Order>) result;
     }
 
-    static int update(Order order) {
-        try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
-                String sql = "UPDATE `order` SET idUser = ?, status = ?" +
-                        " WHERE idOrder = ?";
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                    preparedStatement.setString(1, order.getIdUser());
-                    preparedStatement.setString(2, order.getStatus());
-                    preparedStatement.setInt(3, order.getIdOrder());
-                    return preparedStatement.executeUpdate();
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
+    static void update(Order order) {
+        EntityManager manager = DBFactory.getEntityManager();
+        manager.getTransaction().begin();
+        manager.merge(order);
+        manager.getTransaction().commit();
+        manager.close();
         }
-        return 0;
-    }
 
 
     static Order selectActive(String userID) {
-        Order order = null;
-        try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
-                String sql = "SELECT * FROM `order` WHERE idUser=? AND status=?";
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                    preparedStatement.setString(1, userID);
-                    preparedStatement.setString(2, "0");
-                    ResultSet resultSet = preparedStatement.executeQuery();
-                    if (resultSet.next()) {
-                        int idOrder = resultSet.getInt(1);
-                        String idUser = resultSet.getString(2);
-                        String status = resultSet.getString(3);
-                        order = new Order(idOrder, idUser, status);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-        return order;
+        EntityManager manager = DBFactory.getEntityManager();
+        Query query = manager.createQuery("FROM Order WHERE user like :user and status like :status");
+        query.setParameter("user", userID);
+        query.setParameter("status", "0");
+        List result = query.getResultList();
+        manager.close();
+        return result == null?
+                null
+                : (Order) result.get(0);
     }
 
-    static int insert(Order order) {
-        try {
-            //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            try (Connection conn = DriverManager.getConnection(DBFactory.getURL(), DBFactory.getProperties())) {
-                String sql = "INSERT INTO `order` (idUser, status) Values (?, ?)";
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                    preparedStatement.setString(1, order.getIdUser());
-                    preparedStatement.setString(2, order.getStatus());
-                    return preparedStatement.executeUpdate();
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
+    static void insert(Order order) {
+        EntityManager manager = DBFactory.getEntityManager();
+        manager.getTransaction().begin();
+        manager.persist(order);
+        manager.getTransaction().commit();
+        manager.close();
         }
-        return 0;
-    }
 }

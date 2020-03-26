@@ -16,7 +16,7 @@
     <section>
         <div class="fields">
             <div class="field">
-                <input type="hidden" value="${product.idProduct}" name="id">
+                <input type="hidden" value="${product.id}" name="id">
                 <div class="property-name">Название</div>
                 <label>
                     <input name="name" value="${product.name}" class="input-field">
@@ -43,7 +43,7 @@
             <div class="field">
                 <div class="property-name">ID Категории</div>
                 <label>
-                    <input name="idCategory" value="${product.idCategory}" type="number" min="1" class="input-field">
+                    <input name="idCategory" value="${product.category}" type="number" min="1" class="input-field">
                 </label>
             </div>
             <br>

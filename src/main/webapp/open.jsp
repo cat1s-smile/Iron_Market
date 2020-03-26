@@ -43,8 +43,8 @@
 <body>
 <div class="container">
     <h3>${product.name}</h3>
-    <p>entities.main.Product code: ${product.idProduct}</p>
-    <p>entities.main.Category: ${product.idCategory}</p>
+    <p>entities.main.Product code: ${product.id}</p>
+    <p>entities.main.Category: ${product.category}</p>
     <p>Description: ${product.description}</p>
     <p>Amount on store: ${product.amount}</p>
     <p>Price: ${product.price}</p>
@@ -52,7 +52,7 @@
         <input type="submit" value="Назад" class="button">
     </form>
     <form method="post" action='<c:url value="/buy" />' style="display:inline;">
-        <input type="hidden" name="id" value="${product.idProduct}">
+        <input type="hidden" name="id" value="${product.id}">
         <input type="submit" value="В корзину" class="button">
     </form>
 </div>

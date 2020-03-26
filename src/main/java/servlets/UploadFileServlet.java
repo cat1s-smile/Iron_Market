@@ -62,10 +62,10 @@ public class UploadFileServlet extends HttpServlet {
             if (id==0) {
                 // Transform to HTML
                 TransformerFactory tFactory = TransformerFactory.newInstance();
-                String xslPath = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\src\\main\\resources\\shop.xsl";
+                String xslPath = "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\shop.xsl";
                 Source xslDoc = new StreamSource(xslPath);
                 Source xmlDoc = new StreamSource(filePath);
-                String outputFileName = "C:\\Users\\aaa\\IdeaProjects\\IronMarket\\target\\IronMarket-1.0-SNAPSHOT\\preview.html";
+                String outputFileName = "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\target\\IronMarket-1.0-SNAPSHOT\\preview.html";
                 OutputStream htmlFile = new FileOutputStream(outputFileName);
                 Transformer trasform = tFactory.newTransformer(xslDoc);
                 trasform.transform(xmlDoc, new StreamResult(htmlFile));

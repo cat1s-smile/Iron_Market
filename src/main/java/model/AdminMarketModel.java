@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import javax.ejb.Local;
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
+import java.io.OutputStream;
 import java.util.List;
 
 @Local
@@ -47,6 +48,8 @@ public interface AdminMarketModel {
     ShopContent createShopContent(String xmlFilePath, String xsdSchemaPath) throws JAXBException, SAXException;
 
     void toXmlFile(ShopContent shopContent, String xmlFilePath) throws JAXBException, FileNotFoundException;
+
+    void toXmlFile(ShopContent shopContent, OutputStream out) throws JAXBException, FileNotFoundException;
 
     ShopContent getAllProducts();
 

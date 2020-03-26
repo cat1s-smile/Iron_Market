@@ -2,7 +2,6 @@ package servlets;
 
 import entities.main.Category;
 import model.AdminMarketModel;
-import model.UserMarketModel;
 import parse.Parser;
 
 import javax.ejb.EJB;
@@ -45,7 +44,7 @@ public class EditCategoryServlet extends HttpServlet {
             Category duplicate = model.getCategory(name);
             Category category = new Category(id, name);
             if (name.equalsIgnoreCase(duplicate.getName())) {
-                if (id != duplicate.getIdCategory())
+                if (id != duplicate.getId())
                     getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
             }
             else

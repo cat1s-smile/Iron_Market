@@ -51,22 +51,22 @@
             </tr>
             <c:forEach var="product" items="${products}">
                 <tr>
-                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.idProduct}</td>
+                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.id}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.name}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.idCategory}</td>
+                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                     <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
-                        <a href='<c:url value="/edit?id=${product.idProduct}" />' class="button-edit">Edit</a> |
+                        <a href='<c:url value="/edit?id=${product.id}" />' class="button-edit">Edit</a> |
                         <form method="post" action='<c:url value="/archive" />' style="display:inline;">
-                            <input type="hidden" name="id" value="${product.idProduct}">
+                            <input type="hidden" name="id" value="${product.id}">
                             <input type="submit" class="button-delete"
                                    value=${product.status == 1 ? "Archive" : "DeArchive"}>
                         </form>
                         <form method="post" action='<c:url value="/delete" />' style="display:inline;">
-                            <input type="hidden" name="id" value="${product.idProduct}">
+                            <input type="hidden" name="id" value="${product.id}">
                             <input type="submit" value="Delete" class="button-delete">
                         </form>
                     </td>

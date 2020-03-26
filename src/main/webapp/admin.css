@@ -37,7 +37,7 @@ section{
 
 	text-align: center;
 	vertical-align: bottom;
-	font-size: 30px;
+	font-size: 26px;
 	text-decoration: none;
 	color: white;
 }
@@ -45,8 +45,8 @@ section{
 .entities li{
 	float: left;
 	display: inline-block;
-	margin-left: 200px;
-	width: 250px;
+	margin-left: 120px;
+	width: 200px;
 	border: 2px solid grey;
 	background-color: #3c77a5;
 	text-align: center;
@@ -73,8 +73,8 @@ section{
 }
 
 .menu-elem{
-	width: 100px;
-	height: 70px;
+	width: 90px;
+	height: 60px;
 	/*padding-bottom: 20px;
 	padding-top: 20px;*/
 }
@@ -82,10 +82,10 @@ section{
 .button-menu{
 	display: inline;
 	color: white;
-	font-size: 30px;
-	height: 70px;
-	margin-left: 200px;
-	width: 250px;
+	font-size: 26px;
+	height: 60px;
+	margin-left: 120px;
+	width: 200px;
 	border: 2px solid grey;
 	background-color: #3c77a5;
 }

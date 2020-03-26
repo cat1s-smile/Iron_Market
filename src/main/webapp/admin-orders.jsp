@@ -44,8 +44,8 @@
 					<th>Статус</th>
 				</tr>
 				<c:forEach var="order" items="${orders}">
-					<tr><td>${order.idOrder}</td>
-						<td>${order.idUser}</td>
+					<tr><td>${order.id}</td>
+						<td>${order.user}</td>
 						<td>${order.status}</td>
 						</tr>
 				</c:forEach>

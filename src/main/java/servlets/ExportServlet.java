@@ -51,44 +51,49 @@ public class ExportServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String filePath = request.getParameter("file");
+        //String filePath = request.getParameter("file");
+        String filePath = null;
         ShopContent shopContent = null;
         switch (request.getParameter("option")){
             case "a1":
                 shopContent = model.getAllProducts();
+                filePath = "all_products.xml";
                 break;
             case "a2":
                 shopContent = model.getProductsOnSale();
+                filePath = "products_on_sale.xml";
                 break;
             case "a3":
                 shopContent = model.getArchivedProducts();
+                filePath = "archived_products.xml";
                 break;
         }
-        try {
+        /*try {
             model.toXmlFile(shopContent, filePath);
         } catch (JAXBException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        File file = new File(filePath);
+        //File file = new File(filePath);
         ServletOutputStream outputStream = null;
-        BufferedInputStream inputStream = null;
+        //BufferedInputStream inputStream = null;
         try {
             outputStream = response.getOutputStream();
-            response.setContentType("application/vnd.ms-excel");
+            response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filePath + "\"");
-            response.setContentLength((int) file.length());
-            FileInputStream fileInputStream = new FileInputStream(file);
-            inputStream = new BufferedInputStream(fileInputStream);
-            int readBytes = 0;
-            while ((readBytes = inputStream.read()) != -1)
-                outputStream.write(readBytes);
-        }catch (ExportException e){
+            model.toXmlFile(shopContent, outputStream);
+            //response.setContentLength((int) file.length());
+            //FileInputStream fileInputStream = new FileInputStream(file);
+            //inputStream = new BufferedInputStream(fileInputStream);
+            //int readBytes = 0;
+            //while ((readBytes = inputStream.read()) != -1)
+                //outputStream.write(readBytes);
+        }catch (ExportException | JAXBException e){
             e.printStackTrace();
         }finally {
-            outputStream.flush();
+            //outputStream.flush();
             outputStream.close();
-            inputStream.close();
+            //inputStream.close();
         }
         response.sendRedirect(request.getContextPath()+"/admin");
     }

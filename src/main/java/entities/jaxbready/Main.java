@@ -1,18 +1,42 @@
 package entities.jaxbready;
 
 
+import entities.main.Category;
+import entities.main.Order;
 import model.database.DBAdminMarketModel;
+//import model.database.DBFactory;
 
 import java.io.*;
+import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXBContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 public class Main {
     public static void main(String[] args) throws IOException, JAXBException {
-        new Main().runMarshaller();
+
+        EntityManagerFactory sessionFactory = Persistence.createEntityManagerFactory("marketdb.jpa");
+        EntityManager entityManager = sessionFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery("from Order");
+        //query.setParameter("user", 43);
+        //query.setParameter("status", "0");
+        query.getResultList();
+        entityManager.close();
+
+
+
+
+
+
+
+
+
+        //new Main().runMarshaller();
     }
 
     private void runMarshaller() throws JAXBException, IOException {

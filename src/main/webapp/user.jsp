@@ -44,10 +44,10 @@
                 <c:forEach var="category" items="${categories}">
                     <li>
                         <form method="get" action='<c:url value="/user" />'>
-                            <input type="hidden" value="${category.idCategory}" name="catID"/>
+                            <input type="hidden" value="${category.id}" name="catID"/>
                             <input class="button-category" type="submit" value="${category.name}"
-                                   id="${category.idCategory}"
-                                ${category.idCategory == catID ? "style=\"background-color: #3c87b5;\"" : ""}
+                                   id="${category.id}"
+                                ${category.id == catID ? "style=\"background-color: #3c87b5;\"" : ""}
                             >
                         </form>
                     </li>
@@ -66,16 +66,16 @@
                             <p>Наличие: ${product.amount}</p>
                             <div class="product-buttons">
                                 <form method="get" action='<c:url value="/user" />' style="display:inline;">
-                                    <input type="hidden" name="id" value="${product.idProduct}">
+                                    <input type="hidden" name="id" value="${product.id}">
                                     <input type="hidden" value="${catID}" name="catID"/>
                                     <input type="hidden" value="${cart}" name="cart"/>
                                     <input type="hidden" value="${search}" name="search"/>
-                                    <input class="button-product" id="${product.idProduct}" type="submit"
+                                    <input class="button-product" id="${product.id}" type="submit"
                                            value="О товаре">
                                         <%--                                    onsubmit="document.getElementById('overlay').style.display = 'block' ">--%>
                                 </form>
                                 <form method="post" action='<c:url value="/buy" />' style="display:inline;">
-                                    <input type="hidden" name="buyID" value="${product.idProduct}">
+                                    <input type="hidden" name="buyID" value="${product.id}">
                                     <input type="hidden" value="${catID}" name="catID"/>
                                     <input type="hidden" value="${cart}" name="cart"/>
                                     <input type="hidden" value="${search}" name="search"/>
@@ -97,8 +97,8 @@
                         &times;
                     </div>
                 </div>
-                <p class="popup-text">entities.main.Product code: ${product.idProduct}</p>
-                <p class="popup-text">entities.main.Category: ${product.idCategory}</p>
+                <p class="popup-text">entities.main.Product code: ${product.id}</p>
+                <p class="popup-text">entities.main.Category: ${product.category}</p>
                 <p class="popup-text">Description: ${product.description}</p>
                 <p class="popup-text">Amount on store: ${product.amount}</p>
                 <p class="popup-text">Price: ${product.price}</p>

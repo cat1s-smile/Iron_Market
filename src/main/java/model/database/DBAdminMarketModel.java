@@ -14,6 +14,7 @@ import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editCategory(Category category) {
         Category duplicate = getCategory(category.getName());
         if (category.getName().equalsIgnoreCase(duplicate.getName()) &&
-                category.getIdCategory() != duplicate.getIdCategory())
+                category.getId() != duplicate.getId())
             throw new IllegalArgumentException();////////////////////////// not cool
         CategoryDataBase.update(category);
     }
@@ -157,7 +158,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
         CategoryDataBase.insert(category);
         category = CategoryDataBase.searchByName(rawProduct.getIdCategory());
         categories.add(category);
-        ProductDataBase.insert(transformProduct(rawProduct, category.getIdCategory()));
+        ProductDataBase.insert(transformProduct(rawProduct, category.getId()));
     }
 
     @Override
@@ -204,13 +205,21 @@ public class DBAdminMarketModel implements AdminMarketModel {
         marshaller.marshal(shopContent, fileOutputStream);
     }
 
+    @Override
+    public void toXmlFile(ShopContent shopContent, OutputStream out) throws JAXBException, FileNotFoundException {
+        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(shopContent, out);
+    }
+
     private ShopContent createShopContent(List<Product> products, List<Category> categories) {
         ObjectFactory factory = new ObjectFactory();
         List<RawCategory> rawCategories = new ArrayList<>();
         for (Category category : categories) {
             RawCategory cat = factory.createCategory();
             cat.setName(category.getName());
-            cat.setId(category.getIdCategory());
+            cat.setId(category.getId());
             rawCategories.add(cat);
         }
         List<RawProduct> rawProducts = new ArrayList<>();
@@ -218,12 +227,12 @@ public class DBAdminMarketModel implements AdminMarketModel {
             RawProduct prod = factory.createProduct();
             prod.setName(product.getName());
             for(Category cat : categories) {
-                if (product.getIdCategory() == cat.getIdCategory()) {
+                if (product.getCategory() == cat.getId()) {
                     prod.setIdCategory(cat.getName());
                     break;
                 }
             }
-            prod.setId(product.getIdProduct());
+            prod.setId(product.getId());
             prod.setAmount(product.getAmount());
             prod.setPrice(product.getPrice());
             prod.setDescription(product.getDescription());
@@ -259,7 +268,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     private int getCategoryID(List<Category> categories, String categoryName) {
         for (Category category : categories) {
             if (categoryName.equalsIgnoreCase(category.getName()))
-                return category.getIdCategory();
+                return category.getId();
         }
         return -1;
     }
