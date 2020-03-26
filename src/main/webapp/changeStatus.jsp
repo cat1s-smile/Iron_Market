@@ -24,17 +24,17 @@
                 <c:forEach var="product" items="${products}">
                     <tr>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
-                            <input type="checkbox" name="checkedId" value="${product.idProduct}"
+                            <input type="checkbox" name="checkedId" value="${product.id}"
                             <c:forEach var="checkedProduct" items="${checkedProducts}">
-                                ${product.idProduct == checkedProduct.idProduct ? "checked" : ""}
+                                ${product.id == checkedProduct.id ? "checked" : ""}
                             </c:forEach>>
                         </td>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.idProduct}</td>
+                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.id}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.name}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.idCategory}</td>
+                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                         <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                     </tr>

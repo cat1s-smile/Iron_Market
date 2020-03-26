@@ -9,7 +9,7 @@
 <body>
 <section>
     <div class="container-table">
-        <form method="post" action='<c:url value="/changesPreview" />'>
+        <form method="post" action='<c:url value="/changeParametersPreview" />'>
             <table class="table-product">
                 <tr>
                     <th>ID</th>
@@ -35,9 +35,11 @@
                 </c:forEach>
             </table>
             <input type="hidden" name="mode" value="${mode}">
+            <input type="hidden" name="price" value="${price}">
+            <input type="hidden" name="idCategory" value="${idCategory}">
             <input type="submit" class="button" value="Продолжить">
         </form>
-        <form method="post" action='<c:url value="/changesPreview" />'>
+        <form method="post" action='<c:url value="/changeParametersPreview" />'>
             <c:forEach var="product" items="${products}">
                 <input type="hidden" name="checkedId" value="${product.id}">
             </c:forEach>
