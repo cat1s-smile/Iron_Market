@@ -27,6 +27,10 @@
                 <input type="hidden" name="tab" value="export">
                 <input type="submit" class="button-menu" value="Экспорт">
             </form>
+            <form action='<c:url value="admin" />' style="display: inline">
+                <input type="hidden" name="tab" value="change">
+                <input type="submit" class="button-menu" value="Изменения">
+            </form>
         </div>
     </div>
 </header>

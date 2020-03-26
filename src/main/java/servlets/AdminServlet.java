@@ -40,6 +40,9 @@ public class AdminServlet extends HttpServlet {
             request.setAttribute("impOrExp", 1);
             getServletContext().getRequestDispatcher("/export.jsp").forward(request, response);
         }
+        else if (tab.equals("change")) {
+            getServletContext().getRequestDispatcher("/chooseAction.jsp").forward(request, response);
+        }
         else {
             getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
         }
