@@ -47,7 +47,7 @@ class OrderDataBase {
         query.setParameter("status", "0");
         List result = query.getResultList();
         manager.close();
-        return result == null?
+        return result.isEmpty()?
                 null
                 : (Order) result.get(0);
     }

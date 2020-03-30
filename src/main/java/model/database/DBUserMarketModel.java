@@ -4,6 +4,7 @@ import entities.main.*;
 import entities.supporting.CartItem;
 import entities.supporting.OrderInfo;
 import model.UserMarketModel;
+import servlets.DAOException;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -120,33 +121,33 @@ public class DBUserMarketModel implements UserMarketModel {
     }
 
     @Override
-    public void removeItemFromOrder(String userID, int productID) throws IllegalAccessException {
+    public void removeItemFromOrder(String userID, int productID) throws DAOException {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
-            throw new IllegalAccessException();
+            throw new DAOException("order can not be modified");
         OrderContentDataBase.delete(order.getId(), productID);
     }
 
     @Override
-    public void incrementItemNumber(String userID, int productID) throws IllegalAccessException {
+    public void incrementItemNumber(String userID, int productID) throws DAOException {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
-            throw new IllegalAccessException();
+            throw new DAOException("order can not be modified");
         OrderContent orderContent = OrderContentDataBase.selectOne(order.getId(), productID);
         if (orderContent == null)
-            throw new IllegalAccessException();
+            throw new DAOException("order can not be modified");
         orderContent.setAmount(orderContent.getAmount() + 1);
         OrderContentDataBase.update(orderContent);
     }
 
     @Override
-    public void decrementItemNumber(String userID, int productID) throws IllegalAccessException {
+    public void decrementItemNumber(String userID, int productID) throws DAOException {
         Order order = OrderDataBase.selectActive(userID);
         if (order == null || order.getStatus().equals("1"))
-            throw new IllegalAccessException();
+            throw new DAOException("order can not be modified");
         OrderContent orderContent = OrderContentDataBase.selectOne(order.getId(), productID);
         if (orderContent == null)
-            throw new IllegalAccessException();
+            throw new DAOException("order can not be modified");
         if (orderContent.getAmount() == 1) {
             OrderContentDataBase.delete(order.getId(), productID);
         } else {
