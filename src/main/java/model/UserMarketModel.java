@@ -5,6 +5,7 @@ import entities.main.Order;
 import entities.main.Product;
 import entities.supporting.CartItem;
 import entities.supporting.OrderInfo;
+import servlets.DAOException;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -35,11 +36,11 @@ public interface UserMarketModel {
 
     int getOrderCost(List<CartItem> cart);
 
-    void removeItemFromOrder(String userID, int productID) throws IllegalAccessException;
+    void removeItemFromOrder(String userID, int productID) throws DAOException;
 
-    void incrementItemNumber(String userID, int productID) throws IllegalAccessException;
+    void incrementItemNumber(String userID, int productID) throws DAOException;
 
-    void decrementItemNumber(String userID, int productID) throws IllegalAccessException;
+    void decrementItemNumber(String userID, int productID) throws DAOException;
 
     boolean confirmOrder(String userID);
 
