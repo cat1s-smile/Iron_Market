@@ -24,40 +24,50 @@ public class ChangeParametersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] ID = request.getParameterValues("checkedId");
         String price = request.getParameter("price");
-        String idCategory = request.getParameter("idCategory");
-        ArrayList<Product> checkedProducts = new ArrayList<>();
+        String category = request.getParameter("category");
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (String id : ID) {
+            int idProduct = Integer.parseInt(id);
+            ids.add(idProduct);
+        }
+        List<Product> checkedProducts;
         switch (request.getParameter("mode")) {
             case "preview":
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    Product product = model.getProduct(idProduct);
-                    checkedProducts.add(product);
-                }
+                checkedProducts = model.getProducts(ids);
                 request.setAttribute("products", checkedProducts);
                 request.setAttribute("price", price);
-                request.setAttribute("idCategory", idCategory);
+                request.setAttribute("category", category);
                 request.setAttribute("mode", "change");
                 getServletContext().getRequestDispatcher("/changeParametersPreview.jsp").forward(request, response);
                 break;
             case "back":
                 List<Product> allProducts = model.getProducts();
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    Product product = model.getProduct(idProduct);
-                    checkedProducts.add(product);
-                }
+                checkedProducts = model.getProducts(ids);
                 request.setAttribute("checkedProducts", checkedProducts);
                 request.setAttribute("products", allProducts);
                 request.setAttribute("mode", "preview");
                 getServletContext().getRequestDispatcher("/changeParameters.jsp").forward(request, response);
                 break;
             case "change":
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    Product product = model.getProduct(idProduct);
-                    if(!price.equals("")) product.setPrice(Integer.parseInt(price));
-                    if(!idCategory.equals("")) product.setCategory(Integer.parseInt(idCategory));
-                    model.editProduct(product);
+                checkedProducts = model.getProducts(ids);
+                if (!price.equals("") && !category.equals("")) {
+                    try {
+                        model.editProducts(checkedProducts, Integer.parseInt(price), category);
+                    } catch (DAOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    if (!price.equals("")) model.editProducts(checkedProducts, Integer.parseInt(price));
+                    else {
+                        if (!category.equals("")) {
+                            try {
+                                model.editProducts(checkedProducts, category);
+                            } catch (DAOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
                 request.setAttribute("mode", "preview");
                 response.sendRedirect(request.getContextPath() + "/admin");

@@ -27,7 +27,7 @@
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
+                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.categoryName}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                         <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                     </tr>
@@ -35,14 +35,14 @@
                 </c:forEach>
             </table>
             <input type="hidden" name="mode" value="${mode}">
-            <input type="submit" class="button" value="Продолжить">
+            <input type="submit" class="button-confirm" value="Продолжить">
         </form>
         <form method="post" action='<c:url value="/changesPreview" />'>
             <c:forEach var="product" items="${products}">
                 <input type="hidden" name="checkedId" value="${product.id}">
             </c:forEach>
             <input type="hidden" name="mode" value="back">
-            <input type="submit" class="button" value="Назад">
+            <input type="submit" class="button-back" value="Назад">
         </form>
     </div>
 </section>

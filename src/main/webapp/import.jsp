@@ -23,6 +23,7 @@
     <br>
     <input type="submit" class="button" value="Загрузить" />
 </form>
+<a href='<c:url value="/admin" />' style="display: inline">Вернуться</a>
 
 </body>
 </html>

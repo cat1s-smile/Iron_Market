@@ -56,7 +56,7 @@
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
+                    <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.categoryName}</td>
                     <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                     <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
                         <a href='<c:url value="/edit?id=${product.id}" />' class="button-edit">Edit</a> |

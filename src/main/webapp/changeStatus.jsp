@@ -34,14 +34,15 @@
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
+                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.categoryName}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                         <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                     </tr>
                 </c:forEach>
             </table>
+            <form method="post" action='<c:url value="/changesPreview" />'>
             <input type="hidden" name="mode" value="${mode}">
-            <input type="submit" class="button" value="Продолжить">
+            <input type="submit" class="button-confirm" value="Продолжить">
         </form>
     </div>
 </section>

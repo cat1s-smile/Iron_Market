@@ -16,7 +16,7 @@
                     <input type="number" name="price" min="100" class="input-field">
                 </label> Цена
                 <label>
-                    <input type="number" name="idCategory" min="1" class="input-field">
+                    <input type="text" name="category" class="input-field">
                 </label> ID Категории
 
                 <table class="table-product">
@@ -43,14 +43,14 @@
                             <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                             <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                             <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                            <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
+                            <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.categoryName}</td>
                             <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                             <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                         </tr>
                     </c:forEach>
                 </table>
                 <input type="hidden" name="mode" value="${mode}">
-                <input type="submit" class="button" value="Продолжить">
+                <input type="submit" class="button-confirm" value="Продолжить">
             </section>
         </form>
     </div>

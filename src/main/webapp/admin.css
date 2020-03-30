@@ -150,6 +150,33 @@ th:first-child, td:first-child {
 	text-align: left;
 }
 
+.preview-info{
+	text-align: center;
+	margin-left: -17em;
+}
+
+.button-confirm{
+	color: #fff; /* цвет текста */
+	text-decoration: none; /* убирать подчёркивание у ссылок */
+	user-select: none; /* убирать выделение текста */
+	background: #3c77a5; /* фон кнопки */
+	padding: .7em 1.5em; /* отступ от текста */
+	outline: none; /* убирать контур в Mozilla */
+	float: right;
+	margin-right: 14.5em;
+}
+
+.button-back{
+	color: #fff; /* цвет текста */
+	text-decoration: none; /* убирать подчёркивание у ссылок */
+	user-select: none; /* убирать выделение текста */
+	background: #3c77a5; /* фон кнопки */
+	padding: .7em 1.5em; /* отступ от текста */
+	outline: none; /* убирать контур в Mozilla */
+	float: right;
+	margin-right: 0;
+}
+
 .button-create{
 	color: #fff; /* цвет текста */
 	text-decoration: none; /* убирать подчёркивание у ссылок */

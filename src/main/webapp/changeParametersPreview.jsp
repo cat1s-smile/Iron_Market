@@ -27,24 +27,32 @@
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.amount}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.description}</td>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.category}</td>
+                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.categoryName}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                         <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                     </tr>
                     <input type="hidden" name="checkedId" value="${product.id}">
                 </c:forEach>
             </table>
-            <input type="hidden" name="mode" value="${mode}">
-            <input type="hidden" name="price" value="${price}">
-            <input type="hidden" name="idCategory" value="${idCategory}">
-            <input type="submit" class="button" value="Продолжить">
-        </form>
-        <form method="post" action='<c:url value="/changeParametersPreview" />'>
-            <c:forEach var="product" items="${products}">
-                <input type="hidden" name="checkedId" value="${product.id}">
-            </c:forEach>
-            <input type="hidden" name="mode" value="back">
-            <input type="submit" class="button" value="Назад">
+            <div class="preview-info">
+                <input type="hidden" name="mode" value="${mode}">
+                <input type="hidden" name="price" value="${price}">
+                <input type="hidden" name="category" value="${category}">
+                <input type="submit" class="button-confirm" value="Продолжить">
+                <form method="post" action='<c:url value="/changeParametersPreview" />'>
+                    <c:forEach var="product" items="${products}">
+                        <input type="hidden" name="checkedId" value="${product.id}">
+                    </c:forEach>
+                    <input type="hidden" name="mode" value="back">
+                    <input type="submit" class="button-back" value="Назад">
+                </form>
+                <p>
+                    Категория после замены: ${category}
+                </p>
+                <p>
+                    Цена после замены: ${price}
+                </p>
+            </div>
         </form>
     </div>
 </section>

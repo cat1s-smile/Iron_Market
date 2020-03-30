@@ -3,13 +3,14 @@
 <!DOCTYPE >
 <html>
 <head>
-    <link rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="import.css">
     <title>Изменение параметров</title>
 </head>
 <body>
 
+<h2>Выберите необходимое действие?</h2>
+
 <form method="post" action='<c:url value="/chooseAction" />'>
-    <p><b>Выберите необходимое действие?</b></p>
     <p>
         <label>
             <input type="radio" name="option" value="a1">
@@ -20,6 +21,7 @@
 
     <input type="submit" class="button" value="Продолжить">
 </form>
+<a href='<c:url value="/admin" />' style="display: inline">Вернуться</a>
 
 </body>
 </html>
