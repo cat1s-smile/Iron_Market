@@ -31,8 +31,20 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     @Override
     public List<Product> getProducts() {
-        List<Product> products = ProductDataBase.select();
         List<Category> categories = CategoryDataBase.select();
+        List<Product> products = setCategoryNames(ProductDataBase.select(), categories);
+        for(Product product : products) {
+            product.setAvailableToDelete(canProductBeRemoved(product.getId()));
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> getProducts(List<Integer> ids) {
+        return setCategoryNames(ProductDataBase.select(ids), CategoryDataBase.select());
+    }
+
+    private List<Product> setCategoryNames(List<Product> products, List<Category> categories) {
         for(Product product : products) {
             product.setAvailableToDelete(canProductBeRemoved(product.getId()));
             product.setCategoryName(getCategoryName(product.getCategory(), categories));
@@ -68,6 +80,42 @@ public class DBAdminMarketModel implements AdminMarketModel {
         if(!canProductBeRemoved(productID))
             throw new DAOException("Product is contained in orders");
         ProductDataBase.delete(productID);
+    }
+
+    @Override
+    public void editProducts(List<Product> products, int newPrice) {
+        for (Product product : products) {
+            product.setPrice(newPrice);
+        }
+        ProductDataBase.update(products);
+    }
+
+    @Override
+    public void editProducts(List<Product> products, String newCategory) throws DAOException {
+        int categoryID = getCategoryID(newCategory);
+        for (Product product : products) {
+            product.setCategory(categoryID);
+        }
+        ProductDataBase.update(products);
+    }
+
+    @Override
+    public void editProducts(List<Product> products, int newPrice, String newCategory) throws DAOException {
+        int categoryID = getCategoryID(newCategory);
+        for (Product product : products) {
+            product.setPrice(newPrice);
+            product.setCategory(categoryID);
+        }
+        ProductDataBase.update(products);
+    }
+
+    private int getCategoryID(String categoryName) throws DAOException {
+        Category category = getCategory(categoryName);
+        if(category == null) {
+            createCategory(new Category(categoryName));
+            return getCategory(categoryName).getId();
+        }
+        else return category.getId();
     }
 
     @Override
@@ -156,6 +204,21 @@ public class DBAdminMarketModel implements AdminMarketModel {
                 ProductDataBase.insert(product);
             }
         }
+    }
+
+    private List<Category> insertAndPrepareCategories(List<RawCategory> rawCategories) {
+        List<Category> categories = new ArrayList<>();
+        for (RawCategory rawCategory : rawCategories) {
+            String categoryName = rawCategory.getName();
+            Category category = CategoryDataBase.searchByName(categoryName);
+            if (category == null) {
+                category = new Category(categoryName);
+                CategoryDataBase.insert(category);
+                category = CategoryDataBase.searchByName(categoryName);
+            }
+            categories.add(category);
+        }
+        return categories;
     }
 
     @Override
@@ -301,20 +364,5 @@ public class DBAdminMarketModel implements AdminMarketModel {
                 return category.getId();
         }
         return -1;
-    }
-
-    private List<Category> insertAndPrepareCategories(List<RawCategory> rawCategories) {
-        List<Category> categories = new ArrayList<>();
-        for (RawCategory rawCategory : rawCategories) {
-            String categoryName = rawCategory.getName();
-            Category category = CategoryDataBase.searchByName(categoryName);
-            if (category == null) {
-                category = new Category(categoryName);
-                CategoryDataBase.insert(category);
-                category = CategoryDataBase.searchByName(categoryName);
-            }
-            categories.add(category);
-        }
-        return categories;
     }
 }

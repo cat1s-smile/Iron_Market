@@ -20,6 +20,16 @@ class ProductDataBase {
         return (List<Product>) result;
     }
 
+    static List<Product> select(List<Integer> ids) {
+        EntityManager manager = DBFactory.getEntityManager();
+        List<Product> result = new ArrayList();
+        for(Integer id : ids) {
+            result.add(manager.find(Product.class, id));
+        }
+        manager.close();
+        return result;
+    }
+
     static List<Product> selectOnSale() {
         return getByStatus(1);
     }
@@ -108,6 +118,16 @@ class ProductDataBase {
         EntityManager manager = DBFactory.getEntityManager();
         manager.getTransaction().begin();
         manager.merge(product);
+        manager.getTransaction().commit();
+        manager.close();
+        }
+
+    static void update(List<Product> products) {
+        EntityManager manager = DBFactory.getEntityManager();
+        manager.getTransaction().begin();
+        for(Product product : products) {
+            manager.merge(product);
+        }
         manager.getTransaction().commit();
         manager.close();
         }

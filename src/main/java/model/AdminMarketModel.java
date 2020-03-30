@@ -3,16 +3,10 @@ package model;
 import entities.jaxbready.ShopContent;
 import entities.main.Category;
 import entities.main.Product;
-import org.xml.sax.SAXException;
 import servlets.DAOException;
 
 import javax.ejb.Local;
-import javax.xml.bind.JAXBException;
 import javax.xml.transform.Source;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -23,11 +17,19 @@ public interface AdminMarketModel {
 
     List<Product> getProducts();
 
+    List<Product> getProducts(List<Integer> ids);
+
     Product getProduct(int ProductID);
 
     void createProduct(Product newProduct);
 
     void editProduct(Product product);
+
+    void editProducts(List<Product> product, int newPrice);
+
+    void editProducts(List<Product> product, String newCategory) throws DAOException;
+
+    void editProducts(List<Product> product, int newPrice, String newCategory) throws DAOException;
 
     void deleteProduct(int productID) throws DAOException;
 
