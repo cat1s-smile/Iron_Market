@@ -11,7 +11,7 @@ div{
 header{
 	background-color: #AFCDE7;
 	width: 100%;
-	height: 270px;
+	height: 200px;
 }
 
 section{
@@ -27,14 +27,14 @@ section{
 
 .name-admin{
 	text-align: center;
-	font-size: 30px;
+	font-size: 45px;
 }
 
 .entities{
-	margin-top: 50px;
+	margin-top: 30px;
 	float: left;
 	display: inline-block;
-
+	margin-left: 110px;
 	text-align: center;
 	vertical-align: bottom;
 	font-size: 26px;
@@ -61,7 +61,6 @@ section{
 
 
 .search{
-	margin-top: 10px;
 	width: 99%;
 	font-size: 30px;
 	text-decoration: none;
@@ -84,8 +83,8 @@ section{
 	color: white;
 	font-size: 26px;
 	height: 60px;
-	margin-left: 120px;
-	width: 200px;
+	margin-left: 55px;
+	width: 190px;
 	border: 2px solid grey;
 	background-color: #3c77a5;
 }
@@ -113,9 +112,9 @@ section{
 }
 
 .table-product{
-	width: 70%;
-	margin-left: 15%;
-	margin-right: 15%;
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
 }
 
 .table-categories{
@@ -182,7 +181,7 @@ th:first-child, td:first-child {
 	text-decoration: none; /* убирать подчёркивание у ссылок */
 	user-select: none; /* убирать выделение текста */
 	background: #3c77a5; /* фон кнопки */
-	padding: .7em 1.5em; /* отступ от текста */
+	padding: .4em 1.5em; /* отступ от текста */
 	outline: none; /* убирать контур в Mozilla */
 }
 
@@ -195,6 +194,8 @@ th:first-child, td:first-child {
 }
 
 .button-edit{
+	border-width: 1px;
+	border-radius: 2px;
 	color: #fff; /* цвет текста */
 	text-decoration: none; /* убирать подчёркивание у ссылок */
 	user-select: none; /* убирать выделение текста */
@@ -213,7 +214,8 @@ th:first-child, td:first-child {
 
 .button-delete{
 	font-weight: 500;
-	border: 0;
+	border-width: 1px;
+	border-radius: 2px;
 	color: #fff; /* цвет текста */
 	text-decoration: none; /* убирать подчёркивание у ссылок */
 	user-select: none; /* убирать выделение текста */

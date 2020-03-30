@@ -71,6 +71,14 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
+    public void setExistingCategoryID(Product product) throws DAOException {
+        Category category = getCategory(product.getCategoryName());
+        if (category == null)
+            throw new DAOException("Category does not exist");
+        product.setCategory(category.getId());
+    }
+
+    @Override
     public void editProduct(Product product) {
         ProductDataBase.update(product);
     }
@@ -171,7 +179,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
                 insertProductWithNewCategory(rawProduct, categories);
             else {
                 Product product = transformProduct(rawProduct, categoryID);
-                if (!ProductDataBase.isContain(product))
+                if (ProductDataBase.getProduct(product) == null)
                     ProductDataBase.insert(product);
             }
         }
@@ -185,10 +193,13 @@ public class DBAdminMarketModel implements AdminMarketModel {
                 insertProductWithNewCategory(rawProduct, categories);
             else {
                 Product product = transformProduct(rawProduct, categoryID);
-                if (!ProductDataBase.isContain(product))
+                Product duplicate = ProductDataBase.getProduct(product);
+                if (duplicate == null)
                     ProductDataBase.insert(product);
-                else
+                else {
+                    product.setId(duplicate.getId());
                     ProductDataBase.update(product);
+                }
             }
         }
     }

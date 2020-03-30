@@ -43,7 +43,7 @@
             <div class="field">
                 <div class="property-name">ID Категории</div>
                 <label>
-                    <input name="idCategory" value="${product.category}" type="number" min="1" class="input-field">
+                    <input name="idCategory" value="${product.categoryName}" class="input-field">
                 </label>
             </div>
             <br>

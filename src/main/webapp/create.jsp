@@ -42,7 +42,7 @@
             <div class="field">
                 <div class="property-name">ID категории</div>
                 <label>
-                    <input type="number" name="idCategory" class="input-field" min="1">
+                    <input name="idCategory" class="input-field">
                 </label>
             </div>
             <br>

@@ -94,16 +94,18 @@ class ProductDataBase {
         return result;
     }
 
-    static boolean isContain(Product product) {
+    static Product getProduct(Product product) {
         EntityManager manager = DBFactory.getEntityManager();
         Query query = manager.createQuery("FROM Product " +
                 "WHERE name like :name and description like :desc and category = :cat");
         query.setParameter("name", product.getName());
         query.setParameter("desc", product.getDescription());
         query.setParameter("cat", product.getCategory());
-        boolean result = !query.getResultList().isEmpty();
+        List result = query.getResultList();
         manager.close();
-        return result;
+        return result.isEmpty() ?
+                null
+                : (Product) result.get(0);
     }
 
     static void insert(Product product) {

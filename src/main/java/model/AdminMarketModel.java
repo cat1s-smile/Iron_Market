@@ -68,4 +68,6 @@ public interface AdminMarketModel {
     ShopContent getArchivedProducts();
 
     void changeProductStatus(int id);
+
+    void setExistingCategoryID(Product product) throws DAOException;
 }

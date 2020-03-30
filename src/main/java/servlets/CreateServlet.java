@@ -32,8 +32,11 @@ public class CreateServlet extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             int amount = Integer.parseInt(request.getParameter("amount"));
             String description = request.getParameter("description");
-            int idCategory = Integer.parseInt(request.getParameter("idCategory"));
-            Product product = new Product(idCategory, name, price, amount, description);
+            String categoryName = request.getParameter("idCategory");
+            //int idCategory = Integer.parseInt(c);
+            Product product = new Product(-1, name, price, amount, description);
+            product.setCategoryName(categoryName);
+            model.setExistingCategoryID(product);
             model.createProduct(product);
             response.sendRedirect(request.getContextPath()+"/admin");
         }

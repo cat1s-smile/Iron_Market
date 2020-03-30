@@ -26,6 +26,7 @@ public class EditServlet extends HttpServlet {
             int id = Parser.parseID(request.getParameter("id"));
             Product product = model.getProduct(id);
             if(product!=null) {
+                product.setCategoryName(model.getCategory(product.getCategory()).getName());
                 request.setAttribute("product", product);
                 getServletContext().getRequestDispatcher("/edit.jsp").forward(request, response);
             }
@@ -47,8 +48,10 @@ public class EditServlet extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             int amount = Integer.parseInt(request.getParameter("amount"));
             String description = request.getParameter("description");
-            int idCategory = Integer.parseInt(request.getParameter("idCategory"));
-            Product product = new Product(id, idCategory, name, price, amount, description);
+            String categoryName = request.getParameter("idCategory");
+            Product product = new Product(id, -1, name, price, amount, description);
+            product.setCategoryName(categoryName);
+            model.setExistingCategoryID(product);
             model.editProduct(product);
             response.sendRedirect(request.getContextPath() + "/admin");
         }
