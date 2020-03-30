@@ -50,7 +50,7 @@
 							<a href='<c:url value="/editCategory?id=${category.id}" />' class="button-edit">Edit</a> |
 							<form method="post" action='<c:url value="/deleteCategory" />' style="display:inline;">
 								<input type="hidden" name="id" value="${category.id}">
-								<input type="submit" value="Delete" class="button-delete" id="${category.id}" ${doLinkedProductsExists != 0 ? "disabled" : ""}>
+								<input type="submit" value="Delete" class="button-delete" id="${category.id}" ${category.availableToDelete ? "" : "disabled"}>
 							</form>
 						</td></tr>
 				</c:forEach>

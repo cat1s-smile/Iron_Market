@@ -97,11 +97,11 @@
                         &times;
                     </div>
                 </div>
-                <p class="popup-text">entities.main.Product code: ${product.id}</p>
-                <p class="popup-text">entities.main.Category: ${product.category}</p>
-                <p class="popup-text">Description: ${product.description}</p>
-                <p class="popup-text">Amount on store: ${product.amount}</p>
-                <p class="popup-text">Price: ${product.price}</p>
+                <p class="popup-text">Id товара: ${product.id}</p>
+                <p class="popup-text">Категория: ${product.category}</p>
+                <p class="popup-text">Описание: ${product.description}</p>
+                <p class="popup-text">В наличии: ${product.amount}</p>
+                <p class="popup-text">Цена: ${product.price}</p>
             </div>
         </div>
     </div>

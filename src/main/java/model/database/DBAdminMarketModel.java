@@ -5,27 +5,47 @@ import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 import org.xml.sax.SAXException;
+import servlets.DAOException;
 
 import javax.ejb.Stateless;
 import javax.xml.XMLConstants;
 import javax.xml.bind.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class DBAdminMarketModel implements AdminMarketModel {
+    @Override
     public List<Category> getCategories() {
-        return CategoryDataBase.select();
+        List<Category> categories = CategoryDataBase.select();
+        for (Category category : categories)
+            category.setAvailableToDelete(canCategoryBeRemoved(category.getId()));
+        return categories;
     }
 
+    @Override
     public List<Product> getProducts() {
-        return ProductDataBase.select();
+        List<Product> products = ProductDataBase.select();
+        List<Category> categories = CategoryDataBase.select();
+        for(Product product : products) {
+            product.setAvailableToDelete(canProductBeRemoved(product.getId()));
+            product.setCategoryName(getCategoryName(product.getCategory(), categories));
+        }
+        return products;
+    }
+
+    private String getCategoryName(int id, List<Category> categories) {
+        for(Category category : categories) {
+            if (id == category.getId())
+                return category.getName();
+        }
+        return null;
     }
 
     @Override
@@ -44,9 +64,9 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public void deleteProduct(int productID) {
+    public void deleteProduct(int productID) throws DAOException {
         if(!canProductBeRemoved(productID))
-            throw new IllegalArgumentException();
+            throw new DAOException("Product is contained in orders");
         ProductDataBase.delete(productID);
     }
 
@@ -66,25 +86,25 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public void createCategory(Category newCategory) {
+    public void createCategory(Category newCategory) throws DAOException {
         if (CategoryDataBase.searchByName(newCategory.getName()) != null)
-            throw new IllegalArgumentException();////////////////////////// not cool
+            throw new DAOException("Category has this name already exists");
         CategoryDataBase.insert(newCategory);
     }
 
     @Override
-    public void editCategory(Category category) {
+    public void editCategory(Category category) throws DAOException {
         Category duplicate = getCategory(category.getName());
         if (category.getName().equalsIgnoreCase(duplicate.getName()) &&
                 category.getId() != duplicate.getId())
-            throw new IllegalArgumentException();////////////////////////// not cool
+            throw new DAOException("Category has this name already exists");
         CategoryDataBase.update(category);
     }
 
     @Override
-    public void deleteCategory(int categoryID) {
+    public void deleteCategory(int categoryID) throws DAOException {
         if (!canCategoryBeRemoved(categoryID))
-            throw new IllegalArgumentException();
+            throw new DAOException("Category has some products can not be deleted");
         else
             CategoryDataBase.delete(categoryID);
     }
@@ -162,55 +182,70 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public ShopContent createShopContent(String xmlFilePath, String xsdSchemaPath) throws JAXBException, SAXException {
-        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+    public ShopContent createShopContent(String xmlFilePath, Source xsdSchema) throws DAOException {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ShopContent.class);
 
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File(xsdSchemaPath));
+            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = sf.newSchema(xsdSchema);
 
-        Unmarshaller unmarshaller = context.createUnmarshaller();
+            Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        unmarshaller.setSchema(schema);
-       // unmarshaller.setEventHandler(new EmployeeValidationEventHandler());
+            unmarshaller.setSchema(schema);
+            // unmarshaller.setEventHandler(new EmployeeValidationEventHandler());
 
-        ShopContent shopContent = (ShopContent) unmarshaller.unmarshal(new File(xmlFilePath));
-        return shopContent;
-    }
-
-/*class EmployeeValidationEventHandler implements ValidationEventHandler {
-    @Override
-    public boolean handleEvent(ValidationEvent event) {
-        System.out.println("\nEVENT");
-        System.out.println("SEVERITY:  " + event.getSeverity());
-        System.out.println("MESSAGE:  " + event.getMessage());
-        System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());
-        System.out.println("LOCATOR");
-        System.out.println("    LINE NUMBER:  " + event.getLocator().getLineNumber());
-        System.out.println("    COLUMN NUMBER:  " + event.getLocator().getColumnNumber());
-        System.out.println("    OFFSET:  " + event.getLocator().getOffset());
-        System.out.println("    OBJECT:  " + event.getLocator().getObject());
-        System.out.println("    NODE:  " + event.getLocator().getNode());
-        System.out.println("    URL:  " + event.getLocator().getURL());
-        return true;
-    }
-}
-    }*/
-
-    @Override
-    public void toXmlFile(ShopContent shopContent, String xmlFilePath) throws JAXBException, FileNotFoundException {
-        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(xmlFilePath));
-        marshaller.marshal(shopContent, fileOutputStream);
+            return (ShopContent) unmarshaller.unmarshal(new File(xmlFilePath));
+        } catch (SAXException | JAXBException e) {
+            throw new DAOException("Can not unmarshal file", e);
+        }
     }
 
     @Override
-    public void toXmlFile(ShopContent shopContent, OutputStream out) throws JAXBException, FileNotFoundException {
-        JAXBContext context = JAXBContext.newInstance(ShopContent.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(shopContent, out);
+    public void toXmlFile(ShopContent shopContent, String xmlFilePath) throws DAOException {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(xmlFilePath));
+            marshaller.marshal(shopContent, fileOutputStream);
+        } catch (JAXBException | FileNotFoundException e) {
+            throw new DAOException("Can not marshal in xml", e);
+        }
+    }
+
+    @Override
+    public void toXmlFile(ShopContent shopContent, OutputStream out) throws DAOException {
+        try {
+            JAXBContext context = JAXBContext.newInstance(ShopContent.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(shopContent, out);
+        } catch (JAXBException e) {
+            throw new DAOException("Can not marshal in xml", e);
+        }
+
+    }
+
+    @Override
+    public String xslTransform(InputStream src, Source xsl, String xmlOutPath) throws DAOException {
+        try {
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            OutputStream tempXmlOut = new BufferedOutputStream(new FileOutputStream(xmlOutPath));
+            int readBytes = 0;
+            while ((readBytes = src.read()) != -1)
+                tempXmlOut.write(readBytes);
+            tempXmlOut.flush();
+            tempXmlOut.close();
+            Transformer trasform = tFactory.newTransformer(xsl);
+            StringWriter resultWriter = new StringWriter();
+            trasform.transform(new StreamSource(xmlOutPath), new StreamResult(resultWriter));
+            String result = resultWriter.getBuffer().toString();
+            resultWriter.close();
+            return result;
+        } catch (TransformerException | IOException e) {
+            throw new DAOException("Can not transform xml to html", e);
+        }
+
     }
 
     private ShopContent createShopContent(List<Product> products, List<Category> categories) {
@@ -226,12 +261,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
         for (Product product : products) {
             RawProduct prod = factory.createProduct();
             prod.setName(product.getName());
-            for(Category cat : categories) {
-                if (product.getCategory() == cat.getId()) {
-                    prod.setIdCategory(cat.getName());
-                    break;
-                }
-            }
+            prod.setIdCategory(getCategoryName(product.getCategory(), categories));
             prod.setId(product.getId());
             prod.setAmount(product.getAmount());
             prod.setPrice(product.getPrice());

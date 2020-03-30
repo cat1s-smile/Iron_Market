@@ -33,11 +33,9 @@ public class AdminServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/admin-categories.jsp").forward(request, response);
         }
         else if (tab.equals("import")) {
-            request.setAttribute("impOrExp", 0);
             getServletContext().getRequestDispatcher("/import.jsp").forward(request, response);
         }
         else if (tab.equals("export")) {
-            request.setAttribute("impOrExp", 1);
             getServletContext().getRequestDispatcher("/export.jsp").forward(request, response);
         }
         else if (tab.equals("change")) {

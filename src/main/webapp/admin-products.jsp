@@ -67,7 +67,7 @@
                         </form>
                         <form method="post" action='<c:url value="/delete" />' style="display:inline;">
                             <input type="hidden" name="id" value="${product.id}">
-                            <input type="submit" value="Delete" class="button-delete">
+                            <input type="submit" value="Delete" class="button-delete" ${product.availableToDelete ? "" : "disabled"}>
                         </form>
                     </td>
                 </tr>

@@ -23,35 +23,8 @@ public class ExportServlet extends HttpServlet {
     @EJB(beanName = "DBAdminMarketModel")
     private AdminMarketModel model;
 
-   /* @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fileName = request.getParameter("file");
-        File file = new File(fileName);
-        ServletOutputStream outputStream = null;
-        BufferedInputStream inputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-            response.setContentLength((int) file.length());
-            FileInputStream fileInputStream = new FileInputStream(file);
-            inputStream = new BufferedInputStream(fileInputStream);
-            int readBytes = 0;
-            while ((readBytes = inputStream.read()) != -1)
-                outputStream.write(readBytes);
-        }catch (ExportException e){
-            e.printStackTrace();
-        }finally {
-            outputStream.flush();
-            outputStream.close();
-            inputStream.close();
-        }
-    }*/
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        //String filePath = request.getParameter("file");
         String filePath = null;
         ShopContent shopContent = null;
         switch (request.getParameter("option")){
@@ -68,32 +41,12 @@ public class ExportServlet extends HttpServlet {
                 filePath = "archived_products.xml";
                 break;
         }
-        /*try {
-            model.toXmlFile(shopContent, filePath);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }*/
-
-        //File file = new File(filePath);
-        ServletOutputStream outputStream = null;
-        //BufferedInputStream inputStream = null;
-        try {
-            outputStream = response.getOutputStream();
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filePath + "\"");
             model.toXmlFile(shopContent, outputStream);
-            //response.setContentLength((int) file.length());
-            //FileInputStream fileInputStream = new FileInputStream(file);
-            //inputStream = new BufferedInputStream(fileInputStream);
-            //int readBytes = 0;
-            //while ((readBytes = inputStream.read()) != -1)
-                //outputStream.write(readBytes);
-        }catch (ExportException | JAXBException e){
+        } catch (ExportException | DAOException e) {
             e.printStackTrace();
-        }finally {
-            //outputStream.flush();
-            outputStream.close();
-            //inputStream.close();
         }
         response.sendRedirect(request.getContextPath()+"/admin");
     }

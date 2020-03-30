@@ -4,7 +4,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="import.css">
-    <title>Upload files</title>
+    <title>Импорт</title>
 </head>
 <body>
 
@@ -12,24 +12,16 @@
     ${errorMessage}
 </div>
 
-<h2>Upload Files</h2>
+<h2>Загрузка файла</h2>
 
 <form method="post" action='<c:url value="/uploadFile" />'
       enctype="multipart/form-data">
-    <p>Select file to upload:</p>
+    <p>Выберите файл:</p>
     <div class="files">
         <input type="file" name="file"  />
-        <input type="hidden" name="impOrExp" value="${impOrExp}">
     </div>
     <br>
-    <input type="submit" class="button" value="Upload" />
-<%--    Select file to upload:--%>
-<%--    <br />--%>
-<%--    <input type="file" name="file"  />--%>
-<%--    <br />--%>
-<%--    <br />--%>
-<%--    <input type="hidden" name="impOrExp" value="${impOrExp}">--%>
-<%--    <input type="submit" class="button" value="Upload" />--%>
+    <input type="submit" class="button" value="Загрузить" />
 </form>
 
 </body>

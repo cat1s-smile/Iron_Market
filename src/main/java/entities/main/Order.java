@@ -57,7 +57,6 @@ public class Order {
         if (id != order.id) return false;
         if (!Objects.equals(user, order.user)) return false;
         if (!Objects.equals(status, order.status)) return false;
-
         return true;
     }
 

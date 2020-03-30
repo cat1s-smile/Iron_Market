@@ -1,9 +1,6 @@
 package entities.main;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +12,9 @@ public class Product {
     private String description;
     private int category;
     private Integer status = 1;
+
+    boolean availableToDelete;
+    String categoryName;
 
     public Product() {
     }
@@ -114,6 +114,24 @@ public class Product {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Transient
+    public boolean isAvailableToDelete() {
+        return availableToDelete;
+    }
+
+    public void setAvailableToDelete(boolean availableToDelete) {
+        this.availableToDelete = availableToDelete;
+    }
+
+    @Transient
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
 @WebServlet("/import")
@@ -19,12 +20,12 @@ public class ImportServlet extends HttpServlet {
     private AdminMarketModel model;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ShopContent shopContent = null;
         String xmlPath = request.getParameter("file");
         try {
-           shopContent =  model.createShopContent(xmlPath, "C:\\Users\\alex1\\IdeaProjects\\Iron_Market\\src\\main\\resources\\shopContent.xsd");
-        } catch (JAXBException | SAXException e) {
+           shopContent =  model.createShopContent(xmlPath, new StreamSource(getClass().getClassLoader().getResourceAsStream("shopContent.xsd")));
+        } catch (DAOException e) {
             e.printStackTrace();
         }
         switch (request.getParameter("option")){

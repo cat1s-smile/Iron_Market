@@ -1,15 +1,13 @@
 package entities.main;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Category {
     private int id;
     private String name;
+    boolean availableToDelete;
 
     public Category() {}
 
@@ -40,6 +38,15 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Transient
+    public boolean isAvailableToDelete() {
+        return availableToDelete;
+    }
+
+    public void setAvailableToDelete(boolean availableToDelete) {
+        this.availableToDelete = availableToDelete;
     }
 
     @Override

@@ -8,24 +8,22 @@
 </head>
 <body>
 
-<h3>Upload has been done successfully!</h3>
-<a href="preview.html">Preview</a>
+<h1>Файл загружен</h1>
 <form method="post" action='<c:url value="/import" />'>
     <p><b>Что делать с возможными дубликатами?</b></p>
     <p>
         <label>
-            <input type="radio" name="option" value="a1">
-        </label>IgnoreDuplicates<Br>
+            <input type="radio" name="option" value="a1" checked>
+        </label>Пропустить<Br>
         <label>
             <input type="radio" name="option" value="a2">
-        </label>OverwriteDuplicates<Br>
+        </label>Перезаписать<Br>
         <label>
             <input type="radio" name="option" value="a3">
-        </label>WithDuplicates<Br>
+        </label>Запись с дубликатами<Br>
         <input type="hidden" name="file" value="${file}">
-        <input type="hidden" name="xsl" value="${xsl}">
     <input type="submit" class="button" value="Загрузить в базу">
 </form>
-
+<p> ${preview}Preview</p>
 </body>
 </html>

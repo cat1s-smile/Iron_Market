@@ -4,10 +4,16 @@ import entities.jaxbready.ShopContent;
 import entities.main.Category;
 import entities.main.Product;
 import org.xml.sax.SAXException;
+import servlets.DAOException;
 
 import javax.ejb.Local;
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -23,7 +29,7 @@ public interface AdminMarketModel {
 
     void editProduct(Product product);
 
-    void deleteProduct(int productID);
+    void deleteProduct(int productID) throws DAOException;
 
     boolean canProductBeRemoved(int productID);
 
@@ -31,11 +37,11 @@ public interface AdminMarketModel {
 
     Category getCategory(String categoryName);
 
-    void createCategory(Category newCategory);
+    void createCategory(Category newCategory) throws DAOException;
 
-    void editCategory(Category category);
+    void editCategory(Category category) throws DAOException;
 
-    void deleteCategory(int categoryID);
+    void deleteCategory(int categoryID) throws DAOException;
 
     boolean canCategoryBeRemoved(int categoryID);
 
@@ -45,11 +51,13 @@ public interface AdminMarketModel {
 
     void insertUpdateWithDuplicates(ShopContent shopContent);
 
-    ShopContent createShopContent(String xmlFilePath, String xsdSchemaPath) throws JAXBException, SAXException;
+    ShopContent createShopContent(String xmlFilePath, Source xsdSchema) throws DAOException;
 
-    void toXmlFile(ShopContent shopContent, String xmlFilePath) throws JAXBException, FileNotFoundException;
+    void toXmlFile(ShopContent shopContent, String xmlFilePath) throws DAOException;
 
-    void toXmlFile(ShopContent shopContent, OutputStream out) throws JAXBException, FileNotFoundException;
+    void toXmlFile(ShopContent shopContent, OutputStream out) throws DAOException;
+
+    String xslTransform(InputStream src, Source xsl, String xmlOutPath) throws DAOException;
 
     ShopContent getAllProducts();
 

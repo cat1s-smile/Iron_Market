@@ -80,45 +80,4 @@ public class ObjectFactory {
     public RawCategory createCategory() {
         return new RawCategory();
     }
-
-    public ShopContent createShopContent(List<Product> products, List<Category> categories) {
-        Categories jaxbCategories = createCategories();
-        jaxbCategories.rawCategory = new ArrayList<>();
-        for (Category category : categories) {
-            RawCategory cat = createCategory();
-            cat.name = category.getName();
-            cat.id = category.getId();
-            jaxbCategories.rawCategory.add(cat);
-        }
-        Products jaxbProducts = createProducts();
-        jaxbProducts.rawProduct = new ArrayList<>();
-        for (Product product : products) {
-            RawProduct prod = createProduct();
-            prod.name = product.getName();
-            for(Category cat : categories) {
-                if (product.getCategory() == cat.getId()) {
-                    prod.idCategory = cat.getName();
-                    break;
-                }
-            }
-            prod.id = product.getId();
-            prod.amount = product.getAmount();
-            prod.price = product.getPrice();
-            prod.description = product.getDescription();
-            jaxbProducts.rawProduct.add(prod);
-        }
-        ShopContent shopContent = createShopContent();
-        shopContent.products = jaxbProducts;
-        shopContent.categories = jaxbCategories;
-        return shopContent;
-    }
-
-  /*  public List<entities.RawCategory> getRawCategories(ShopContent shopContent) {
-        List<RawCategory> categories = shopContent.categories.rawCategory;
-        List<entities.RawCategory> categoryList = new ArrayList<>();
-        for (RawCategory rawCategory : categories) {
-            categoryList.add(new entities.RawCategory(rawCategory.id, rawCategory.name));
-        }
-        return categoryList;
-    } */
 }

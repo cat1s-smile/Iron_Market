@@ -4,34 +4,29 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="import.css">
-    <title>Upload files</title>
+    <title>Экспорт</title>
 </head>
 <body>
 
-<div style="padding:5px; color:red;font-style:italic;">
-    ${errorMessage}
-</div>
 
-<h2>Upload Files</h2>
 
-<form method="post" action='<c:url value="/uploadFile" />'
-      enctype="multipart/form-data">
+<h2>Критерий экспорта</h2>
 
-<%--    Select file to upload:--%>
-<%--    <br />--%>
-<%--    <input type="file" name="file"  />--%>
-<%--    <br />--%>
-<%--    <br />--%>
-<%--    <input type="hidden" name="impOrExp" value="${impOrExp}">--%>
-<%--    <input type="submit" value="Upload" />--%>
-    <p>Select file to upload:</p>
-    <div class="files">
-        <input type="file" name="file"  />
-        <input type="hidden" name="impOrExp" value="${impOrExp}">
-    </div>
-    <br>
-    <input type="submit" class="button" value="Upload" />
+<form method="post" action='<c:url value="/export" />'>
+    <p>
+        <label>
+            <input type="radio" name="option" value="a1" checked>
+        </label>AllProducts<Br>
+        <label>
+            <input type="radio" name="option" value="a2">
+        </label>ProductsOnSale<Br>
+        <label>
+            <input type="radio" name="option" value="a3">
+        </label>ArchivedProducts<Br>
+        <input type="hidden" name="file" value="${file}">
+        <input type="submit" class="button" value="Сохранить из базы">
 </form>
+<a href='<c:url value="/admin" />' style="display: inline">Вернуться</a>
 
 </body>
 </html>
