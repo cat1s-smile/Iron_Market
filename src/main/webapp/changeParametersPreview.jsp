@@ -35,17 +35,6 @@
                 </c:forEach>
             </table>
             <div class="preview-info">
-                <input type="hidden" name="mode" value="${mode}">
-                <input type="hidden" name="price" value="${price}">
-                <input type="hidden" name="category" value="${category}">
-                <input type="submit" class="button-confirm" value="Продолжить">
-                <form method="post" action='<c:url value="/changeParametersPreview" />'>
-                    <c:forEach var="product" items="${products}">
-                        <input type="hidden" name="checkedId" value="${product.id}">
-                    </c:forEach>
-                    <input type="hidden" name="mode" value="back">
-                    <input type="submit" class="button-back" value="Назад">
-                </form>
                 <p>
                     Категория после замены: ${category}
                 </p>
@@ -53,6 +42,19 @@
                     Цена после замены: ${price}
                 </p>
             </div>
+            <input type="hidden" name="mode" value="${mode}">
+            <input type="hidden" name="price" value="${price}">
+            <input type="hidden" name="category" value="${category}">
+            <input type="submit" class="button-confirm" value="Продолжить">
+        </form>
+        <form method="post" action='<c:url value="/changeParametersPreview" />'>
+            <c:forEach var="product" items="${products}">
+                <input type="hidden" name="checkedId" value="${product.id}">
+            </c:forEach>
+            <input type="hidden" name="price" value="${price}">
+            <input type="hidden" name="category" value="${category}">
+            <input type="hidden" name="mode" value="back">
+            <input type="submit" class="button-back" value="Назад">
         </form>
     </div>
 </section>

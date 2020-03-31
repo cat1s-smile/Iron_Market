@@ -45,6 +45,8 @@ public class ChangeParametersServlet extends HttpServlet {
                 checkedProducts = model.getProducts(ids);
                 request.setAttribute("checkedProducts", checkedProducts);
                 request.setAttribute("products", allProducts);
+                request.setAttribute("price", price);
+                request.setAttribute("category", category);
                 request.setAttribute("mode", "preview");
                 getServletContext().getRequestDispatcher("/changeParameters.jsp").forward(request, response);
                 break;

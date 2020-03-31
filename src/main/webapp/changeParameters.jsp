@@ -13,10 +13,10 @@
             <section>
 
                 <label>
-                    <input type="number" name="price" min="100" class="input-field">
+                    <input type="number" name="price"  value="${price}" min="100" class="input-field">
                 </label> Цена
                 <label>
-                    <input type="text" name="category" class="input-field">
+                    <input type="text" name="category" value="${category}" class="input-field">
                 </label> ID Категории
 
                 <table class="table-product">

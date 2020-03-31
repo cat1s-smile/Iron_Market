@@ -41,7 +41,7 @@
                 </label>
             </div>
             <div class="field">
-                <div class="property-name">ID Категории</div>
+                <div class="property-name">Категория</div>
                 <label>
                     <input name="idCategory" value="${product.categoryName}" class="input-field">
                 </label>
