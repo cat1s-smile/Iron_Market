@@ -22,34 +22,31 @@ public class ChangeStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] ID = request.getParameterValues("checkedId");
-        ArrayList<Product> checkedProducts = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (String id : ID) {
+            int idProduct = Integer.parseInt(id);
+            ids.add(idProduct);
+        }
+        List<Product> checkedProducts;
         switch (request.getParameter("mode")) {
             case "preview":
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    Product product = model.getProduct(idProduct);
-                    checkedProducts.add(product);
-                }
+                checkedProducts = model.getProducts(ids);
                 request.setAttribute("products", checkedProducts);
                 request.setAttribute("mode", "change");
                 getServletContext().getRequestDispatcher("/changeStatusPreview.jsp").forward(request, response);
                 break;
             case "back":
                 List<Product> allProducts = model.getProducts();
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    Product product = model.getProduct(idProduct);
-                    checkedProducts.add(product);
-                }
+                checkedProducts = model.getProducts(ids);
                 request.setAttribute("checkedProducts", checkedProducts);
                 request.setAttribute("products", allProducts);
                 request.setAttribute("mode", "preview");
                 getServletContext().getRequestDispatcher("/changeStatus.jsp").forward(request, response);
                 break;
             case "change":
-                for (String id : ID) {
-                    int idProduct = Integer.parseInt(id);
-                    model.changeProductStatus(idProduct);
+                checkedProducts = model.getProducts(ids);
+                for (Product product: checkedProducts) {
+                    model.changeProductStatus(product.getId());
                 }
                 request.setAttribute("mode", "preview");
                 response.sendRedirect(request.getContextPath() + "/admin");
