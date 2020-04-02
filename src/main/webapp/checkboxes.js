@@ -1,3 +1,7 @@
+$('select#cities').on('change', function () {
+    $('input[name="city"]').val(this.value);
+});
+
 function checkAll(obj) {
     'use strict';
     let items = obj.form.getElementsByClassName("check"),

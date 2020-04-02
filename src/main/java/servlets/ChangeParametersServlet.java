@@ -1,5 +1,6 @@
 package servlets;
 
+import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 
@@ -42,9 +43,11 @@ public class ChangeParametersServlet extends HttpServlet {
                 break;
             case "back":
                 List<Product> allProducts = model.getProducts();
+                List<Category> categories = model.getCategories();
                 checkedProducts = model.getProducts(ids);
                 request.setAttribute("checkedProducts", checkedProducts);
                 request.setAttribute("products", allProducts);
+                request.setAttribute("categories", categories);
                 request.setAttribute("price", price);
                 request.setAttribute("category", category);
                 request.setAttribute("mode", "preview");
@@ -52,7 +55,7 @@ public class ChangeParametersServlet extends HttpServlet {
                 break;
             case "change":
                 checkedProducts = model.getProducts(ids);
-                if (!price.equals("") && !category.equals("")) {
+                if (!price.equals("") && !category.equals("-")) {
                     try {
                         model.editProducts(checkedProducts, Integer.parseInt(price), category);
                     } catch (DAOException e) {
@@ -62,7 +65,7 @@ public class ChangeParametersServlet extends HttpServlet {
                 else {
                     if (!price.equals("")) model.editProducts(checkedProducts, Integer.parseInt(price));
                     else {
-                        if (!category.equals("")) {
+                        if (!category.equals("-")) {
                             try {
                                 model.editProducts(checkedProducts, category);
                             } catch (DAOException e) {

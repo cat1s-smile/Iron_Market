@@ -17,8 +17,13 @@
                     <input type="number" name="price"  value="${price}" min="100" class="input-field">
                 </label> Цена
                 <label>
-                    <input type="text" name="category" value="${category}" class="input-field">
-                </label> ID Категории
+                    <select name="category" required>
+                        <option>-</option>
+                        <c:forEach var="category" items="${categories}">
+                            <option>${category.name}</option>
+                        </c:forEach>
+                    </select>
+                </label> Категория
 
                 <table class="table-product">
                     <tr>

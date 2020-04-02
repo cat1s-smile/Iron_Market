@@ -1,6 +1,7 @@
 package servlets;
 
 import entities.jaxbready.ShopContent;
+import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 import org.xml.sax.SAXException;
@@ -23,7 +24,9 @@ public class ChooseActionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> products = model.getProducts();
+        List<Category> categories = model.getCategories();
         request.setAttribute("products", products);
+        request.setAttribute("categories", categories);
         request.setAttribute("mode", "preview");
         request.setAttribute("checkedProducts", null);
         switch (request.getParameter("option")){
