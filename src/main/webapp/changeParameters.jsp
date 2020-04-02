@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="admin.css">
     <meta charset="UTF-8">
+    <script type="text/javascript" src="checkboxes.js"></script>
     <title>Магазин комплектующих компьютеров</title>
 </head>
 <body>
@@ -21,7 +22,7 @@
 
                 <table class="table-product">
                     <tr>
-                        <th> </th>
+                        <th><input type="checkbox" class="check" name="checkAllB" onclick="checkAll(this)"/></th>
                         <th>ID</th>
                         <th>Наименование</th>
                         <th>Цена</th>
@@ -33,7 +34,8 @@
                     <c:forEach var="product" items="${products}">
                         <tr>
                             <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
-                                <input type="checkbox" name="checkedId" value="${product.id}"
+                                <input type="checkbox" class="check" name="checkedId" value="${product.id}"
+                                onclick="checkOne(this)"
                                 <c:forEach var="checkedProduct" items="${checkedProducts}">
                                     ${product.id == checkedProduct.id ? "checked" : ""}
                                 </c:forEach>>
