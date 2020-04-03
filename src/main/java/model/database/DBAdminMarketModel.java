@@ -4,6 +4,7 @@ import entities.jaxbready.*;
 import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
+import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 import servlets.DAOException;
 
@@ -21,8 +22,13 @@ import java.util.List;
 
 @Stateless
 public class DBAdminMarketModel implements AdminMarketModel {
+
+    private static final Logger logger = Logger.getLogger("file");
+
+
     @Override
     public List<Category> getCategories() {
+        //logger.info("All categories");
         List<Category> categories = CategoryDataBase.select();
         for (Category category : categories)
             category.setAvailableToDelete(canCategoryBeRemoved(category.getId()));
@@ -31,6 +37,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     @Override
     public List<Product> getProducts() {
+        //logger.info("All products");
         List<Category> categories = CategoryDataBase.select();
         List<Product> products = setCategoryNames(ProductDataBase.select(), categories);
         for(Product product : products) {
@@ -67,32 +74,40 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     @Override
     public void createProduct(Product newProduct) { //mb duplicate
+        logger.info("Create product");
         ProductDataBase.insert(newProduct);
     }
 
     @Override
     public void setExistingCategoryID(Product product) throws DAOException {
         Category category = getCategory(product.getCategoryName());
-        if (category == null)
+        if (category == null) {
+            logger.warn("Category does not exist", new DAOException("Category does not exist"));
             throw new DAOException("Category does not exist");
+        }
         product.setCategory(category.getId());
     }
 
     @Override
     public void editProduct(Product product) {
+        logger.info("Edit product id=" + product.getId());
         ProductDataBase.update(product);
     }
 
     @Override
     public void deleteProduct(int productID) throws DAOException {
-        if(!canProductBeRemoved(productID))
+        logger.info("Delete product id=" + productID);
+        if(!canProductBeRemoved(productID)) {
+            logger.warn("Product is contained in orders", new DAOException("Product is contained in orders"));
             throw new DAOException("Product is contained in orders");
+        }
         ProductDataBase.delete(productID);
     }
 
     @Override
     public void editProducts(List<Product> products, int newPrice) {
         for (Product product : products) {
+            logger.info("Change price on " + newPrice +" Product id="+ product.getId());
             product.setPrice(newPrice);
         }
         ProductDataBase.update(products);
@@ -102,6 +117,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editProducts(List<Product> products, String newCategory) throws DAOException {
         int categoryID = getCategoryID(newCategory);
         for (Product product : products) {
+            logger.info("Change category on " + newCategory +" Product id="+ product.getId());
             product.setCategory(categoryID);
         }
         ProductDataBase.update(products);
@@ -111,6 +127,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editProducts(List<Product> products, int newPrice, String newCategory) throws DAOException {
         int categoryID = getCategoryID(newCategory);
         for (Product product : products) {
+            logger.info("Change price on" + newPrice +" and category on "+ newCategory + " Product id="+ product.getId());
             product.setPrice(newPrice);
             product.setCategory(categoryID);
         }
@@ -143,24 +160,33 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     @Override
     public void createCategory(Category newCategory) throws DAOException {
-        if (CategoryDataBase.searchByName(newCategory.getName()) != null)
+        logger.info("Create category");
+        if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
+            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
             throw new DAOException("Category has this name already exists");
+        }
         CategoryDataBase.insert(newCategory);
     }
 
     @Override
     public void editCategory(Category category) throws DAOException {
+        logger.info("Edit category id=" + category.getId());
         Category duplicate = getCategory(category.getName());
         if (category.getName().equalsIgnoreCase(duplicate.getName()) &&
-                category.getId() != duplicate.getId())
+                category.getId() != duplicate.getId()) {
+            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
             throw new DAOException("Category has this name already exists");
+        }
         CategoryDataBase.update(category);
     }
 
     @Override
     public void deleteCategory(int categoryID) throws DAOException {
-        if (!canCategoryBeRemoved(categoryID))
+        logger.info("Delete category id=" + categoryID);
+        if (!canCategoryBeRemoved(categoryID)) {
+            logger.warn("Category has some products can not be deleted", new DAOException("Category has some products can not be deleted"));
             throw new DAOException("Category has some products can not be deleted");
+        }
         else
             CategoryDataBase.delete(categoryID);
     }
@@ -172,6 +198,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     public void insertUpdateIgnoreDuplicates(ShopContent shopContent) {
+        logger.info("Insert with ignore duplicates");
         List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
         for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
             int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
@@ -186,6 +213,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     public void insertUpdateOverwriteDuplicates(ShopContent shopContent) {
+        logger.info("Insert with overwrite duplicates");
         List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
         for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
             int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
@@ -205,6 +233,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     public void insertUpdateWithDuplicates(ShopContent shopContent) {
+        logger.info("Insert with duplicates");
         List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
         for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
             int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
@@ -235,8 +264,15 @@ public class DBAdminMarketModel implements AdminMarketModel {
     @Override
     public void changeProductStatus(int id) {
         Product product = ProductDataBase.selectOne(id);
-        if (product.getStatus() == 1) ProductDataBase.archive(product);
-        else ProductDataBase.deArchive(product);
+        if (product.getStatus() == 1) {
+            logger.info("Archive product id="+ product.getId());
+            ProductDataBase.archive(product);
+        }
+        else
+        {
+            logger.info("De archive product id= "+ product.getId());
+            ProductDataBase.deArchive(product);
+        }
     }
 
     private Product transformProduct(RawProduct rawProduct, int categoryID) {
@@ -277,12 +313,14 @@ public class DBAdminMarketModel implements AdminMarketModel {
     @Override
     public void toXmlFile(ShopContent shopContent, String xmlFilePath) throws DAOException {
         try {
+            logger.info("Start export");
             JAXBContext context = JAXBContext.newInstance(ShopContent.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             FileOutputStream fileOutputStream = new FileOutputStream(new File(xmlFilePath));
             marshaller.marshal(shopContent, fileOutputStream);
         } catch (JAXBException | FileNotFoundException e) {
+            logger.error("Can not marshal in xml", e);
             throw new DAOException("Can not marshal in xml", e);
         }
     }
@@ -290,11 +328,13 @@ public class DBAdminMarketModel implements AdminMarketModel {
     @Override
     public void toXmlFile(ShopContent shopContent, OutputStream out) throws DAOException {
         try {
+            logger.info("Start export");
             JAXBContext context = JAXBContext.newInstance(ShopContent.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(shopContent, out);
         } catch (JAXBException e) {
+            logger.error("Can not marshal in xml", e);
             throw new DAOException("Can not marshal in xml", e);
         }
 
@@ -303,6 +343,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     @Override
     public String xslTransform(InputStream src, Source xsl, String xmlOutPath) throws DAOException {
         try {
+            logger.info("Start import");
             TransformerFactory tFactory = TransformerFactory.newInstance();
             OutputStream tempXmlOut = new BufferedOutputStream(new FileOutputStream(xmlOutPath));
             int readBytes = 0;
@@ -317,6 +358,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
             resultWriter.close();
             return result;
         } catch (TransformerException | IOException e) {
+            logger.error("Incorrect file", e);
             throw new DAOException("Can not transform xml to html", e);
         }
 
@@ -354,16 +396,19 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     @Override
     public ShopContent getAllProducts() {
+        logger.info("Export all products");
         return createShopContent(ProductDataBase.select(), CategoryDataBase.select());
     }
 
     @Override
     public ShopContent getProductsOnSale() {
+        logger.info("Export products on sale");
         return createShopContent(ProductDataBase.selectOnSale(), CategoryDataBase.select());
     }
 
     @Override
     public ShopContent getArchivedProducts() {
+        logger.info("Export archived products");
         return createShopContent(ProductDataBase.selectArchivedProducts(), CategoryDataBase.select());
     }
 

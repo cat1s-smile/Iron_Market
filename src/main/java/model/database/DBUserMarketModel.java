@@ -10,8 +10,13 @@ import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 @Stateless
 public class DBUserMarketModel implements UserMarketModel {
+
+    private static final Logger searchLogger = Logger.getLogger("searchFile");
+
     @Override
     public List<Category> getCategories() {
         return CategoryDataBase.select();
@@ -34,11 +39,13 @@ public class DBUserMarketModel implements UserMarketModel {
 
     @Override
     public List<Product> getProductsBySearch(String searchRequest) {
+        searchLogger.info("Search by " + searchRequest);
         return ProductDataBase.selectBySearch(searchRequest);
     }
 
     @Override
     public List<Product> getProductsBySearch(String searchRequest, int categoryID) {
+        searchLogger.info("Search by " + searchRequest + " in category " + categoryID);
         return ProductDataBase.selectBySearch(searchRequest, categoryID);
     }
 

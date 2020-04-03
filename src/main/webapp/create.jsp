@@ -12,7 +12,7 @@
         <div class="header">Добавление товара</div>
     </div>
 </header>
-<form method="post">
+<form method="post" action='<c:url value="/create" />'>
     <section>
         <div class="fields">
             <div class="field" id="first-field">
@@ -48,6 +48,9 @@
             <br>
             <input type="submit" class="button" value="Сохранить"/>
         </div>
+        <p>
+        <a href='<c:url value="/admin" />' style="display: inline">Вернуться</a>
+        </p>
     </section>
 </form>
 </body>
