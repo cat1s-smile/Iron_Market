@@ -172,8 +172,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editCategory(Category category) throws DAOException {
         logger.info("Edit category id=" + category.getId());
         Category duplicate = getCategory(category.getName());
-        if (category.getName().equalsIgnoreCase(duplicate.getName()) &&
-                category.getId() != duplicate.getId()) {
+        if (duplicate != null && category.getId() != duplicate.getId()) {
             logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
             throw new DAOException("Category has this name already exists");
         }

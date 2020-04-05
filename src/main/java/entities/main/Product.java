@@ -1,20 +1,38 @@
 package entities.main;
 
+import com.fasterxml.jackson.annotation.*;
+import org.json.JSONObject;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Objects;
 
 @Entity
+@JsonAutoDetect
+@JsonRootName("Product")
+@JsonPropertyOrder({"id, category, name, price, amount, description"})
 public class Product {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("price")
     private int price;
+    @JsonProperty("amount")
     private int amount;
+    @JsonProperty("description")
     private String description;
+    @JsonProperty("category")
     private int category;
+    @JsonIgnore
     private Integer status = 1;
-
+    @JsonIgnore
     boolean availableToDelete;
+    @JsonIgnore
     String categoryName;
+
 
     public Product() {
     }

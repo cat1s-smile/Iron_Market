@@ -1,12 +1,20 @@
 package entities.main;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@JsonAutoDetect
+@JsonRootName("Category")
+@JsonPropertyOrder({"id, name"})
 public class Category {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("name")
     private String name;
+    @JsonIgnore
     boolean availableToDelete;
 
     public Category() {}
