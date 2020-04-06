@@ -24,7 +24,23 @@ public class DBUserMarketModel implements UserMarketModel {
 
     @Override
     public List<Product> getProducts() {
-        return ProductDataBase.selectOnSale();
+        List<Category> categories = CategoryDataBase.select();
+        return setCategoryNames(ProductDataBase.selectOnSale(), categories);
+    }
+
+    private List<Product> setCategoryNames(List<Product> products, List<Category> categories) {
+        for(Product product : products) {
+            product.setCategoryName(getCategoryName(product.getCategory(), categories));
+        }
+        return products;
+    }
+
+    private String getCategoryName(int id, List<Category> categories) {
+        for(Category category : categories) {
+            if (id == category.getId())
+                return category.getName();
+        }
+        return null;
     }
 
     @Override
@@ -34,19 +50,22 @@ public class DBUserMarketModel implements UserMarketModel {
 
     @Override
     public List<Product> getProductsByCategory(int categoryID) {
-        return ProductDataBase.selectByCategoryOnSale(categoryID);
+        List<Category> categories = CategoryDataBase.select();
+        return setCategoryNames(ProductDataBase.selectByCategoryOnSale(categoryID), categories);
     }
 
     @Override
     public List<Product> getProductsBySearch(String searchRequest) {
         searchLogger.info("Search by " + searchRequest);
-        return ProductDataBase.selectBySearch(searchRequest);
+        List<Category> categories = CategoryDataBase.select();
+        return setCategoryNames(ProductDataBase.selectBySearch(searchRequest), categories);
     }
 
     @Override
     public List<Product> getProductsBySearch(String searchRequest, int categoryID) {
         searchLogger.info("Search by " + searchRequest + " in category " + categoryID);
-        return ProductDataBase.selectBySearch(searchRequest, categoryID);
+        List<Category> categories = CategoryDataBase.select();
+        return setCategoryNames(ProductDataBase.selectBySearch(searchRequest, categoryID), categories);
     }
 
     @Override

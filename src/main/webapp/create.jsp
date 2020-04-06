@@ -42,8 +42,12 @@
             <div class="field">
                 <div class="property-name">Категория</div>
                 <label>
-                    <input name="idCategory" class="input-field">
-                </label>
+                    <select name="category" required>
+                        <c:forEach var="category" items="${categories}">
+                            <option>${category.name}</option>
+                        </c:forEach>
+                    </select>
+                </label> Категория
             </div>
             <br>
             <input type="submit" class="button" value="Сохранить"/>

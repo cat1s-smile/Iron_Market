@@ -1,5 +1,6 @@
 package servlets;
 
+import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 import model.UserMarketModel;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
@@ -27,7 +29,9 @@ public class EditServlet extends HttpServlet {
             Product product = model.getProduct(id);
             if(product!=null) {
                 product.setCategoryName(model.getCategory(product.getCategory()).getName());
+                List<Category> categories = model.getCategories();
                 request.setAttribute("product", product);
+                request.setAttribute("categories", categories);
                 getServletContext().getRequestDispatcher("/edit.jsp").forward(request, response);
             }
             else {
@@ -48,7 +52,7 @@ public class EditServlet extends HttpServlet {
             int price = Integer.parseInt(request.getParameter("price"));
             int amount = Integer.parseInt(request.getParameter("amount"));
             String description = request.getParameter("description");
-            String categoryName = request.getParameter("idCategory");
+            String categoryName = request.getParameter("category");
             Product product = new Product(id, -1, name, price, amount, description);
             product.setCategoryName(categoryName);
             model.setExistingCategoryID(product);

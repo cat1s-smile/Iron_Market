@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 <p class="popup-text">Id товара: ${product.id}</p>
-                <p class="popup-text">Категория: ${product.category}</p>
+                <p class="popup-text">Категория: ${product.categoryName}</p>
                 <p class="popup-text">Описание: ${product.description}</p>
                 <p class="popup-text">В наличии: ${product.amount}</p>
                 <p class="popup-text">Цена: ${product.price}</p>

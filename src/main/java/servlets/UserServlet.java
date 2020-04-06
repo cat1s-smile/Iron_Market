@@ -49,6 +49,12 @@ public class UserServlet extends HttpServlet {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Product product = model.getProduct(id);
                 if (product != null) {
+                    String categoryName = null;
+                    for(Category category : categories) {
+                        if (product.getCategory() == category.getId())
+                            categoryName = category.getName();
+                    }
+                    product.setCategoryName(categoryName);
                     request.setAttribute("product", product);
                     request.setAttribute("overlay", 1);
                 } else {
