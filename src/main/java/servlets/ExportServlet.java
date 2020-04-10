@@ -28,7 +28,13 @@ public class ExportServlet extends HttpServlet {
         String filePath;
         ShopContent shopContent;
         try {
-            switch (request.getParameter("option")) {
+            String option = request.getParameter("option");
+            if(option == null) {
+                request.setAttribute("message", "Incorrect parameter");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                return;
+            }
+            switch (option) {
                 case "a1":
                     shopContent = model.getAllProducts();
                     filePath = "all_products.xml";

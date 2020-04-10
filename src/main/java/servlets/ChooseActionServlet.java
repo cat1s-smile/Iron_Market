@@ -37,7 +37,13 @@ public class ChooseActionServlet extends HttpServlet {
         request.setAttribute("categories", categories);
         request.setAttribute("mode", "preview");
         request.setAttribute("checkedProducts", null);
-        switch (request.getParameter("option")) {
+        String option = request.getParameter("option");
+        if(option == null) {
+            request.setAttribute("message", "Incorrect parameter");
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            return;
+        }
+        switch (option) {
             case "a1":
                 getServletContext().getRequestDispatcher("/change-status.jsp").forward(request, response);
                 break;

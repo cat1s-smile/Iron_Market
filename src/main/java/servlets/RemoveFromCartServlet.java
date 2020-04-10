@@ -25,6 +25,11 @@ public class RemoveFromCartServlet extends HttpServlet {
             String userID = User.getDefaultID();
             int productID = Parser.parseID(request.getParameter("id"));
             String toDo = request.getParameter("todo");
+            if(toDo == null) {
+                request.setAttribute("message", "Incorrect parameter");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                return;
+            }
             switch (toDo) {
                 case "-":
                     model.decrementItemNumber(userID, productID);

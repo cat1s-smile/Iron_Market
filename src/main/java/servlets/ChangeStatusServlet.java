@@ -31,7 +31,13 @@ public class ChangeStatusServlet extends HttpServlet {
         }
         try {
             List<Product> checkedProducts = model.getProducts(ids);
-            switch (request.getParameter("mode")) {
+            String mode = request.getParameter("mode");
+            if(mode == null) {
+                request.setAttribute("message", "Incorrect parameter");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                return;
+            }
+            switch (mode) {
                 case "preview":
                     //checkedProducts = model.getProducts(ids);
                     request.setAttribute("products", checkedProducts);

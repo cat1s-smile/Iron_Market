@@ -41,7 +41,13 @@ public class ChangeParametersServlet extends HttpServlet {
             redirectToErrorPage(e.getMessage(), request, response);
             return;
         }
-        switch (request.getParameter("mode")) {
+        String mode = request.getParameter("mode");
+        if(mode == null) {
+            request.setAttribute("message", "Incorrect parameter");
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            return;
+        }
+        switch (mode) {
             case "preview":
                 //checkedProducts = model.getProducts(ids);
                 request.setAttribute("products", checkedProducts);

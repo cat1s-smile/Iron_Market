@@ -25,7 +25,13 @@ public class ImportServlet extends HttpServlet {
         String xmlPath = request.getParameter("file");
         try {
             shopContent = model.createShopContent(xmlPath, new StreamSource(getClass().getClassLoader().getResourceAsStream("shopContent.xsd")));
-            switch (request.getParameter("option")) {
+            String option = request.getParameter("option");
+            if(option == null) {
+                request.setAttribute("message", "Incorrect parameter");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                return;
+            }
+            switch (option)  {
                 case "a1":
                     model.insertUpdateIgnoreDuplicates(shopContent);
                     break;

@@ -16,20 +16,11 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="marketdb.jpa" value="102bc2cb-7a45-40a0-ac57-9734044f9989" />
+          <factory-entry name="marketdb.jpa" value="83fdd415-f263-4a89-9acc-c6ecc1c837ed" />
           <factory-entry name="org.hibernate.tutorial.jpa" value="e0a0be34-7683-44fb-89fa-70bd5f85bba1" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
-      </configuration>
-    </facet>
-    <facet type="hibernate" name="Hibernate">
-      <configuration>
-        <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="e0a0be34-7683-44fb-89fa-70bd5f85bba1" />
-        </datasource-map>
-        <naming-strategy-map />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
       </configuration>
     </facet>
   </component>
@@ -49,6 +40,7 @@
     <orderEntry type="library" name="Maven: org.jvnet.staxex:stax-ex:1.7.8" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.13" level="project" />
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.5" level="project" />
+    <orderEntry type="library" name="@types/jquery" level="application" />
     <orderEntry type="library" name="Maven: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.bower:jquery.ajax:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:3.3.1" level="project" />
