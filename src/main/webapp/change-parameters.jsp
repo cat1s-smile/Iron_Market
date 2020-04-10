@@ -2,9 +2,9 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" type="text/css" href="admin.css">
+    <link rel="stylesheet" type="text/css" href="styles/admin.css">
     <meta charset="UTF-8">
-    <script type="text/javascript" src="checkboxes.js"></script>
+    <script type="text/javascript" src="scripts/checkboxes.js"></script>
     <title>Магазин комплектующих компьютеров</title>
 </head>
 <body>

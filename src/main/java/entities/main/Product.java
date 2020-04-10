@@ -14,6 +14,10 @@ import java.util.Objects;
 @JsonRootName("Product")
 @JsonPropertyOrder({"id, category, name, price, amount, description"})
 public class Product {
+
+    public static final int MIN_PRICE = 100;
+    public static final int MAX_PRICE = 1000000;
+
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")

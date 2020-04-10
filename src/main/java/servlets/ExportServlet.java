@@ -25,29 +25,36 @@ public class ExportServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String filePath = null;
-        ShopContent shopContent = null;
-        switch (request.getParameter("option")){
-            case "a1":
-                shopContent = model.getAllProducts();
-                filePath = "all_products.xml";
-                break;
-            case "a2":
-                shopContent = model.getProductsOnSale();
-                filePath = "products_on_sale.xml";
-                break;
-            case "a3":
-                shopContent = model.getArchivedProducts();
-                filePath = "archived_products.xml";
-                break;
-        }
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
+        String filePath;
+        ShopContent shopContent;
+        try {
+            switch (request.getParameter("option")) {
+                case "a1":
+                    shopContent = model.getAllProducts();
+                    filePath = "all_products.xml";
+                    break;
+                case "a2":
+                    shopContent = model.getProductsOnSale();
+                    filePath = "products_on_sale.xml";
+                    break;
+                case "a3":
+                    shopContent = model.getArchivedProducts();
+                    filePath = "archived_products.xml";
+                    break;
+                default:
+                    request.setAttribute("message", "Incorrect parameter");
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                    return;
+            }
+            ServletOutputStream outputStream = response.getOutputStream();
             response.setContentType("text/xml;charset=UTF-8");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filePath + "\"");
             model.toXmlFile(shopContent, outputStream);
-        } catch (ExportException | DAOException e) {
-            e.printStackTrace();
+            outputStream.close();
+            response.sendRedirect(request.getContextPath() + "/admin");
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
-        response.sendRedirect(request.getContextPath()+"/admin");
     }
 }

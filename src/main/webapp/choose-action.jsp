@@ -3,7 +3,7 @@
 <!DOCTYPE >
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="import.css">
+    <link rel="stylesheet" type="text/css" href="styles/import.css">
     <title>Изменение параметров</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
 <form method="post" action='<c:url value="/chooseAction" />'>
     <p>
         <label>
-            <input type="radio" name="option" value="a1">
+            <input type="radio" name="option" checked value="a1">
         </label>Архивация<Br>
         <label>
             <input type="radio" name="option" value="a2">

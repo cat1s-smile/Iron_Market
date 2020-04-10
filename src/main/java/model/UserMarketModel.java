@@ -12,29 +12,29 @@ import java.util.List;
 
 @Local
 public interface UserMarketModel {
-    List<Category> getCategories();
+    List<Category> getCategories() throws DAOException;
 
-    List<Product> getProducts();
+    List<Product> getProducts() throws DAOException;
 
-    Product getProduct(int productID);
+    Product getProduct(int productID) throws DAOException;
 
-    List<Product> getProductsByCategory(int categoryID);
+    List<Product> getProductsByCategory(int categoryID) throws DAOException;
 
-    List<Product> getProductsBySearch(String searchRequest);
+    List<Product> getProductsBySearch(String searchRequest) throws DAOException;
 
-    List<Product> getProductsBySearch(String searchRequest, int categoryID);
+    List<Product> getProductsBySearch(String searchRequest, int categoryID) throws DAOException;
 
-    void buyProduct(int productID, String userID);
+    void buyProduct(int productID, String userID) throws DAOException;
 
-    int getProductNumber(String userID);
+    int getProductNumber(String userID) throws DAOException;
 
-    List<CartItem> getCart(String userID);
+    List<CartItem> getCart(String userID) throws DAOException;
 
-    List<CartItem> validateOrder(List<CartItem> cart);
+    List<CartItem> validateOrder(List<CartItem> cart) throws DAOException;
 
-    boolean isOrderValid(List<CartItem> cart);
+    boolean isOrderValid(List<CartItem> cart) throws DAOException;
 
-    int getOrderCost(List<CartItem> cart);
+    int getOrderCost(List<CartItem> cart) throws DAOException;
 
     void removeItemFromOrder(String userID, int productID) throws DAOException;
 
@@ -42,9 +42,9 @@ public interface UserMarketModel {
 
     void decrementItemNumber(String userID, int productID) throws DAOException;
 
-    boolean confirmOrder(String userID);
+    boolean confirmOrder(String userID) throws DAOException;
 
-    List<OrderInfo> getOrdersHistory(String userID);
+    List<OrderInfo> getOrdersHistory(String userID) throws DAOException;
 
 
 }

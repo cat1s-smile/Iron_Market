@@ -2,7 +2,6 @@ package servlets;
 
 import entities.main.*;
 import model.AdminMarketModel;
-import model.UserMarketModel;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -22,27 +21,43 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String tab = request.getParameter("tab");
-        if(tab == null || tab.equals("products")) {
-            List<Product> products = model.getProducts();
-            request.setAttribute("products", products);
-            getServletContext().getRequestDispatcher("/admin-products.jsp").forward(request, response);
-        }
-        else if (tab.equals("categories")) {
-            List<Category> categories = model.getCategories();
-            request.setAttribute("categories", categories);
-            getServletContext().getRequestDispatcher("/admin-categories.jsp").forward(request, response);
-        }
-        else if (tab.equals("import")) {
-            getServletContext().getRequestDispatcher("/import.jsp").forward(request, response);
-        }
-        else if (tab.equals("export")) {
-            getServletContext().getRequestDispatcher("/export.jsp").forward(request, response);
-        }
-        else if (tab.equals("change")) {
-            getServletContext().getRequestDispatcher("/chooseAction.jsp").forward(request, response);
-        }
-        else {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        if (tab == null)
+            tab = "products";
+        switch (tab) {
+            case "products":
+                List<Product> products = null;
+                try {
+                    products = model.getProducts();
+                } catch (DAOException e) {
+                    request.setAttribute("message", e.getMessage());
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                }
+                request.setAttribute("products", products);
+                getServletContext().getRequestDispatcher("/admin-products.jsp").forward(request, response);
+                break;
+            case "categories":
+                List<Category> categories = null;
+                try {
+                    categories = model.getCategories();
+                } catch (DAOException e) {
+                    request.setAttribute("message", e.getMessage());
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                }
+                request.setAttribute("categories", categories);
+                getServletContext().getRequestDispatcher("/admin-categories.jsp").forward(request, response);
+                break;
+            case "import":
+                getServletContext().getRequestDispatcher("/import.jsp").forward(request, response);
+                break;
+            case "export":
+                getServletContext().getRequestDispatcher("/export.jsp").forward(request, response);
+                break;
+            case "change":
+                getServletContext().getRequestDispatcher("/choose-action.jsp").forward(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/admin");
+                break;
         }
     }
 }

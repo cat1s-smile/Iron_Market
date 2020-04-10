@@ -16,14 +16,14 @@ public class CategoryService {
 
     @GET
     @Produces("application/json")
-    public List<Category> getCategories(){
+    public List<Category> getCategories() throws DAOException {
         return model.getCategories();
     }
 
     @Path("{id}")
     @GET
     @Produces("application/json")
-    public Category getCategory(@PathParam("id") int id){
+    public Category getCategory(@PathParam("id") int id) throws DAOException {
         return model.getCategory(id);
     }
 

@@ -3,7 +3,7 @@
 <!DOCTYPE >
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="import.css">
+    <link rel="stylesheet" type="text/css" href="styles/import.css">
     <title>Импорт</title>
 </head>
 <body>

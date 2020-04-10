@@ -20,25 +20,29 @@ public class ImportServlet extends HttpServlet {
     private AdminMarketModel model;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ShopContent shopContent = null;
         String xmlPath = request.getParameter("file");
         try {
-           shopContent =  model.createShopContent(xmlPath, new StreamSource(getClass().getClassLoader().getResourceAsStream("shopContent.xsd")));
+            shopContent = model.createShopContent(xmlPath, new StreamSource(getClass().getClassLoader().getResourceAsStream("shopContent.xsd")));
+            switch (request.getParameter("option")) {
+                case "a1":
+                    model.insertUpdateIgnoreDuplicates(shopContent);
+                    break;
+                case "a2":
+                    model.insertUpdateOverwriteDuplicates(shopContent);
+                    break;
+                case "a3":
+                    model.insertUpdateWithDuplicates(shopContent);
+                    break;
+                default:
+                    request.setAttribute("message", "Incorrect parameter");
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            }
+            response.sendRedirect(request.getContextPath() + "/admin");
         } catch (DAOException e) {
-            e.printStackTrace();
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
-        switch (request.getParameter("option")){
-            case "a1":
-                model.insertUpdateIgnoreDuplicates(shopContent);
-                break;
-            case "a2":
-                model.insertUpdateOverwriteDuplicates(shopContent);
-                break;
-            case "a3":
-                model.insertUpdateWithDuplicates(shopContent);
-                break;
-        }
-        response.sendRedirect(request.getContextPath()+"/admin");
     }
 }

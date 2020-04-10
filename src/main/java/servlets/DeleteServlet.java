@@ -26,8 +26,9 @@ public class DeleteServlet extends HttpServlet {
             model.deleteProduct(id);
             response.sendRedirect(request.getContextPath() + "/admin");
         }
-        catch(Exception ex) {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

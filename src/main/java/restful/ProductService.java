@@ -18,21 +18,21 @@ public class ProductService {
 
     @GET
     @Produces("application/json")
-    public List<Product> getProducts(){
+    public List<Product> getProducts() throws DAOException {
         return model.getProducts();
     }
 
     @Path("{id}")
     @GET
     @Produces("application/json")
-    public Product getProduct(@PathParam("id") int id){
+    public Product getProduct(@PathParam("id") int id) throws DAOException {
         return model.getProduct(id);
     }
 
     @Path("create")
     @POST
     @Produces("application/json")
-    public Response createProduct(Product product){
+    public Response createProduct(Product product) throws DAOException {
         model.createProduct(product);
         return Response.status(200).entity(product).build();
     }
@@ -40,7 +40,7 @@ public class ProductService {
     @Path("update")
     @PUT
     @Produces("application/json")
-    public Response updateProduct(Product product){
+    public Response updateProduct(Product product) throws DAOException {
         model.editProduct(product);
         return Response.status(200).entity(product).build();
     }

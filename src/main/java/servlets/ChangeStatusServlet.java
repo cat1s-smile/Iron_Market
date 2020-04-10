@@ -22,36 +22,48 @@ public class ChangeStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] ID = request.getParameterValues("checkedId");
-        ArrayList<Integer> ids = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         for (String id : ID) {
             int idProduct = Integer.parseInt(id);
+            if (idProduct < 0)
+                redirectToErrorPage("Illegal ID detected", request, response);
             ids.add(idProduct);
         }
-        List<Product> checkedProducts;
-        switch (request.getParameter("mode")) {
-            case "preview":
-                checkedProducts = model.getProducts(ids);
-                request.setAttribute("products", checkedProducts);
-                request.setAttribute("mode", "change");
-                getServletContext().getRequestDispatcher("/changeStatusPreview.jsp").forward(request, response);
-                break;
-            case "back":
-                List<Product> allProducts = model.getProducts();
-                checkedProducts = model.getProducts(ids);
-                request.setAttribute("checkedProducts", checkedProducts);
-                request.setAttribute("products", allProducts);
-                request.setAttribute("mode", "preview");
-                getServletContext().getRequestDispatcher("/changeStatus.jsp").forward(request, response);
-                break;
-            case "change":
-                checkedProducts = model.getProducts(ids);
-                for (Product product: checkedProducts) {
-                    model.changeProductStatus(product.getId());
-                }
-                request.setAttribute("mode", "preview");
-                response.sendRedirect(request.getContextPath() + "/admin");
-                break;
+        try {
+            List<Product> checkedProducts = model.getProducts(ids);
+            switch (request.getParameter("mode")) {
+                case "preview":
+                    //checkedProducts = model.getProducts(ids);
+                    request.setAttribute("products", checkedProducts);
+                    request.setAttribute("mode", "change");
+                    getServletContext().getRequestDispatcher("/change-status-preview.jsp").forward(request, response);
+                    break;
+                case "back":
+                    List<Product> allProducts = model.getProducts();
+                    //checkedProducts = model.getProducts(ids);
+                    request.setAttribute("checkedProducts", checkedProducts);
+                    request.setAttribute("products", allProducts);
+                    request.setAttribute("mode", "preview");
+                    getServletContext().getRequestDispatcher("/change-status.jsp").forward(request, response);
+                    break;
+                case "change":
+                    //checkedProducts = model.getProducts(ids);
+                    for (Product product : checkedProducts) {
+                        model.changeProductStatus(product.getId());
+                    }
+                    request.setAttribute("mode", "preview");
+                    response.sendRedirect(request.getContextPath() + "/admin");
+                    break;
             }
+        } catch (DAOException e) {
+            redirectToErrorPage(e.getMessage(), request, response);
         }
     }
+
+    protected void redirectToErrorPage(String message, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("message", message);
+        getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+    }
+
+}
 

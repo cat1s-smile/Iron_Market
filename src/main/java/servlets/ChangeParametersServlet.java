@@ -3,6 +3,7 @@ package servlets;
 import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
+import parse.Parser;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -29,55 +30,74 @@ public class ChangeParametersServlet extends HttpServlet {
         ArrayList<Integer> ids = new ArrayList<>();
         for (String id : ID) {
             int idProduct = Integer.parseInt(id);
+            if (idProduct < 0)
+                redirectToErrorPage("Illegal ID detected", request, response);
             ids.add(idProduct);
         }
-        List<Product> checkedProducts;
+        List<Product> checkedProducts = null;
+        try {
+            checkedProducts = model.getProducts(ids);
+        } catch (DAOException e) {
+            redirectToErrorPage(e.getMessage(), request, response);
+            return;
+        }
         switch (request.getParameter("mode")) {
             case "preview":
-                checkedProducts = model.getProducts(ids);
+                //checkedProducts = model.getProducts(ids);
                 request.setAttribute("products", checkedProducts);
                 request.setAttribute("price", price);
                 request.setAttribute("category", category);
                 request.setAttribute("mode", "change");
-                getServletContext().getRequestDispatcher("/changeParametersPreview.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/change-parameters-preview.jsp").forward(request, response);
                 break;
             case "back":
-                List<Product> allProducts = model.getProducts();
-                List<Category> categories = model.getCategories();
-                checkedProducts = model.getProducts(ids);
+                List<Product> allProducts = null;
+                List<Category> categories = null;
+                try {
+                    allProducts = model.getProducts();
+                    categories = model.getCategories();
+                } catch (DAOException e) {
+                    redirectToErrorPage(e.getMessage(), request, response);
+                    return;
+                }
+                //checkedProducts = model.getProducts(ids);
                 request.setAttribute("checkedProducts", checkedProducts);
                 request.setAttribute("products", allProducts);
                 request.setAttribute("categories", categories);
                 request.setAttribute("price", price);
                 request.setAttribute("category", category);
                 request.setAttribute("mode", "preview");
-                getServletContext().getRequestDispatcher("/changeParameters.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/change-parameters.jsp").forward(request, response);
                 break;
             case "change":
-                checkedProducts = model.getProducts(ids);
-                if (!price.equals("") && !category.equals("-")) {
-                    try {
-                        model.editProducts(checkedProducts, Integer.parseInt(price), category);
-                    } catch (DAOException e) {
-                        e.printStackTrace();
+                //checkedProducts = model.getProducts(ids);
+                try {
+                    if (!price.equals("")) {
+                        int priceVal = Parser.parseID(price);
+                        if (priceVal < 0)
+                            redirectToErrorPage("Incorrect price value", request, response);
+                        if (category.equals("-"))
+                            model.editProducts(checkedProducts, priceVal);
+                        else
+                            model.editProducts(checkedProducts, priceVal, category);
                     }
-                }
-                else {
-                    if (!price.equals("")) model.editProducts(checkedProducts, Integer.parseInt(price));
-                    else {
-                        if (!category.equals("-")) {
-                            try {
-                                model.editProducts(checkedProducts, category);
-                            } catch (DAOException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    else if (!category.equals("-")) {
+                        model.editProducts(checkedProducts, category);
                     }
+                    response.sendRedirect(request.getContextPath() + "/admin");
+                } catch (DAOException e) {
+                    redirectToErrorPage(e.getMessage(), request, response);
                 }
-                request.setAttribute("mode", "preview");
-                response.sendRedirect(request.getContextPath() + "/admin");
                 break;
-            }
+            default:
+                redirectToErrorPage("unknown mode", request, response);
+                break;
         }
     }
+
+    protected void redirectToErrorPage(String message, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("message", message);
+        getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+    }
+}
 

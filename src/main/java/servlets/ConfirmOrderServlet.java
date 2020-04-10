@@ -25,13 +25,13 @@ public class ConfirmOrderServlet extends HttpServlet {
         try {
             boolean isSuccessful = model.confirmOrder(User.getDefaultID());
             if(isSuccessful)
-                getServletContext().getRequestDispatcher("/order_successful.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/order-successful.jsp").forward(request, response);
             else
                 response.sendRedirect(request.getContextPath() + "/cart");
         }
-        catch(Exception ex) {
-
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

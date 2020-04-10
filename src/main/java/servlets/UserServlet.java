@@ -23,34 +23,34 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Category> categories = model.getCategories();
-        List<Product> products = null;
-        int catID = Parser.parseID(request.getParameter("catID"));
-        String searchRequest = request.getParameter("search");
-        if (searchRequest == null || searchRequest.equals("")) {
-            if (catID == Parser.NAN || catID < 0)
-                products = model.getProducts();
-            else
-                products = model.getProductsByCategory(catID);
-        } else {
-            if (catID == Parser.NAN || catID < 0)
-                products = model.getProductsBySearch(searchRequest);
-            else
-                products = model.getProductsBySearch(searchRequest, catID);
-            request.setAttribute("search", searchRequest);
-        }
-        request.setAttribute("catID", catID);
-        request.setAttribute("products", products);
-        request.setAttribute("categories", categories);
-        request.setAttribute("cart", model.getProductNumber(User.getDefaultID()));
+        try {
+            List<Category> categories = model.getCategories();
+            List<Product> products = null;
+            int catID = Parser.parseID(request.getParameter("catID"));
+            String searchRequest = request.getParameter("search");
+            if (searchRequest == null || searchRequest.equals("")) {
+                if (catID == Parser.NAN || catID < 0)
+                    products = model.getProducts();
+                else
+                    products = model.getProductsByCategory(catID);
+            } else {
+                if (catID == Parser.NAN || catID < 0)
+                    products = model.getProductsBySearch(searchRequest);
+                else
+                    products = model.getProductsBySearch(searchRequest, catID);
+                request.setAttribute("search", searchRequest);
+            }
+            request.setAttribute("catID", catID);
+            request.setAttribute("products", products);
+            request.setAttribute("categories", categories);
+            request.setAttribute("cart", model.getProductNumber(User.getDefaultID()));
 
-        if (request.getParameter("id") != null) {
-            try {
+            if (request.getParameter("id") != null) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Product product = model.getProduct(id);
                 if (product != null) {
                     String categoryName = null;
-                    for(Category category : categories) {
+                    for (Category category : categories) {
                         if (product.getCategory() == category.getId())
                             categoryName = category.getName();
                     }
@@ -58,13 +58,14 @@ public class UserServlet extends HttpServlet {
                     request.setAttribute("product", product);
                     request.setAttribute("overlay", 1);
                 } else {
-                    getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
                 }
-            } catch (Exception ex) {
-                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
             }
+            getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
-        getServletContext().getRequestDispatcher("/user.jsp").forward(request, response);
     }
 
     @Override

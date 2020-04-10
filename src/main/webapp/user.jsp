@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="user3.css">
-    <link rel="stylesheet" type="text/css" href="popup.css">
+    <link rel="stylesheet" type="text/css" href="styles/user.css">
+    <link rel="stylesheet" type="text/css" href="styles/popup.css">
     <title>Магазин комплектующих компьютеров</title>
 </head>
 <body>

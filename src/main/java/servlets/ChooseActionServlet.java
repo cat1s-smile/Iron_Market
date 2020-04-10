@@ -23,19 +23,30 @@ public class ChooseActionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Product> products = model.getProducts();
-        List<Category> categories = model.getCategories();
+        List<Product> products = null;
+        List<Category> categories = null;
+        try {
+            products = model.getProducts();
+            categories = model.getCategories();
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            return;
+        }
         request.setAttribute("products", products);
         request.setAttribute("categories", categories);
         request.setAttribute("mode", "preview");
         request.setAttribute("checkedProducts", null);
-        switch (request.getParameter("option")){
+        switch (request.getParameter("option")) {
             case "a1":
-                getServletContext().getRequestDispatcher("/changeStatus.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/change-status.jsp").forward(request, response);
                 break;
             case "a2":
-                getServletContext().getRequestDispatcher("/changeParameters.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/change-parameters.jsp").forward(request, response);
                 break;
+            default:
+                request.setAttribute("message", "wrong action");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

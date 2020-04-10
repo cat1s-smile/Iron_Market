@@ -26,12 +26,13 @@ public class EditCategoryServlet extends HttpServlet {
             Category category = model.getCategory(id);
             if (category != null) {
                 request.setAttribute("category", category);
-                getServletContext().getRequestDispatcher("/editCategory.jsp").forward(request, response);
+                getServletContext().getRequestDispatcher("/edit-category.jsp").forward(request, response);
             } else {
-                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+                request.setAttribute("message", "Incorrect id detected");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
             }
-        } catch (Exception ex) {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        } catch (DAOException ex) {
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 
@@ -41,18 +42,12 @@ public class EditCategoryServlet extends HttpServlet {
         try {
             int id = Parser.parseID(request.getParameter("id"));
             String name = request.getParameter("name");
-            Category duplicate = model.getCategory(name);
             Category category = new Category(id, name);
-            if (name.equalsIgnoreCase(duplicate.getName())) {
-                if (id != duplicate.getId())
-                    getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
-            }
-            else
-                model.editCategory(category);
-                response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
-        } catch (Exception ex) {
-
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            model.editCategory(category);
+            response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
+        } catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
         }
     }
 }

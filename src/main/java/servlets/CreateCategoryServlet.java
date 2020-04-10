@@ -21,7 +21,7 @@ public class CreateCategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        getServletContext().getRequestDispatcher("/createCategory.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -31,12 +31,11 @@ public class CreateCategoryServlet extends HttpServlet {
             String name = request.getParameter("name");
             Category category = new Category(name);
             model.createCategory(category);
-            request.setAttribute("tab", "categories");
             response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         }
-        catch(Exception ex) {
-
-            getServletContext().getRequestDispatcher("/createCategory.jsp").forward(request, response);
+        catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
         }
     }
 }

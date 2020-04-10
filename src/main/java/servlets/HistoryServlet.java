@@ -24,7 +24,12 @@ public class HistoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String userID = User.getDefaultID();
-        request.setAttribute("orders", model.getOrdersHistory(userID));
-        getServletContext().getRequestDispatcher("/history.jsp").forward(request, response);
+        try {
+            request.setAttribute("orders", model.getOrdersHistory(userID));
+            getServletContext().getRequestDispatcher("/history.jsp").forward(request, response);
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+        }
     }
 }

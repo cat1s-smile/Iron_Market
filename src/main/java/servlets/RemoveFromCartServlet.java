@@ -36,12 +36,14 @@ public class RemoveFromCartServlet extends HttpServlet {
                     model.removeItemFromOrder(userID, productID);
                     break;
                 default:
+                    request.setAttribute("message", "Incorrect parameter");
+                    getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+                    return;
             }
             response.sendRedirect(request.getContextPath() + "/cart");
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

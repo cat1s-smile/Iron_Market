@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" type="text/css" href="perform.css">
+    <link rel="stylesheet" type="text/css" href="styles/perform.css">
     <meta charset="UTF-8">
     <title>Редактирование товара</title>
 </head>

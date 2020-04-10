@@ -4,7 +4,7 @@
 <fmt:requestEncoding value="UTF-8" />
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" type="text/css" href="perform.css">
+    <link rel="stylesheet" type="text/css" href="styles/perform.css">
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Редактирование категории</title>
 </head>

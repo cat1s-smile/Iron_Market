@@ -23,8 +23,12 @@ class ProductDataBase {
     static List<Product> select(List<Integer> ids) {
         EntityManager manager = DBFactory.getEntityManager();
         List<Product> result = new ArrayList();
-        for(Integer id : ids) {
-            result.add(manager.find(Product.class, id));
+        for (Integer id : ids) {
+            Product product = manager.find(Product.class, id);
+            if (product == null)
+                return null;
+            else
+                result.add(product);
         }
         manager.close();
         return result;
@@ -114,7 +118,7 @@ class ProductDataBase {
         manager.persist(product);
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 
     static void update(Product product) {
         EntityManager manager = DBFactory.getEntityManager();
@@ -122,17 +126,17 @@ class ProductDataBase {
         manager.merge(product);
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 
     static void update(List<Product> products) {
         EntityManager manager = DBFactory.getEntityManager();
         manager.getTransaction().begin();
-        for(Product product : products) {
+        for (Product product : products) {
             manager.merge(product);
         }
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 
     static void delete(int id) {
         EntityManager manager = DBFactory.getEntityManager();
@@ -140,7 +144,7 @@ class ProductDataBase {
         manager.remove(manager.find(Product.class, id));
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 
     static void archive(Product product) {
         product.setStatus(0);
@@ -149,7 +153,7 @@ class ProductDataBase {
         manager.merge(product);
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 
     static void deArchive(Product product) {
         product.setStatus(1);
@@ -158,5 +162,5 @@ class ProductDataBase {
         manager.merge(product);
         manager.getTransaction().commit();
         manager.close();
-        }
+    }
 }

@@ -23,14 +23,17 @@ public class ArchiveServlet extends HttpServlet {
 
         try {
             int id = Parser.parseID(request.getParameter("id"));
-            if (id == Parser.NAN)
-                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            if (id == Parser.NAN) {
+                request.setAttribute("message", "Parameter \"id\" is incorrect");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            }
             else {
                 model.changeProductStatus(id);
                 response.sendRedirect(request.getContextPath() + "/admin");
             }
-        } catch (Exception ex) {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        } catch (DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

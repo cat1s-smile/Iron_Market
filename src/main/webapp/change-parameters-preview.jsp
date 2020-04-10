@@ -2,18 +2,16 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" type="text/css" href="admin.css">
+    <link rel="stylesheet" type="text/css" href="styles/admin.css">
     <meta charset="UTF-8">
-    <script type="text/javascript" src="checkboxes.js"></script>
     <title>Магазин комплектующих компьютеров</title>
 </head>
 <body>
 <section>
     <div class="container-table">
-        <form method="post" action='<c:url value="/changesPreview" />'>
+        <form method="post" action='<c:url value="/changeParametersPreview" />'>
             <table class="table-product">
                 <tr>
-                    <th><input type="checkbox" class="check" name="checkAllB" onclick="checkAll(this)"/></th>
                     <th>ID</th>
                     <th>Наименование</th>
                     <th>Цена</th>
@@ -24,13 +22,6 @@
                 </tr>
                 <c:forEach var="product" items="${products}">
                     <tr>
-                        <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>
-                            <input type="checkbox" class="check" name="checkedId" value="${product.id}"
-                                   onclick="checkOne(this)"
-                            <c:forEach var="checkedProduct" items="${checkedProducts}">
-                                ${product.id == checkedProduct.id ? "checked" : ""}
-                            </c:forEach>>
-                        </td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.id}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.name}</td>
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.price}</td>
@@ -40,11 +31,31 @@
                         <td ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}>${product.status}</td>
                         <td  ${product.status == 0 ? "style=\"background: #dfdfdf;\"" : ""}></td>
                     </tr>
+                    <input type="hidden" name="checkedId" value="${product.id}">
                 </c:forEach>
             </table>
-                <input type="hidden" name="mode" value="${mode}">
-                <input type="submit" class="button-confirm" value="Продолжить">
-            </form>
+            <div class="preview-info">
+                <p>
+                    Категория после замены: ${category}
+                </p>
+                <p>
+                    Цена после замены: ${price}
+                </p>
+            </div>
+            <input type="hidden" name="mode" value="${mode}">
+            <input type="hidden" name="price" value="${price}">
+            <input type="hidden" name="category" value="${category}">
+            <input type="submit" class="button-confirm" value="Продолжить">
+        </form>
+        <form method="post" action='<c:url value="/changeParametersPreview" />'>
+            <c:forEach var="product" items="${products}">
+                <input type="hidden" name="checkedId" value="${product.id}">
+            </c:forEach>
+            <input type="hidden" name="price" value="${price}">
+            <input type="hidden" name="category" value="${category}">
+            <input type="hidden" name="mode" value="back">
+            <input type="submit" class="button-back" value="Назад">
+        </form>
     </div>
 </section>
 </body>

@@ -4,6 +4,7 @@ import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 import model.UserMarketModel;
+import parse.Parser;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -22,9 +23,14 @@ public class CreateServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Category> categories = model.getCategories();
-        request.setAttribute("categories", categories);
-        getServletContext().getRequestDispatcher("/create.jsp").forward(request, response);
+        try {
+            List<Category> categories = model.getCategories();
+            request.setAttribute("categories", categories);
+            getServletContext().getRequestDispatcher("/create.jsp").forward(request, response);
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,8 +38,8 @@ public class CreateServlet extends HttpServlet {
 
         try {
             String name = request.getParameter("name");
-            int price = Integer.parseInt(request.getParameter("price"));
-            int amount = Integer.parseInt(request.getParameter("amount"));
+            int price = Parser.parseID(request.getParameter("price"));
+            int amount = Parser.parseID(request.getParameter("amount"));
             String description = request.getParameter("description");
             String categoryName = request.getParameter("category");
             //int idCategory = Integer.parseInt(c);
@@ -43,9 +49,9 @@ public class CreateServlet extends HttpServlet {
             model.createProduct(product);
             response.sendRedirect(request.getContextPath()+"/admin");
         }
-        catch(Exception ex) {
-
-            getServletContext().getRequestDispatcher("/create.jsp").forward(request, response);
+        catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
         }
     }
 }

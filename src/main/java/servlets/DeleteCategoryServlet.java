@@ -24,11 +24,11 @@ public class DeleteCategoryServlet extends HttpServlet {
         try {
             int id = Parser.parseID(request.getParameter("id"));
             model.deleteCategory(id);
-            request.setAttribute("tab", "categories");
             response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         }
-        catch(Exception ex) {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        catch(DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

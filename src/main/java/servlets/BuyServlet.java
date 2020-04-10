@@ -24,8 +24,10 @@ public class BuyServlet extends HttpServlet {
 
         try {
             int id = Parser.parseID(request.getParameter("buyID"));
-            if (id == Parser.NAN)
-                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            if (id == Parser.NAN) {
+                request.setAttribute("message", "Parameter \"id\" is incorrect");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            }
             else {
                 String userID = User.getDefaultID();
                 model.buyProduct(id, userID);
@@ -40,9 +42,9 @@ public class BuyServlet extends HttpServlet {
                 //response.sendRedirect(request.getContextPath() + "/user");
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+        } catch (DAOException ex) {
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }

@@ -39,9 +39,8 @@ public class UploadFileServlet extends HttpServlet {
             String tempXml = "product.xml";
             request.setAttribute("file", tempXml);
             request.setAttribute("preview", model.xslTransform(src, xslDoc, tempXml));
-            getServletContext().getRequestDispatcher("/importResults.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
+            getServletContext().getRequestDispatcher("/import-results.jsp").forward(request, response);
+        } catch (DAOException e) {
             request.setAttribute("errorMessage", "Error: " + e.getMessage());
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/import.jsp");
             dispatcher.forward(request, response);

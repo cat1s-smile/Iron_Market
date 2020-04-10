@@ -26,11 +26,16 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         //String userID = request.getSession().getId();
         String userID = User.getDefaultID();
-        List<CartItem> cart = model.validateOrder(model.getCart(userID));
-        request.setAttribute("cart", cart);
-        if(!model.isOrderValid(cart))
-            request.setAttribute("correct", 0);
-        request.setAttribute("cost", model.getOrderCost(cart));
-        getServletContext().getRequestDispatcher("/cart.jsp").forward(request, response);
+        try {
+            List<CartItem> cart = model.validateOrder(model.getCart(userID));
+            request.setAttribute("cart", cart);
+            if (!model.isOrderValid(cart))
+                request.setAttribute("correct", 0);
+            request.setAttribute("cost", model.getOrderCost(cart));
+            getServletContext().getRequestDispatcher("/cart.jsp").forward(request, response);
+        } catch (DAOException e) {
+            request.setAttribute("message", e.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+        }
     }
 }

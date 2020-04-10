@@ -5,6 +5,7 @@ import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.JDBCConnectionException;
 import org.xml.sax.SAXException;
 import servlets.DAOException;
 
@@ -27,32 +28,47 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
 
     @Override
-    public List<Category> getCategories() {
+    public List<Category> getCategories() throws DAOException {
         //logger.info("All categories");
-        List<Category> categories = CategoryDataBase.select();
-        for (Category category : categories)
-            category.setAvailableToDelete(canCategoryBeRemoved(category.getId()));
-        return categories;
-    }
-
-    @Override
-    public List<Product> getProducts() {
-        //logger.info("All products");
-        List<Category> categories = CategoryDataBase.select();
-        List<Product> products = setCategoryNames(ProductDataBase.select(), categories);
-        for(Product product : products) {
-            product.setAvailableToDelete(canProductBeRemoved(product.getId()));
+        try {
+            List<Category> categories = CategoryDataBase.select();
+            for (Category category : categories)
+                category.setAvailableToDelete(canCategoryBeRemoved(category.getId()));
+            return categories;
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        return products;
     }
 
     @Override
-    public List<Product> getProducts(List<Integer> ids) {
-        return setCategoryNames(ProductDataBase.select(ids), CategoryDataBase.select());
+    public List<Product> getProducts() throws DAOException {
+        //logger.info("All products");
+        try {
+            List<Category> categories = CategoryDataBase.select();
+            List<Product> products = setCategoryNames(ProductDataBase.select(), categories);
+            for (Product product : products) {
+                product.setAvailableToDelete(canProductBeRemoved(product.getId()));
+            }
+            return products;
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
-    private List<Product> setCategoryNames(List<Product> products, List<Category> categories) {
-        for(Product product : products) {
+    @Override
+    public List<Product> getProducts(List<Integer> ids) throws DAOException {
+        try {
+            List<Product> products = ProductDataBase.select(ids);
+            if (products == null)
+                throw new DAOException("Illegal ID detected");
+            return setCategoryNames(products, CategoryDataBase.select());
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    private List<Product> setCategoryNames(List<Product> products, List<Category> categories) throws DAOException {
+        for (Product product : products) {
             product.setAvailableToDelete(canProductBeRemoved(product.getId()));
             product.setCategoryName(getCategoryName(product.getCategory(), categories));
         }
@@ -60,7 +76,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     private String getCategoryName(int id, List<Category> categories) {
-        for(Category category : categories) {
+        for (Category category : categories) {
             if (id == category.getId())
                 return category.getName();
         }
@@ -68,14 +84,28 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public Product getProduct(int productID) {
-        return ProductDataBase.selectOne(productID);
+    public Product getProduct(int productID) throws DAOException {
+        try {
+            return ProductDataBase.selectOne(productID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
-    public void createProduct(Product newProduct) { //mb duplicate
+    public void createProduct(Product newProduct) throws DAOException {
         logger.info("Create product");
-        ProductDataBase.insert(newProduct);
+        try {
+            if (getCategory(newProduct.getCategory()) == null)
+                throw new DAOException("Incorrect category");
+            if (newProduct.getPrice() < Product.MIN_PRICE || newProduct.getPrice() > Product.MAX_PRICE)
+                throw new DAOException("Incorrect price value");
+            if (newProduct.getAmount() < 0)
+                throw new DAOException("Incorrect 'count' value");
+            ProductDataBase.insert(newProduct);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
@@ -89,188 +119,263 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public void editProduct(Product product) {
-        logger.info("Edit product id=" + product.getId());
-        ProductDataBase.update(product);
+    public void editProduct(Product product) throws DAOException {
+        try {
+            logger.info("Edit product id=" + product.getId());
+            ProductDataBase.update(product);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        } catch (IllegalArgumentException e) {
+            throw new DAOException("Incorrect id detected");
+        }
     }
 
     @Override
     public void deleteProduct(int productID) throws DAOException {
-        logger.info("Delete product id=" + productID);
-        if(!canProductBeRemoved(productID)) {
-            logger.warn("Product is contained in orders", new DAOException("Product is contained in orders"));
-            throw new DAOException("Product is contained in orders");
+        try {
+            logger.info("Delete product id=" + productID);
+            if (!canProductBeRemoved(productID)) {
+                logger.warn("Product is contained in orders", new DAOException("Product is contained in orders"));
+                throw new DAOException("Product is contained in orders");
+            }
+            ProductDataBase.delete(productID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        } catch (IllegalArgumentException e) {
+            throw new DAOException("Incorrect id detected");
         }
-        ProductDataBase.delete(productID);
     }
 
     @Override
-    public void editProducts(List<Product> products, int newPrice) {
-        for (Product product : products) {
-            logger.info("Change price on " + newPrice +" Product id="+ product.getId());
-            product.setPrice(newPrice);
+    public void editProducts(List<Product> products, int newPrice) throws DAOException {
+        if (newPrice < Product.MIN_PRICE || newPrice > Product.MAX_PRICE)
+            throw new DAOException("Incorrect price value");
+        try {
+            for (Product product : products) {
+                logger.info("Change price on " + newPrice + " Product id=" + product.getId());
+                product.setPrice(newPrice);
+            }
+            ProductDataBase.update(products);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        ProductDataBase.update(products);
     }
 
     @Override
     public void editProducts(List<Product> products, String newCategory) throws DAOException {
-        int categoryID = getCategoryID(newCategory);
-        for (Product product : products) {
-            logger.info("Change category on " + newCategory +" Product id="+ product.getId());
-            product.setCategory(categoryID);
+        try {
+            int categoryID = getCategoryID(newCategory);
+            for (Product product : products) {
+                logger.info("Change category on " + newCategory + " Product id=" + product.getId());
+                product.setCategory(categoryID);
+            }
+            ProductDataBase.update(products);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        ProductDataBase.update(products);
     }
 
     @Override
     public void editProducts(List<Product> products, int newPrice, String newCategory) throws DAOException {
-        int categoryID = getCategoryID(newCategory);
-        for (Product product : products) {
-            logger.info("Change price on" + newPrice +" and category on "+ newCategory + " Product id="+ product.getId());
-            product.setPrice(newPrice);
-            product.setCategory(categoryID);
+        if (newPrice < Product.MIN_PRICE || newPrice > Product.MAX_PRICE)
+            throw new DAOException("Incorrect price value");
+        try {
+            int categoryID = getCategoryID(newCategory);
+            for (Product product : products) {
+                logger.info("Change price on" + newPrice + " and category on " + newCategory + " Product id=" + product.getId());
+                product.setPrice(newPrice);
+                product.setCategory(categoryID);
+            }
+            ProductDataBase.update(products);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        ProductDataBase.update(products);
     }
 
     private int getCategoryID(String categoryName) throws DAOException {
         Category category = getCategory(categoryName);
-        if(category == null) {
-            createCategory(new Category(categoryName));
-            return getCategory(categoryName).getId();
+        if (category == null) {
+            throw new DAOException("Category with this name does not exists");
+        } else return category.getId();
+    }
+
+    @Override
+    public boolean canProductBeRemoved(int productID) throws DAOException {
+        try {
+            return !OrderContentDataBase.doOrdersContain(productID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        else return category.getId();
     }
 
     @Override
-    public boolean canProductBeRemoved(int productID) {
-        return  !OrderContentDataBase.doOrdersContain(productID);
+    public Category getCategory(int categoryID) throws DAOException {
+        try {
+            return CategoryDataBase.selectOne(categoryID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
-    public Category getCategory(int categoryID) {
-        return CategoryDataBase.selectOne(categoryID);
-    }
-
-    @Override
-    public Category getCategory(String categoryName) {
-        return CategoryDataBase.searchByName(categoryName);
+    public Category getCategory(String categoryName) throws DAOException {
+        try {
+            return CategoryDataBase.searchByName(categoryName);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
     public void createCategory(Category newCategory) throws DAOException {
-        logger.info("Create category");
-        if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
-            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
-            throw new DAOException("Category has this name already exists");
+        try {
+            logger.info("Create category");
+            if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
+                logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
+                throw new DAOException("Category with this name already exists");
+            }
+            CategoryDataBase.insert(newCategory);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        CategoryDataBase.insert(newCategory);
     }
 
     @Override
     public void editCategory(Category category) throws DAOException {
-        logger.info("Edit category id=" + category.getId());
-        Category duplicate = getCategory(category.getName());
-        if (duplicate != null && category.getId() != duplicate.getId()) {
-            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
-            throw new DAOException("Category has this name already exists");
+        try {
+            logger.info("Edit category id=" + category.getId());
+            Category duplicate = getCategory(category.getName());
+            if (duplicate != null && category.getId() != duplicate.getId()) {
+                logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
+                throw new DAOException("Category has this name already exists");
+            }
+            CategoryDataBase.update(category);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        } catch (IllegalArgumentException e) {
+            throw new DAOException("Incorrect id detected");
         }
-        CategoryDataBase.update(category);
     }
 
     @Override
     public void deleteCategory(int categoryID) throws DAOException {
-        logger.info("Delete category id=" + categoryID);
-        if (!canCategoryBeRemoved(categoryID)) {
-            logger.warn("Category has some products can not be deleted", new DAOException("Category has some products can not be deleted"));
-            throw new DAOException("Category has some products can not be deleted");
+        try {
+            logger.info("Delete category id=" + categoryID);
+            if (!canCategoryBeRemoved(categoryID)) {
+                logger.warn("Category has some products can not be deleted", new DAOException("Category has some products can not be deleted"));
+                throw new DAOException("Category has some products can not be deleted");
+            } else
+                CategoryDataBase.delete(categoryID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        } catch (IllegalArgumentException e) {
+            throw new DAOException("Incorrect id detected");
         }
-        else
-            CategoryDataBase.delete(categoryID);
     }
 
     @Override
-    public boolean canCategoryBeRemoved(int categoryID) {
-        List<Product> products = ProductDataBase.selectByCategory(categoryID);
-        return products.isEmpty();
-    }
-
-    public void insertUpdateIgnoreDuplicates(ShopContent shopContent) {
-        logger.info("Insert with ignore duplicates");
-        List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-        for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-            int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-            if (categoryID < 0)
-                insertProductWithNewCategory(rawProduct, categories);
-            else {
-                Product product = transformProduct(rawProduct, categoryID);
-                if (ProductDataBase.getProduct(product) == null)
-                    ProductDataBase.insert(product);
-            }
+    public boolean canCategoryBeRemoved(int categoryID) throws DAOException {
+        try {
+            List<Product> products = ProductDataBase.selectByCategory(categoryID);
+            return products.isEmpty();
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
     }
 
-    public void insertUpdateOverwriteDuplicates(ShopContent shopContent) {
-        logger.info("Insert with overwrite duplicates");
-        List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-        for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-            int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-            if (categoryID < 0)
-                insertProductWithNewCategory(rawProduct, categories);
-            else {
-                Product product = transformProduct(rawProduct, categoryID);
-                Product duplicate = ProductDataBase.getProduct(product);
-                if (duplicate == null)
-                    ProductDataBase.insert(product);
+    public void insertUpdateIgnoreDuplicates(ShopContent shopContent) throws DAOException {
+        try {
+            logger.info("Insert with ignore duplicates");
+            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                if (categoryID < 0)
+                    insertProductWithNewCategory(rawProduct, categories);
                 else {
-                    product.setId(duplicate.getId());
-                    ProductDataBase.update(product);
+                    Product product = transformProduct(rawProduct, categoryID);
+                    if (ProductDataBase.getProduct(product) == null)
+                        ProductDataBase.insert(product);
                 }
             }
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
     }
 
-    public void insertUpdateWithDuplicates(ShopContent shopContent) {
-        logger.info("Insert with duplicates");
-        List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-        for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-            int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-            if (categoryID < 0)
-                insertProductWithNewCategory(rawProduct, categories);
-            else {
-                Product product = transformProduct(rawProduct, categoryID);
-                ProductDataBase.insert(product);
+    public void insertUpdateOverwriteDuplicates(ShopContent shopContent) throws DAOException {
+        try {
+            logger.info("Insert with overwrite duplicates");
+            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                if (categoryID < 0)
+                    insertProductWithNewCategory(rawProduct, categories);
+                else {
+                    Product product = transformProduct(rawProduct, categoryID);
+                    Product duplicate = ProductDataBase.getProduct(product);
+                    if (duplicate == null)
+                        ProductDataBase.insert(product);
+                    else {
+                        product.setId(duplicate.getId());
+                        ProductDataBase.update(product);
+                    }
+                }
             }
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
     }
 
-    private List<Category> insertAndPrepareCategories(List<RawCategory> rawCategories) {
-        List<Category> categories = new ArrayList<>();
-        for (RawCategory rawCategory : rawCategories) {
-            String categoryName = rawCategory.getName();
-            Category category = CategoryDataBase.searchByName(categoryName);
-            if (category == null) {
-                category = new Category(categoryName);
-                CategoryDataBase.insert(category);
-                category = CategoryDataBase.searchByName(categoryName);
+    public void insertUpdateWithDuplicates(ShopContent shopContent) throws DAOException {
+        try {
+            logger.info("Insert with duplicates");
+            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                if (categoryID < 0)
+                    insertProductWithNewCategory(rawProduct, categories);
+                else {
+                    Product product = transformProduct(rawProduct, categoryID);
+                    ProductDataBase.insert(product);
+                }
             }
-            categories.add(category);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
-        return categories;
+    }
+
+    private List<Category> insertAndPrepareCategories(List<RawCategory> rawCategories) throws DAOException {
+        try {
+            List<Category> categories = new ArrayList<>();
+            for (RawCategory rawCategory : rawCategories) {
+                String categoryName = rawCategory.getName();
+                Category category = CategoryDataBase.searchByName(categoryName);
+                if (category == null) {
+                    category = new Category(categoryName);
+                    CategoryDataBase.insert(category);
+                    category = CategoryDataBase.searchByName(categoryName);
+                }
+                categories.add(category);
+            }
+            return categories;
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
-    public void changeProductStatus(int id) {
-        Product product = ProductDataBase.selectOne(id);
-        if (product.getStatus() == 1) {
-            logger.info("Archive product id="+ product.getId());
-            ProductDataBase.archive(product);
-        }
-        else
-        {
-            logger.info("De archive product id= "+ product.getId());
-            ProductDataBase.deArchive(product);
+    public void changeProductStatus(int id) throws DAOException {
+        try {
+            Product product = ProductDataBase.selectOne(id);
+            if (product.getStatus() == 1) {
+                logger.info("Archive product id=" + product.getId());
+                ProductDataBase.archive(product);
+            } else {
+                logger.info("De archive product id= " + product.getId());
+                ProductDataBase.deArchive(product);
+            }
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
         }
     }
 
@@ -282,12 +387,16 @@ public class DBAdminMarketModel implements AdminMarketModel {
                 rawProduct.getDescription());
     }
 
-    private void insertProductWithNewCategory(RawProduct rawProduct, List<Category> categories) {
-        Category category = new Category(rawProduct.getIdCategory());
-        CategoryDataBase.insert(category);
-        category = CategoryDataBase.searchByName(rawProduct.getIdCategory());
-        categories.add(category);
-        ProductDataBase.insert(transformProduct(rawProduct, category.getId()));
+    private void insertProductWithNewCategory(RawProduct rawProduct, List<Category> categories) throws DAOException {
+        try {
+            Category category = new Category(rawProduct.getIdCategory());
+            CategoryDataBase.insert(category);
+            category = CategoryDataBase.searchByName(rawProduct.getIdCategory());
+            categories.add(category);
+            ProductDataBase.insert(transformProduct(rawProduct, category.getId()));
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
@@ -345,7 +454,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
             logger.info("Start import");
             TransformerFactory tFactory = TransformerFactory.newInstance();
             OutputStream tempXmlOut = new BufferedOutputStream(new FileOutputStream(xmlOutPath));
-            int readBytes = 0;
+            int readBytes;
             while ((readBytes = src.read()) != -1)
                 tempXmlOut.write(readBytes);
             tempXmlOut.flush();
@@ -394,23 +503,34 @@ public class DBAdminMarketModel implements AdminMarketModel {
     }
 
     @Override
-    public ShopContent getAllProducts() {
-        logger.info("Export all products");
-        return createShopContent(ProductDataBase.select(), CategoryDataBase.select());
+    public ShopContent getAllProducts() throws DAOException {
+        try {
+            logger.info("Export all products");
+            return createShopContent(ProductDataBase.select(), CategoryDataBase.select());
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
-    public ShopContent getProductsOnSale() {
-        logger.info("Export products on sale");
-        return createShopContent(ProductDataBase.selectOnSale(), CategoryDataBase.select());
+    public ShopContent getProductsOnSale() throws DAOException {
+        try {
+            logger.info("Export products on sale");
+            return createShopContent(ProductDataBase.selectOnSale(), CategoryDataBase.select());
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
 
     @Override
-    public ShopContent getArchivedProducts() {
-        logger.info("Export archived products");
-        return createShopContent(ProductDataBase.selectArchivedProducts(), CategoryDataBase.select());
+    public ShopContent getArchivedProducts() throws DAOException {
+        try {
+            logger.info("Export archived products");
+            return createShopContent(ProductDataBase.selectArchivedProducts(), CategoryDataBase.select());
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
     }
-
 
 
     private int getCategoryID(List<Category> categories, String categoryName) {

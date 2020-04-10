@@ -35,11 +35,12 @@ public class EditServlet extends HttpServlet {
                 getServletContext().getRequestDispatcher("/edit.jsp").forward(request, response);
             }
             else {
-                getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+                request.setAttribute("message", "Incorrect ID detected");
+                getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
             }
         }
         catch(Exception ex) {
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 
@@ -60,8 +61,8 @@ public class EditServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin");
         }
         catch(Exception ex) {
-
-            getServletContext().getRequestDispatcher("/notfound.jsp").forward(request, response);
+            request.setAttribute("message", ex.getMessage());
+            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
         }
     }
 }
