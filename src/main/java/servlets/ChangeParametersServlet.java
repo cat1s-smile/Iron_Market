@@ -27,7 +27,11 @@ public class ChangeParametersServlet extends HttpServlet {
         String[] ID = request.getParameterValues("checkedId");
         String price = request.getParameter("price");
         String category = request.getParameter("category");
-        ArrayList<Integer> ids = new ArrayList<>();
+        if(ID == null) {
+            response.sendRedirect(request.getContextPath() + "/admin");
+            return;
+        }
+        List<Integer> ids = new ArrayList<>();
         for (String id : ID) {
             int idProduct = Integer.parseInt(id);
             if (idProduct < 0)

@@ -22,6 +22,10 @@ public class ChangeStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] ID = request.getParameterValues("checkedId");
+        if(ID == null) {
+            response.sendRedirect(request.getContextPath() + "/admin");
+            return;
+        }
         List<Integer> ids = new ArrayList<>();
         for (String id : ID) {
             int idProduct = Integer.parseInt(id);
