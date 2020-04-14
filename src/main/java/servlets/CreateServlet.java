@@ -51,7 +51,8 @@ public class CreateServlet extends HttpServlet {
         }
         catch(DAOException ex) {
             request.setAttribute("message", ex.getMessage());
-            getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
+            doGet(request, response);
+            //getServletContext().getRequestDispatcher("/create").forward(request, response);
         }
     }
 }

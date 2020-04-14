@@ -96,6 +96,8 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void createProduct(Product newProduct) throws DAOException {
         logger.info("Create product");
         try {
+            if(newProduct.getName().equals(""))
+                throw new DAOException("Empty name is not allowed");
             if (getCategory(newProduct.getCategory()) == null)
                 throw new DAOException("Incorrect category");
             if (newProduct.getPrice() < Product.MIN_PRICE || newProduct.getPrice() > Product.MAX_PRICE)
@@ -122,6 +124,14 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editProduct(Product product) throws DAOException {
         try {
             logger.info("Edit product id=" + product.getId());
+            if(product.getName().equals(""))
+                throw new DAOException("Empty name is not allowed");
+            if (getCategory(product.getCategory()) == null)
+                throw new DAOException("Incorrect category");
+            if (product.getPrice() < Product.MIN_PRICE || product.getPrice() > Product.MAX_PRICE)
+                throw new DAOException("Incorrect price value");
+            if (product.getAmount() < 0)
+                throw new DAOException("Incorrect 'count' value");
             ProductDataBase.update(product);
         } catch (JDBCConnectionException e) {
             throw new DAOException("Can not connect to database", e);
@@ -230,6 +240,8 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void createCategory(Category newCategory) throws DAOException {
         try {
             logger.info("Create category");
+            if(newCategory.getName().equals(""))
+                throw new DAOException("Empty name is not allowed");
             if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
                 logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
                 throw new DAOException("Category with this name already exists");
@@ -244,6 +256,8 @@ public class DBAdminMarketModel implements AdminMarketModel {
     public void editCategory(Category category) throws DAOException {
         try {
             logger.info("Edit category id=" + category.getId());
+            if(category.getName().equals(""))
+                throw new DAOException("Empty name is not allowed");
             Category duplicate = getCategory(category.getName());
             if (duplicate != null && category.getId() != duplicate.getId()) {
                 logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));

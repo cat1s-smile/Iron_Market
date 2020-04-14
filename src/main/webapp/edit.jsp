@@ -11,6 +11,9 @@
     <div class="upper-container">
         <div class="header">Редактирование товара</div>
     </div>
+    <div style="padding:5px; color:red;font-style:italic;">
+        ${message}
+    </div>
 </header>
 <form method="post" action='<c:url value="/edit" />'>
     <section>

@@ -62,7 +62,8 @@ public class EditServlet extends HttpServlet {
         }
         catch(Exception ex) {
             request.setAttribute("message", ex.getMessage());
-            getServletContext().getRequestDispatcher("/not-found.jsp").forward(request, response);
+            doGet(request, response);
+            //getServletContext().getRequestDispatcher("/edit.jsp").forward(request, response);
         }
     }
 }

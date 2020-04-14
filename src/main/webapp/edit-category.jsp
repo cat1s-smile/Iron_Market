@@ -13,6 +13,9 @@
     <div class="upper-container">
         <div class="header">Редактирование категории</div>
     </div>
+    <div style="padding:5px; color:red;font-style:italic;">
+        ${message}
+    </div>
 </header>
 <form method="post">
     <div class="fields">

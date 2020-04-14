@@ -47,7 +47,8 @@ public class EditCategoryServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin?tab=categories");
         } catch(DAOException ex) {
             request.setAttribute("message", ex.getMessage());
-            getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
+            doGet(request, response);
+            //getServletContext().getRequestDispatcher("/create-category.jsp").forward(request, response);
         }
     }
 }
