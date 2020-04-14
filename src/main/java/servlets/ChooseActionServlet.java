@@ -4,6 +4,7 @@ import entities.jaxbready.ShopContent;
 import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 import org.xml.sax.SAXException;
 
 import javax.ejb.EJB;
@@ -18,8 +19,9 @@ import java.util.List;
 
 @WebServlet("/chooseAction")
 public class ChooseActionServlet extends HttpServlet {
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

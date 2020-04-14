@@ -10,6 +10,7 @@
 <body>
 <section>
     <div class="container-table">
+        <h4>Выберите товары, у которых изменятся параметры</h4>
         <form method="post" action='<c:url value="/changeParametersPreview" />'>
             <section>
 

@@ -15,8 +15,9 @@ import java.io.IOException;
 
 @WebServlet("/remove_from_cart")
 public class RemoveFromCartServlet extends HttpServlet {
-    @EJB(beanName = "DBUserMarketModel")
-    private UserMarketModel model;
+
+    @EJB
+    private OrderManager model;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

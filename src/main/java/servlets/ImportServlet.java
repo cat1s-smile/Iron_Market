@@ -2,6 +2,7 @@ package servlets;
 
 import entities.jaxbready.ShopContent;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 import org.xml.sax.SAXException;
 
 import javax.ejb.EJB;
@@ -16,8 +17,8 @@ import java.io.IOException;
 
 @WebServlet("/import")
 public class ImportServlet extends HttpServlet {
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

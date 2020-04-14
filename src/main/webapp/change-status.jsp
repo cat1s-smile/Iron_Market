@@ -10,6 +10,7 @@
 <body>
 <section>
     <div class="container-table">
+        <h4>Выберите товары, у которых поменяется статус</h4>
         <form method="post" action='<c:url value="/changesPreview" />'>
             <table class="table-product">
                 <tr>

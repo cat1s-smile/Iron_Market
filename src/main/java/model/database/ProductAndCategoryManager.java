@@ -3,7 +3,6 @@ package model.database;
 import entities.jaxbready.*;
 import entities.main.Category;
 import entities.main.Product;
-import model.AdminMarketModel;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
 import org.xml.sax.SAXException;
@@ -11,8 +10,14 @@ import servlets.DAOException;
 
 import javax.ejb.Stateless;
 import javax.xml.XMLConstants;
-import javax.xml.bind.*;
-import javax.xml.transform.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -22,13 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class DBAdminMarketModel implements AdminMarketModel {
+public class ProductAndCategoryManager {
 
     private static final Logger logger = Logger.getLogger("file");
+    private static final Logger searchLogger = Logger.getLogger("searchFile");
 
-    @Override
     public List<Category> getCategories() throws DAOException {
-        //logger.info("All categories");
         try {
             List<Category> categories = CategoryDataBase.select();
             for (Category category : categories)
@@ -39,9 +43,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public List<Product> getProducts() throws DAOException {
-        //logger.info("All products");
         try {
             List<Category> categories = CategoryDataBase.select();
             List<Product> products = setCategoryNames(ProductDataBase.select(), categories);
@@ -54,7 +56,19 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
+    public List<Product> getProductsOnMarket() throws DAOException {
+        try {
+            List<Category> categories = CategoryDataBase.select();
+            List<Product> products = setCategoryNames(ProductDataBase.selectOnSale(), categories);
+            for (Product product : products) {
+                product.setAvailableToDelete(canProductBeRemoved(product.getId()));
+            }
+            return products;
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
     public List<Product> getProducts(List<Integer> ids) throws DAOException {
         try {
             List<Product> products = ProductDataBase.select(ids);
@@ -82,7 +96,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         return null;
     }
 
-    @Override
     public Product getProduct(int productID) throws DAOException {
         try {
             return ProductDataBase.selectOne(productID);
@@ -91,11 +104,56 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
+    public boolean canProductBeRemoved(int productID) throws DAOException {
+        try {
+            return !OrderContentDataBase.doOrdersContain(productID);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    public boolean canCategoryBeRemoved(int categoryID) throws DAOException {
+        try {
+            List<Product> products = ProductDataBase.selectByCategory(categoryID);
+            return products.isEmpty();
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    public List<Product> getProductsByCategory(int categoryID) throws DAOException {
+        try {
+            List<Category> categories = CategoryDataBase.select();
+            return setCategoryNames(ProductDataBase.selectByCategoryOnSale(categoryID), categories);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    public List<Product> getProductsBySearch(String searchRequest) throws DAOException {
+        try {
+            searchLogger.info("Search by " + searchRequest);
+            List<Category> categories = CategoryDataBase.select();
+            return setCategoryNames(ProductDataBase.selectBySearch(searchRequest), categories);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    public List<Product> getProductsBySearch(String searchRequest, int categoryID) throws DAOException {
+        try {
+            searchLogger.info("Search by " + searchRequest + " in category " + categoryID);
+            List<Category> categories = CategoryDataBase.select();
+            return setCategoryNames(ProductDataBase.selectBySearch(searchRequest, categoryID), categories);
+        } catch (JDBCConnectionException e) {
+            throw new DAOException("Can not connect to database", e);
+        }
+    }
+
     public void createProduct(Product newProduct) throws DAOException {
         logger.info("Create product");
         try {
-            if(newProduct.getName().equals(""))
+            if (newProduct.getName().equals(""))
                 throw new DAOException("Empty name is not allowed");
             if (getCategory(newProduct.getCategory()) == null)
                 throw new DAOException("Incorrect category");
@@ -109,7 +167,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void setExistingCategoryID(Product product) throws DAOException {
         Category category = getCategory(product.getCategoryName());
         if (category == null) {
@@ -119,18 +176,11 @@ public class DBAdminMarketModel implements AdminMarketModel {
         product.setCategory(category.getId());
     }
 
-    @Override
     public void editProduct(Product product) throws DAOException {
         try {
-            logger.info("Edit product id=" + product.getId());
-            if(product.getName().equals(""))
+            if (product.getName().equals(""))
                 throw new DAOException("Empty name is not allowed");
-            if (getCategory(product.getCategory()) == null)
-                throw new DAOException("Incorrect category");
-            if (product.getPrice() < Product.MIN_PRICE || product.getPrice() > Product.MAX_PRICE)
-                throw new DAOException("Incorrect price value");
-            if (product.getAmount() < 0)
-                throw new DAOException("Incorrect 'count' value");
+            logger.info("Edit product id=" + product.getId());
             ProductDataBase.update(product);
         } catch (JDBCConnectionException e) {
             throw new DAOException("Can not connect to database", e);
@@ -139,7 +189,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void deleteProduct(int productID) throws DAOException {
         try {
             logger.info("Delete product id=" + productID);
@@ -155,7 +204,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void editProducts(List<Product> products, int newPrice) throws DAOException {
         if (newPrice < Product.MIN_PRICE || newPrice > Product.MAX_PRICE)
             throw new DAOException("Incorrect price value");
@@ -170,7 +218,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void editProducts(List<Product> products, String newCategory) throws DAOException {
         try {
             int categoryID = getCategoryID(newCategory);
@@ -184,7 +231,7 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
+
     public void editProducts(List<Product> products, int newPrice, String newCategory) throws DAOException {
         if (newPrice < Product.MIN_PRICE || newPrice > Product.MAX_PRICE)
             throw new DAOException("Incorrect price value");
@@ -208,16 +255,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         } else return category.getId();
     }
 
-    @Override
-    public boolean canProductBeRemoved(int productID) throws DAOException {
-        try {
-            return !OrderContentDataBase.doOrdersContain(productID);
-        } catch (JDBCConnectionException e) {
-            throw new DAOException("Can not connect to database", e);
-        }
-    }
-
-    @Override
     public Category getCategory(int categoryID) throws DAOException {
         try {
             return CategoryDataBase.selectOne(categoryID);
@@ -226,7 +263,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public Category getCategory(String categoryName) throws DAOException {
         try {
             return CategoryDataBase.searchByName(categoryName);
@@ -235,11 +271,10 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void createCategory(Category newCategory) throws DAOException {
         try {
             logger.info("Create category");
-            if(newCategory.getName().equals(""))
+            if (newCategory.getName().equals(""))
                 throw new DAOException("Empty name is not allowed");
             if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
                 logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
@@ -251,13 +286,12 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void editCategory(Category category) throws DAOException {
         try {
             logger.info("Edit category id=" + category.getId());
-            if(category.getName().equals(""))
-                throw new DAOException("Empty name is not allowed");
             Category duplicate = getCategory(category.getName());
+            if (category.getName().equals(""))
+                throw new DAOException("Empty name is not allowed");
             if (duplicate != null && category.getId() != duplicate.getId()) {
                 logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
                 throw new DAOException("Category has this name already exists");
@@ -270,7 +304,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void deleteCategory(int categoryID) throws DAOException {
         try {
             logger.info("Delete category id=" + categoryID);
@@ -283,16 +316,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
             throw new DAOException("Can not connect to database", e);
         } catch (IllegalArgumentException e) {
             throw new DAOException("Incorrect id detected");
-        }
-    }
-
-    @Override
-    public boolean canCategoryBeRemoved(int categoryID) throws DAOException {
-        try {
-            List<Product> products = ProductDataBase.selectByCategory(categoryID);
-            return products.isEmpty();
-        } catch (JDBCConnectionException e) {
-            throw new DAOException("Can not connect to database", e);
         }
     }
 
@@ -376,7 +399,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void changeProductStatus(int id) throws DAOException {
         try {
             Product product = ProductDataBase.selectOne(id);
@@ -412,7 +434,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public ShopContent createShopContent(String xmlFilePath, Source xsdSchema) throws DAOException {
         try {
             JAXBContext context = JAXBContext.newInstance(ShopContent.class);
@@ -431,7 +452,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void toXmlFile(ShopContent shopContent, String xmlFilePath) throws DAOException {
         try {
             logger.info("Start export");
@@ -446,7 +466,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public void toXmlFile(ShopContent shopContent, OutputStream out) throws DAOException {
         try {
             logger.info("Start export");
@@ -461,7 +480,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
 
     }
 
-    @Override
     public String xslTransform(InputStream src, Source xsl, String xmlOutPath) throws DAOException {
         try {
             logger.info("Start import");
@@ -515,7 +533,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         return shopContent;
     }
 
-    @Override
     public ShopContent getAllProducts() throws DAOException {
         try {
             logger.info("Export all products");
@@ -525,7 +542,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public ShopContent getProductsOnSale() throws DAOException {
         try {
             logger.info("Export products on sale");
@@ -535,7 +551,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
         }
     }
 
-    @Override
     public ShopContent getArchivedProducts() throws DAOException {
         try {
             logger.info("Export archived products");
@@ -544,7 +559,6 @@ public class DBAdminMarketModel implements AdminMarketModel {
             throw new DAOException("Can not connect to database", e);
         }
     }
-
 
     private int getCategoryID(List<Category> categories, String categoryName) {
         for (Category category : categories) {

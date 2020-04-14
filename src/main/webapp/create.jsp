@@ -50,7 +50,7 @@
                             <option>${category.name}</option>
                         </c:forEach>
                     </select>
-                </label> Категория
+                </label>
             </div>
             <br>
             <input type="submit" class="button" value="Сохранить"/>

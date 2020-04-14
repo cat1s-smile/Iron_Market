@@ -2,6 +2,7 @@ package servlets;
 
 import entities.main.Product;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -16,8 +17,8 @@ import java.util.List;
 @WebServlet("/changesPreview")
 public class ChangeStatusServlet extends HttpServlet {
 
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

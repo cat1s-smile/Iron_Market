@@ -19,8 +19,8 @@ import java.util.List;
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
 
-    @EJB(beanName = "DBUserMarketModel")
-    private UserMarketModel model;
+    @EJB
+    private OrderManager model;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

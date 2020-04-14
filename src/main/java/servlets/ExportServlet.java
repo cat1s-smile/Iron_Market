@@ -2,6 +2,7 @@ package servlets;
 
 import entities.jaxbready.ShopContent;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,8 +21,9 @@ import java.rmi.server.ExportException;
 
 @WebServlet("/export")
 public class ExportServlet extends HttpServlet {
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

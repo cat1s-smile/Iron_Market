@@ -9,6 +9,7 @@
 <body>
 <section>
     <div class="container-table">
+        <h4> Выбранные для изменения товары </h4>
         <form method="post" action='<c:url value="/changesPreview" />'>
             <table class="table-product">
                 <tr>

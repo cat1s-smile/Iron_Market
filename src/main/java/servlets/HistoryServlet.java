@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class HistoryServlet extends HttpServlet {
 
 
-    @EJB(beanName = "DBUserMarketModel")
-    private UserMarketModel model;
+    @EJB
+    private OrderManager model;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

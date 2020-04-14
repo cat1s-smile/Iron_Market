@@ -3,6 +3,7 @@ package servlets;
 import entities.main.Category;
 import entities.main.Product;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 import parse.Parser;
 
 import javax.ejb.EJB;
@@ -19,8 +20,8 @@ import java.util.List;
 @WebServlet("/changeParametersPreview")
 public class ChangeParametersServlet extends HttpServlet {
 
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

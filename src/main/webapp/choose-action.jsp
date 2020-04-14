@@ -14,10 +14,10 @@
     <p>
         <label>
             <input type="radio" name="option" checked value="a1">
-        </label>Архивация<Br>
+        </label>Изменение статуса товаров в магазине<Br>
         <label>
             <input type="radio" name="option" value="a2">
-        </label>Изменение параметров<Br>
+        </label>Изменение параметров товаров<Br>
 
     <input type="submit" class="button" value="Продолжить">
 </form>

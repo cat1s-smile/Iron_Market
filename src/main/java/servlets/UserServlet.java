@@ -18,8 +18,11 @@ import java.util.List;
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
 
-    @EJB(beanName = "DBUserMarketModel")
-    private UserMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
+
+    @EJB
+    private OrderManager orderManager;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,7 +33,7 @@ public class UserServlet extends HttpServlet {
             String searchRequest = request.getParameter("search");
             if (searchRequest == null || searchRequest.equals("")) {
                 if (catID == Parser.NAN || catID < 0)
-                    products = model.getProducts();
+                    products = model.getProductsOnMarket();
                 else
                     products = model.getProductsByCategory(catID);
             } else {
@@ -43,7 +46,7 @@ public class UserServlet extends HttpServlet {
             request.setAttribute("catID", catID);
             request.setAttribute("products", products);
             request.setAttribute("categories", categories);
-            request.setAttribute("cart", model.getProductNumber(User.getDefaultID()));
+            request.setAttribute("cart", orderManager.getProductNumber(User.getDefaultID()));
 
             if (request.getParameter("id") != null) {
                 int id = Integer.parseInt(request.getParameter("id"));

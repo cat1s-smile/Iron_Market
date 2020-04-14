@@ -2,6 +2,7 @@ package servlets;
 
 import model.AdminMarketModel;
 import model.UserMarketModel;
+import model.database.ProductAndCategoryManager;
 import parse.Parser;
 
 import javax.ejb.EJB;
@@ -15,8 +16,8 @@ import java.io.IOException;
 @WebServlet("/delete")
 public class DeleteServlet extends HttpServlet {
 
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

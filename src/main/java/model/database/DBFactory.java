@@ -9,12 +9,12 @@ import javax.persistence.Persistence;
 import java.io.*;
 import java.util.Properties;
 
-class DBFactory {
+public class DBFactory {
     private static String URL;
     private static Properties properties;
     private static EntityManagerFactory factory = null;
 
-    static void init() {
+    public static void init() {
         DBFactory.factory = Persistence.createEntityManagerFactory("marketdb.jpa");
     }
 

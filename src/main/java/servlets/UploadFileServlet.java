@@ -1,6 +1,7 @@
 package servlets;
 
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 import parse.Parser;
 
 import java.io.*;
@@ -26,8 +27,8 @@ import javax.xml.transform.stream.StreamSource;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UploadFileServlet extends HttpServlet {
 
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

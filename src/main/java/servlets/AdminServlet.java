@@ -2,6 +2,7 @@ package servlets;
 
 import entities.main.*;
 import model.AdminMarketModel;
+import model.database.ProductAndCategoryManager;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -15,8 +16,8 @@ import java.util.List;
 @WebServlet("/admin")
 public class AdminServlet extends HttpServlet {
 
-    @EJB(beanName = "DBAdminMarketModel")
-    private AdminMarketModel model;
+    @EJB
+    private ProductAndCategoryManager model;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
