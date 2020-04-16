@@ -3,8 +3,8 @@
     <xsd:element name="shopContent">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="products" type="products"/>
-                <xsd:element name="categories" type="categories"/>
+                <xsd:element name="products" type="products" minOccurs="0"/>
+                <xsd:element name="categories" type="categories" minOccurs="0"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

@@ -322,15 +322,19 @@ public class ProductAndCategoryManager {
     public void insertUpdateIgnoreDuplicates(ShopContent shopContent) throws DAOException {
         try {
             logger.info("Insert with ignore duplicates");
-            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-                if (categoryID < 0)
-                    insertProductWithNewCategory(rawProduct, categories);
-                else {
-                    Product product = transformProduct(rawProduct, categoryID);
-                    if (ProductDataBase.getProduct(product) == null)
-                        ProductDataBase.insert(product);
+            List<Category> categories = shopContent.getCategories() == null ?
+                    getCategories()
+                    : insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            if (shopContent.getProducts() != null) {
+                for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                    int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                    if (categoryID < 0)
+                        insertProductWithNewCategory(rawProduct, categories);
+                    else {
+                        Product product = transformProduct(rawProduct, categoryID);
+                        if (ProductDataBase.getProduct(product) == null)
+                            ProductDataBase.insert(product);
+                    }
                 }
             }
         } catch (JDBCConnectionException e) {
@@ -341,19 +345,23 @@ public class ProductAndCategoryManager {
     public void insertUpdateOverwriteDuplicates(ShopContent shopContent) throws DAOException {
         try {
             logger.info("Insert with overwrite duplicates");
-            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-                if (categoryID < 0)
-                    insertProductWithNewCategory(rawProduct, categories);
-                else {
-                    Product product = transformProduct(rawProduct, categoryID);
-                    Product duplicate = ProductDataBase.getProduct(product);
-                    if (duplicate == null)
-                        ProductDataBase.insert(product);
+            List<Category> categories = shopContent.getCategories() == null ?
+                    getCategories()
+                    : insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            if (shopContent.getProducts() != null) {
+                for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                    int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                    if (categoryID < 0)
+                        insertProductWithNewCategory(rawProduct, categories);
                     else {
-                        product.setId(duplicate.getId());
-                        ProductDataBase.update(product);
+                        Product product = transformProduct(rawProduct, categoryID);
+                        Product duplicate = ProductDataBase.getProduct(product);
+                        if (duplicate == null)
+                            ProductDataBase.insert(product);
+                        else {
+                            product.setId(duplicate.getId());
+                            ProductDataBase.update(product);
+                        }
                     }
                 }
             }
@@ -365,14 +373,18 @@ public class ProductAndCategoryManager {
     public void insertUpdateWithDuplicates(ShopContent shopContent) throws DAOException {
         try {
             logger.info("Insert with duplicates");
-            List<Category> categories = insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
-            for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
-                int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
-                if (categoryID < 0)
-                    insertProductWithNewCategory(rawProduct, categories);
-                else {
-                    Product product = transformProduct(rawProduct, categoryID);
-                    ProductDataBase.insert(product);
+            List<Category> categories = shopContent.getCategories() == null ?
+                    getCategories()
+                    : insertAndPrepareCategories(shopContent.getCategories().getRawCategory());
+            if (shopContent.getProducts() != null) {
+                for (RawProduct rawProduct : shopContent.getProducts().getRawProduct()) {
+                    int categoryID = getCategoryID(categories, rawProduct.getIdCategory());
+                    if (categoryID < 0)
+                        insertProductWithNewCategory(rawProduct, categories);
+                    else {
+                        Product product = transformProduct(rawProduct, categoryID);
+                        ProductDataBase.insert(product);
+                    }
                 }
             }
         } catch (JDBCConnectionException e) {
