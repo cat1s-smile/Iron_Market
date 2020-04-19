@@ -43,6 +43,7 @@ public class UserServlet extends HttpServlet {
                     products = model.getProductsBySearch(searchRequest, catID);
                 request.setAttribute("search", searchRequest);
             }
+
             request.setAttribute("catID", catID);
             request.setAttribute("products", products);
             request.setAttribute("categories", categories);

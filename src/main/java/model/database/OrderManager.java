@@ -194,7 +194,7 @@ public class OrderManager {
                     List<OrderContent> orderContents = OrderContentDataBase.selectByOrderID(order.getId());
                     for (OrderContent ord : orderContents) {
                         Product product = ProductDataBase.selectOne(ord.getProduct());
-                        content.add(product.getName() + " x" + ord.getAmount() + ";");
+                        content.add("Товар: " + "\""+ product.getName() +"\""+ " Количество: " + ord.getAmount() + ";");
                         totalCost += product.getPrice() * ord.getAmount();
                     }
                     orderInfos.add(new OrderInfo(order.getId(), content, totalCost));

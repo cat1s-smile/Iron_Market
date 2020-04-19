@@ -153,18 +153,22 @@ public class ProductAndCategoryManager {
     public void createProduct(Product newProduct) throws DAOException {
         logger.info("Create product");
         try {
-            if (newProduct.getName().equals(""))
-                throw new DAOException("Empty name is not allowed");
-            if (getCategory(newProduct.getCategory()) == null)
-                throw new DAOException("Incorrect category");
-            if (newProduct.getPrice() < Product.MIN_PRICE || newProduct.getPrice() > Product.MAX_PRICE)
-                throw new DAOException("Incorrect price value");
-            if (newProduct.getAmount() < 0)
-                throw new DAOException("Incorrect 'count' value");
+            validateProduct(newProduct);
             ProductDataBase.insert(newProduct);
         } catch (JDBCConnectionException e) {
             throw new DAOException("Can not connect to database", e);
         }
+    }
+
+    public void validateProduct(Product newProduct) throws DAOException{
+        if (newProduct.getName().equals(""))
+            throw new DAOException("Empty name is not allowed");
+        if (getCategory(newProduct.getCategory()) == null)
+            throw new DAOException("Incorrect category");
+        if (newProduct.getPrice() < Product.MIN_PRICE || newProduct.getPrice() > Product.MAX_PRICE)
+            throw new DAOException("Incorrect price value");
+        if (newProduct.getAmount() < 0)
+            throw new DAOException("Incorrect 'count' value");
     }
 
     public void setExistingCategoryID(Product product) throws DAOException {
@@ -178,8 +182,7 @@ public class ProductAndCategoryManager {
 
     public void editProduct(Product product) throws DAOException {
         try {
-            if (product.getName().equals(""))
-                throw new DAOException("Empty name is not allowed");
+            validateProduct(product);
             logger.info("Edit product id=" + product.getId());
             ProductDataBase.update(product);
         } catch (JDBCConnectionException e) {
@@ -274,15 +277,19 @@ public class ProductAndCategoryManager {
     public void createCategory(Category newCategory) throws DAOException {
         try {
             logger.info("Create category");
-            if (newCategory.getName().equals(""))
-                throw new DAOException("Empty name is not allowed");
-            if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
-                logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
-                throw new DAOException("Category with this name already exists");
-            }
+            validateCreateCategory(newCategory);
             CategoryDataBase.insert(newCategory);
         } catch (JDBCConnectionException e) {
             throw new DAOException("Can not connect to database", e);
+        }
+    }
+
+    public void validateCreateCategory(Category newCategory) throws DAOException{
+        if (newCategory.getName().equals(""))
+            throw new DAOException("Empty name is not allowed");
+        if (CategoryDataBase.searchByName(newCategory.getName()) != null) {
+            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
+            throw new DAOException("Category with this name already exists");
         }
     }
 
@@ -290,17 +297,21 @@ public class ProductAndCategoryManager {
         try {
             logger.info("Edit category id=" + category.getId());
             Category duplicate = getCategory(category.getName());
-            if (category.getName().equals(""))
-                throw new DAOException("Empty name is not allowed");
-            if (duplicate != null && category.getId() != duplicate.getId()) {
-                logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
-                throw new DAOException("Category has this name already exists");
-            }
+            validateEditCategory(category, duplicate);
             CategoryDataBase.update(category);
         } catch (JDBCConnectionException e) {
             throw new DAOException("Can not connect to database", e);
         } catch (IllegalArgumentException e) {
             throw new DAOException("Incorrect id detected");
+        }
+    }
+
+    public void validateEditCategory(Category category, Category duplicate) throws DAOException{
+        if (category.getName().equals(""))
+            throw new DAOException("Empty name is not allowed");
+        if (duplicate != null && category.getId() != duplicate.getId()) {
+            logger.warn("Category has this name already exists", new DAOException("Category has this name already exists"));
+            throw new DAOException("Category has this name already exists");
         }
     }
 

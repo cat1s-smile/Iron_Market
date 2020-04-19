@@ -23,7 +23,7 @@
         <div class="list-text">Выбранные товары:</div>
         <div class="container-products">
             <ul class="products">
-                ${cart == null ? "Корзина пока что пуста" : ""}
+                ${cart.isEmpty() ? "Корзина пока что пуста" : ""}
                 <c:forEach var="cartItem" items="${cart}">
                     <li>
                         <div class="cart-product" ${cartItem.status == 0 ? "style=\"border: 2px solid red;\"" : ""}>

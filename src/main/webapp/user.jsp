@@ -58,6 +58,7 @@
         <div class="lower-container-products">
             <div class="text-center">Товары</div>
             <ul class="products">
+                ${products.isEmpty() ? "В этой категории пока что нет товаров" : ""}
                 <c:forEach var="product" items="${products}">
                     <li>
                         <div class="product">
