@@ -45,8 +45,8 @@
             <div class="field">
                 <div class="property-name">Категория</div>
                 <label>
-                    <select name="category" required>
-                        <c:forEach var="category" items="${categories}">
+                    <select name="category" required class="input-field">
+                        <c:forEach var="category" items="${categories}" >
                             <option>${category.name}</option>
                         </c:forEach>
                     </select>

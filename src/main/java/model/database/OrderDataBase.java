@@ -24,8 +24,9 @@ class OrderDataBase {
 
     static List<Order> selectByID(String userID) {
         EntityManager manager = DBFactory.getEntityManager();
-        Query query = manager.createQuery("FROM Order WHERE user = :user");
+        Query query = manager.createQuery("FROM Order WHERE user = :user and status like :status");
         query.setParameter("user", userID);
+        query.setParameter("status", "1");
         List result = query.getResultList();
         manager.close();
         return (List<Order>) result;

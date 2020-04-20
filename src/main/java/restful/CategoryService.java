@@ -36,7 +36,7 @@ public class CategoryService {
             model.validateCreateCategory(category);
         }
         catch (DAOException e){
-            return Response.status(400).entity(category).build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
         model.createCategory(category);
         return Response.status(201).entity(category).build();
@@ -51,7 +51,7 @@ public class CategoryService {
             model.validateEditCategory(category, duplicate);
         }
         catch (DAOException e){
-            return Response.status(400).entity(category).build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
         model.editCategory(category);
         return Response.status(200).entity(category).build();

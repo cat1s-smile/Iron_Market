@@ -38,7 +38,7 @@ public class ProductService {
             model.validateProduct(product);
         }
         catch (DAOException e){
-            return Response.status(400).entity(product).build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
         model.createProduct(product);
         return Response.status(201).entity(product).build();
@@ -52,7 +52,7 @@ public class ProductService {
             model.validateProduct(product);
         }
         catch (DAOException e){
-            return Response.status(400).entity(product).build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
         model.editProduct(product);
         return Response.status(200).entity(product).build();

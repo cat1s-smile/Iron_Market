@@ -16,13 +16,13 @@
     <p>
         <label>
             <input type="radio" name="option" value="a1" checked>
-        </label>AllProducts<Br>
+        </label>Все товары<Br>
         <label>
             <input type="radio" name="option" value="a2">
-        </label>ProductsOnSale<Br>
+        </label>Товары на продаже<Br>
         <label>
             <input type="radio" name="option" value="a3">
-        </label>ArchivedProducts<Br>
+        </label>Архивированные товары<Br>
         <input type="hidden" name="file" value="${file}">
         <input type="submit" class="button" value="Сохранить из базы">
 </form>
